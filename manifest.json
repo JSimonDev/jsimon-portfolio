@@ -1,18 +1,14 @@
 {
-    "name": "JSimonDev Portfolio",
-    "short_name": "JSimonDev",
+    "name": "JSimon Portfolio",
+    "short_name": "JSimon",
     "start_url": "/",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "JSimonDev Portfolio",
+    "description": "This is my porfolio website",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
-    "categories": [
-        "portfolio",
-        "development",
-        "design"
-    ],
+    "categories": ["portfolio", "development", "design"],
     "lang": "en-US",
     "dir": "ltr",
     "icons": [
