@@ -1,13 +1,16 @@
 {
     "name": "JSimonDev Portfolio",
     "short_name": "JSimonDev",
-    "start_url": ".",
+    "start_url": "/",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "This is the portfolio of JSimonDev, a Front-End Developer and UI/UX Designer.",
+    "description": "JSimonDev | Jonathan Simon - Front-End & Flutter Developer | Cultivating Technology & Creativity",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
+    "categories": ["portfolio", "development", "design"],
+    "lang": "en-US",
+    "dir": "ltr",
     "icons": [
         {
             "src": "icons/Icon-192.png",
