@@ -5,6 +5,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:my_portfolio/config/theme/app_theme.dart';
 import 'package:my_portfolio/widgets/widgets.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final GlobalKey<HomeScreenState> homeScreenKey = GlobalKey();
 
@@ -270,13 +271,13 @@ class ProjectList extends StatelessWidget {
       'name': 'Cotízame',
       'description':
           'In the development of "Cotízame", an innovative mobile application that facilitates interaction between buyers and sellers through direct quotation requests, I lead the creation of the user interface and design, using Flutter. My role is fundamental in the conceptualization and execution of an intuitive user experience, significantly contributing to the distinctive character and usability of the application. This project has been an excellent opportunity to delve deeper into Flutter and Dart, strengthening my skills in interface design and collaboration to deliver a revolutionary market solution.',
-      'image': 'assets/741shots_so.png',
+      'image': 'assets/cotizame.png',
     },
     {
       'name': 'WikiMovies',
       'description':
           'In the development of "WikiMovies", an innovative mobile application that facilitates interaction between buyers and sellers through direct quotation requests, I lead the creation of the user interface and design, using Flutter.',
-      'image': 'assets/125shots_so.png',
+      'image': 'assets/wikimovie.png',
     },
   };
 
@@ -705,68 +706,87 @@ class TechnologiesList extends StatelessWidget {
       'nombre': 'Dart',
       'icon': DevIcons.dartPlain,
       'wordmark': DevIcons.dartPlainWordmark,
+      'doc': 'https://dart.dev/'
     },
     {
       'nombre': 'Flutter',
       'icon': DevIcons.flutterPlain,
       'wordmark': DevIcons.flutterPlain,
+      'doc': 'https://flutter.dev/'
     },
     {
       'nombre': 'Firebase',
       'icon': DevIcons.firebasePlain,
       'wordmark': DevIcons.firebasePlainWordmark,
+      'doc': 'https://firebase.google.com/'
     },
     {
       'nombre': 'Node.js',
       'icon': DevIcons.nodejsPlain,
       'wordmark': DevIcons.nodejsPlainWordmark,
+      'doc': 'https://nodejs.org/'
     },
     {
       'nombre': 'Express.js',
       'icon': DevIcons.expressOriginal,
       'wordmark': DevIcons.expressOriginalWordmark,
+      'doc': 'https://expressjs.com/'
     },
     {
       'nombre': 'MongoDB',
       'icon': DevIcons.mongodbPlain,
       'wordmark': DevIcons.mongodbPlainWordmark,
+      'doc': 'https://www.mongodb.com/'
     },
     {
       'nombre': 'Figma',
       'icon': DevIcons.figmaPlain,
       'wordmark': DevIcons.figmaPlain,
+      'doc': 'https://www.figma.com/'
     },
     {
       'nombre': 'Git',
       'icon': DevIcons.gitPlain,
       'wordmark': DevIcons.gitPlainWordmark,
+      'doc': 'https://git-scm.com/'
     },
     {
       'nombre': 'GitHub',
       'icon': DevIcons.githubOriginal,
       'wordmark': DevIcons.githubOriginalWordmark,
+      'doc': 'https://docs.github.com/',
     },
     {
       'nombre': 'Python',
       'icon': DevIcons.pythonPlain,
       'wordmark': DevIcons.pythonPlainWordmark,
+      'doc': 'https://www.python.org/'
     },
     {
       'nombre': 'HTML',
       'icon': DevIcons.html5Plain,
       'wordmark': DevIcons.html5PlainWordmark,
+      'doc': 'https://developer.mozilla.org/en-US/docs/Web/HTML'
     },
     {
       'nombre': 'CSS',
       'icon': DevIcons.css3Plain,
       'wordmark': DevIcons.css3PlainWordmark,
+      'doc': 'https://developer.mozilla.org/en-US/docs/Web/CSS'
     },
     {
       'nombre': 'JavaScript',
       'icon': DevIcons.javascriptPlain,
       'wordmark': DevIcons.javascriptPlain,
+      'doc': 'https://developer.mozilla.org/en-US/docs/Web/JavaScript'
     }
   };
+
+  Future<void> _launchUrl(url) async {
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -787,51 +807,58 @@ class TechnologiesList extends StatelessWidget {
 
             return AspectRatio(
               aspectRatio: 1,
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(radius),
-                    bottomRight: Radius.circular(radius),
-                    bottomLeft: Radius.circular(radius),
+              child: GestureDetector(
+                onTap: () {
+                  final Uri url = Uri.parse(techs.elementAt(index)['doc']);
+
+                  _launchUrl(url);
+                },
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(radius),
+                      bottomRight: Radius.circular(radius),
+                      bottomLeft: Radius.circular(radius),
+                    ),
+                    side: BorderSide(
+                      color: Theme.of(context).colorScheme.primary,
+                      width: 0.5,
+                    ),
                   ),
-                  side: BorderSide(
-                    color: Theme.of(context).colorScheme.primary,
-                    width: 0.5,
-                  ),
+                  child: wordmark && !isIconEqualWordmark || onlyWordmark
+                      ? Icon(
+                          techs.elementAt(index)['wordmark'],
+                          size: isIconEqualWordmark ? 50 : 60,
+                        )
+                      : Column(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  top: 10.0,
+                                ),
+                                child: Icon(
+                                  techs.elementAt(index)['icon'],
+                                  size: isLargeScreen ? 50 : 40,
+                                  // color: colors.primary,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                techs.elementAt(index)['nombre'],
+                                style: isLargeScreen
+                                    ? textStyles.titleLarge
+                                    : textStyles.bodyLarge,
+                                textAlign: TextAlign.center,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
                 ),
-                child: wordmark && !isIconEqualWordmark || onlyWordmark
-                    ? Icon(
-                        techs.elementAt(index)['wordmark'],
-                        size: isIconEqualWordmark ? 50 : 60,
-                      )
-                    : Column(
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                top: 10.0,
-                              ),
-                              child: Icon(
-                                techs.elementAt(index)['icon'],
-                                size: isLargeScreen ? 50 : 40,
-                                // color: colors.primary,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              techs.elementAt(index)['nombre'],
-                              style: isLargeScreen
-                                  ? textStyles.titleLarge
-                                  : textStyles.bodyLarge,
-                              textAlign: TextAlign.center,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                        ],
-                      ),
               ),
             );
           },

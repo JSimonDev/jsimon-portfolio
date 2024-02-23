@@ -1,6 +1,10 @@
-# my_portfolio
+# JSimonDev's Flutter Portfolio
 
-A new Flutter project.
+Comando para generar el build web en la rama gh-pages:
+```dart run peanut:peanut```
+
+Comando para generar el build de la aplicacion movil version release e instalarla en un dispositivo conectado:
+```flutter build apk --release && flutter install --release```
 
 ## Getting Started
 
