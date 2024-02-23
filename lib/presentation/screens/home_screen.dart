@@ -3,8 +3,8 @@ import 'package:dev_icons/dev_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:my_portfolio/config/theme/app_theme.dart';
-import 'package:my_portfolio/widgets/widgets.dart';
+import 'package:jsimon/config/theme/app_theme.dart';
+import 'package:jsimon/widgets/widgets.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 final GlobalKey<HomeScreenState> homeScreenKey = GlobalKey();
@@ -541,12 +541,41 @@ class CustomSliverAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
-    const BorderRadius borderRadius = BorderRadius.only(
-      topLeft: Radius.circular(20),
-      bottomRight: Radius.circular(20),
-      bottomLeft: Radius.circular(20),
+    return SliverAppBar(
+      scrolledUnderElevation: 0,
+      pinned: true,
+      collapsedHeight: 70,
+      expandedHeight: isLargeScreen ? 280 : 200.0,
+      leading: AppBarLeadingButton(
+        opacity: _opacity,
+      ),
+      actions: [
+        ContactButton(
+          scrollController: scrollController,
+        ),
+        SizedBox(
+          width: isLargeScreen ? 10 : 5,
+        ),
+        const TheSwitcherButton(),
+        const SizedBox(
+          width: 5,
+        ),
+      ],
+      flexibleSpace: SliverAppBarTitle(
+        isLargeScreen: isLargeScreen,
+      ),
     );
+  }
+}
+
+class TheSwitcherButton extends StatelessWidget {
+  const TheSwitcherButton({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     //* LIGHT THEME
     final ThemeData appThemeLight = AppTheme(
@@ -558,99 +587,89 @@ class CustomSliverAppBar extends StatelessWidget {
       isDarkMode: true,
     ).getTheme();
 
-    return SliverAppBar(
-      scrolledUnderElevation: 0,
-      pinned: true,
-      collapsedHeight: 70,
-      expandedHeight: isLargeScreen ? 280 : 200.0,
-      leading: Opacity(
-        opacity: _opacity,
-        child: TextButton(
-          onPressed: () {},
-          child: Text(
-            '</>',
-            style: TextStyle(
-              fontFamily: GoogleFonts.acme().fontFamily,
-              fontSize: 20,
-            ),
-          ),
-        ),
-      ),
-      actions: [
-        FilledButton(
-          style: const ButtonStyle(
-            shape: MaterialStatePropertyAll(
-              RoundedRectangleBorder(
-                borderRadius: borderRadius,
-              ),
-            ),
-            enableFeedback: true,
-            padding: MaterialStatePropertyAll(
-              EdgeInsets.symmetric(
-                horizontal: 15.0,
-              ),
-            ),
-            visualDensity: VisualDensity.comfortable,
-          ),
+    return ThemeSwitcher.switcher(
+      builder: (context, switcher) {
+        return IconButton(
           onPressed: () {
-            scrollController.animateTo(
-              scrollController.position.maxScrollExtent,
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeInOut,
+            switcher.changeTheme(
+              isReversed: isDarkMode ? true : false,
+              theme: isDarkMode ? appThemeLight : appThemeDark,
             );
           },
-          child: const Text(
-            'Contact',
+          icon: Icon(
+            isDarkMode ? Icons.wb_sunny_rounded : Icons.nights_stay_rounded,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class ContactButton extends StatelessWidget {
+  const ContactButton({
+    super.key,
+    required this.scrollController,
+  });
+
+  final ScrollController scrollController;
+
+  @override
+  Widget build(BuildContext context) {
+    const BorderRadius borderRadius = BorderRadius.only(
+      topLeft: Radius.circular(20),
+      bottomRight: Radius.circular(20),
+      bottomLeft: Radius.circular(20),
+    );
+
+    return FilledButton(
+      style: const ButtonStyle(
+        shape: MaterialStatePropertyAll(
+          RoundedRectangleBorder(
+            borderRadius: borderRadius,
           ),
         ),
-        SizedBox(
-          width: isLargeScreen ? 10 : 5,
+        enableFeedback: true,
+        padding: MaterialStatePropertyAll(
+          EdgeInsets.symmetric(
+            horizontal: 15.0,
+          ),
         ),
-        ThemeSwitcher.switcher(
-          builder: (context, switcher) {
-            return IconButton(
-              onPressed: () {
-                switcher.changeTheme(
-                  isReversed: isDarkMode ? true : false,
-                  theme: isDarkMode ? appThemeLight : appThemeDark,
-                );
-              },
-              icon: Icon(
-                isDarkMode ? Icons.wb_sunny_rounded : Icons.nights_stay_rounded,
-              ),
-            );
-          },
-        ),
-        const SizedBox(
-          width: 5,
-        ),
-      ],
-      flexibleSpace: FlexibleSpaceBar(
-        expandedTitleScale: isLargeScreen ? 2 : 1.5,
-        // background: ClipRRect(
-        //   child: BackdropFilter(
-        //     filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-        //     child: Shimmer.fromColors(
-        //       period: const Duration(seconds: 3),
-        //       baseColor: colors.primary.withOpacity(0.3),
-        //       highlightColor: colors.primary.withOpacity(0.9),
-        //       enabled: true,
-        //       child: Container(
-        //         decoration: BoxDecoration(
-        //           color: colors.primary.withOpacity(0.1),
-        //           borderRadius: BorderRadius.circular(15.0),
-        //           border: Border.all(
-        //             width: 1.5,
-        //             color: colors.primary.withOpacity(0.5),
-        //           ),
-        //         ),
-        //       ),
-        //     ),
-        //   ),
-        // ),
-        titlePadding: const EdgeInsets.all(0),
-        title: SliverAppBarTitle(
-          isLargeScreen: isLargeScreen,
+        visualDensity: VisualDensity.comfortable,
+      ),
+      onPressed: () {
+        scrollController.animateTo(
+          scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      },
+      child: const Text(
+        'Contact',
+      ),
+    );
+  }
+}
+
+class AppBarLeadingButton extends StatelessWidget {
+  const AppBarLeadingButton({
+    super.key,
+    required double opacity,
+  }) : _opacity = opacity;
+
+  final double _opacity;
+
+  @override
+  Widget build(BuildContext context) {
+    return Opacity(
+      opacity: _opacity,
+      child: TextButton(
+        onPressed: () {},
+        child: Text(
+          '</>',
+          style: TextStyle(
+            fontFamily: GoogleFonts.acme().fontFamily,
+            fontSize: 20,
+          ),
         ),
       ),
     );
@@ -896,59 +915,111 @@ class SliverAppBarTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return FlexibleSpaceBar(
+      expandedTitleScale: isLargeScreen ? 2 : 1.5,
+      // background: ClipRRect(
+      //   child: BackdropFilter(
+      //     filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+      //     child: Shimmer.fromColors(
+      //       period: const Duration(seconds: 3),
+      //       baseColor: colors.primary.withOpacity(0.3),
+      //       highlightColor: colors.primary.withOpacity(0.9),
+      //       enabled: true,
+      //       child: Container(
+      //         decoration: BoxDecoration(
+      //           color: colors.primary.withOpacity(0.1),
+      //           borderRadius: BorderRadius.circular(15.0),
+      //           border: Border.all(
+      //             width: 1.5,
+      //             color: colors.primary.withOpacity(0.5),
+      //           ),
+      //         ),
+      //       ),
+      //     ),
+      //   ),
+      // ),
+      titlePadding: const EdgeInsets.all(0),
+      title: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: IntrinsicHeight(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              const AppBarCircleAvatar(),
+              const SizedBox(width: 10),
+              AppBarName(isLargeScreen: isLargeScreen),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class AppBarCircleAvatar extends StatelessWidget {
+  const AppBarCircleAvatar({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     final ColorScheme colors = Theme.of(context).colorScheme;
-    final TextTheme textStyles = Theme.of(context).textTheme;
     const double radius = 20;
 
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: IntrinsicHeight(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CircleAvatar(
-              radius: radius + 6,
-              backgroundColor: colors.primary.withOpacity(0.1),
-              child: CircleAvatar(
-                radius: radius + 3,
-                backgroundColor: colors.primary.withOpacity(0.5),
-                child: const CircleAvatar(
-                  radius: radius,
-                  backgroundImage: AssetImage(
-                    'assets/portafolio.jpg',
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(width: 10),
-            Flexible(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Jonathan Simon',
-                    style: textStyles.titleLarge!.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  Text(
-                    isLargeScreen
-                        ? 'Software Developer | Tech Enthusiast'
-                        : 'Software Developer',
-                    style: textStyles.labelSmall!.copyWith(
-                      color: colors.onSurface.withOpacity(0.6),
-                    ),
-                    softWrap: true,
-                  ),
-                ],
-              ),
-            ),
-          ],
+    return CircleAvatar(
+      radius: radius + 6,
+      backgroundColor: colors.primary.withOpacity(0.1),
+      child: CircleAvatar(
+        radius: radius + 3,
+        backgroundColor: colors.primary.withOpacity(0.5),
+        child: const CircleAvatar(
+          radius: radius,
+          backgroundImage: AssetImage(
+            'assets/portafolio.jpg',
+          ),
         ),
+      ),
+    );
+  }
+}
+
+class AppBarName extends StatelessWidget {
+  const AppBarName({
+    super.key,
+    required this.isLargeScreen,
+  });
+
+  final bool isLargeScreen;
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme colors = Theme.of(context).colorScheme;
+    final TextTheme textStyles = Theme.of(context).textTheme;
+
+    return Flexible(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Jonathan Simon',
+            style: textStyles.titleLarge!.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          Text(
+            isLargeScreen
+                ? 'Software Developer | Tech Enthusiast'
+                : 'Software Developer',
+            style: textStyles.labelSmall!.copyWith(
+              color: colors.onSurface.withOpacity(0.6),
+            ),
+            softWrap: true,
+          ),
+        ],
       ),
     );
   }

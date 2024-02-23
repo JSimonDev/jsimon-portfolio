@@ -6,6 +6,12 @@ Comando para generar el build web en la rama gh-pages:
 Comando para generar el build de la aplicacion movil version release e instalarla en un dispositivo conectado:
 ```flutter build apk --release && flutter install --release```
 
+Para generar los iconos de la aplicacion:
+```dart run flutter_launcher_icons```
+
+Para generar los splash de la aplicacion:
+```dart run flutter_native_splash:create```
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
