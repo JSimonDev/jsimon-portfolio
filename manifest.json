@@ -5,10 +5,14 @@
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "JSimonDev | Jonathan Simon - Front-End & Flutter Developer | Cultivating Technology & Creativity",
+    "description": "JSimonDev Portfolio",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
-    "categories": ["portfolio", "development", "design"],
+    "categories": [
+        "portfolio",
+        "development",
+        "design"
+    ],
     "lang": "en-US",
     "dir": "ltr",
     "icons": [
