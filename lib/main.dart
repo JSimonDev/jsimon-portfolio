@@ -1,8 +1,8 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:my_portfolio/config/router/app_router.dart';
-import 'package:my_portfolio/config/theme/app_theme.dart';
+import 'package:jsimon/config/router/app_router.dart';
+import 'package:jsimon/config/theme/app_theme.dart';
 
 void main() {
   runApp(
@@ -25,6 +25,7 @@ class MyApp extends ConsumerWidget {
       initTheme: initTheme,
       builder: (context, theme) {
         return MaterialApp.router(
+          title: 'JSimon Portfolio',
           scrollBehavior: const MaterialScrollBehavior().copyWith(
             scrollbars: false,
           ),

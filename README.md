@@ -1,7 +1,10 @@
-# JSimonDev's Flutter Portfolio
+# JSimon Flutter Portfolio
 
 Comando para generar el build web en la rama gh-pages:
 ```dart run peanut:peanut```
+
+Comando para generar el build web en la rama gh-pages con base-href:
+```dart run peanut:peanut --extra-args "--dart-define --base-href=https://jsimondev.github.io/"```
 
 Comando para generar el build de la aplicacion movil version release e instalarla en un dispositivo conectado:
 ```flutter build apk --release && flutter install --release```
