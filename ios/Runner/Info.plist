@@ -5,11 +5,7 @@
 		<key>CFBundleDevelopmentRegion</key>
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>
-<<<<<<< HEAD
 		<string>JSimon</string>
-=======
-		<string>My Portfolio</string>
->>>>>>> fb026517b2f8e03d9e494b4cfd2687f331510268
 		<key>CFBundleExecutable</key>
 		<string>$(EXECUTABLE_NAME)</string>
 		<key>CFBundleIdentifier</key>
