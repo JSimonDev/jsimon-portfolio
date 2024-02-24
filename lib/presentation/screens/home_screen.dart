@@ -272,12 +272,14 @@ class ProjectList extends StatelessWidget {
       'description':
           'In the development of "Cotízame", an innovative mobile application that facilitates interaction between buyers and sellers through direct quotation requests, I lead the creation of the user interface and design, using Flutter. My role is fundamental in the conceptualization and execution of an intuitive user experience, significantly contributing to the distinctive character and usability of the application. This project has been an excellent opportunity to delve deeper into Flutter and Dart, strengthening my skills in interface design and collaboration to deliver a revolutionary market solution.',
       'image': 'assets/cotizame.png',
+      'alt': 'Cotízame App Picture',
     },
     {
       'name': 'WikiMovies',
       'description':
           'In the development of "WikiMovies", an innovative mobile application that facilitates interaction between buyers and sellers through direct quotation requests, I lead the creation of the user interface and design, using Flutter.',
       'image': 'assets/wikimovie.png',
+      'alt': 'WikiMovies App Picture',
     },
   };
 
@@ -725,79 +727,92 @@ class TechnologiesList extends StatelessWidget {
       'nombre': 'Dart',
       'icon': DevIcons.dartPlain,
       'wordmark': DevIcons.dartPlainWordmark,
-      'doc': 'https://dart.dev/'
+      'doc': 'https://dart.dev/',
+      'alt': 'Dart Logo',
     },
     {
       'nombre': 'Flutter',
       'icon': DevIcons.flutterPlain,
       'wordmark': DevIcons.flutterPlain,
-      'doc': 'https://flutter.dev/'
+      'doc': 'https://flutter.dev/',
+      'alt': 'Flutter Logo',
     },
     {
       'nombre': 'Firebase',
       'icon': DevIcons.firebasePlain,
       'wordmark': DevIcons.firebasePlainWordmark,
-      'doc': 'https://firebase.google.com/'
+      'doc': 'https://firebase.google.com/',
+      'alt': 'Firebase Logo',
     },
     {
       'nombre': 'Node.js',
       'icon': DevIcons.nodejsPlain,
       'wordmark': DevIcons.nodejsPlainWordmark,
-      'doc': 'https://nodejs.org/'
+      'doc': 'https://nodejs.org/docs/latest/api/',
+      'alt': 'Node.js Logo',
     },
     {
       'nombre': 'Express.js',
       'icon': DevIcons.expressOriginal,
       'wordmark': DevIcons.expressOriginalWordmark,
-      'doc': 'https://expressjs.com/'
+      'doc': 'https://expressjs.com/',
+      'alt': 'Express.js Logo',
     },
     {
       'nombre': 'MongoDB',
       'icon': DevIcons.mongodbPlain,
       'wordmark': DevIcons.mongodbPlainWordmark,
-      'doc': 'https://www.mongodb.com/'
+      'doc': 'https://www.mongodb.com/',
+      'alt': 'MongoDB Logo',
     },
     {
       'nombre': 'Figma',
       'icon': DevIcons.figmaPlain,
       'wordmark': DevIcons.figmaPlain,
-      'doc': 'https://www.figma.com/'
+      'doc': 'https://www.figma.com/',
+      'alt': 'Figma Logo',
     },
     {
       'nombre': 'Git',
       'icon': DevIcons.gitPlain,
       'wordmark': DevIcons.gitPlainWordmark,
-      'doc': 'https://git-scm.com/'
+      'doc': 'https://git-scm.com/',
+      'alt': 'Git Logo',
     },
     {
       'nombre': 'GitHub',
       'icon': DevIcons.githubOriginal,
       'wordmark': DevIcons.githubOriginalWordmark,
       'doc': 'https://docs.github.com/',
+      'alt': 'GitHub Logo',
     },
     {
       'nombre': 'Python',
       'icon': DevIcons.pythonPlain,
       'wordmark': DevIcons.pythonPlainWordmark,
-      'doc': 'https://www.python.org/'
+      'doc': 'https://www.python.org/',
+      'alt': 'Python Logo',
     },
     {
       'nombre': 'HTML',
       'icon': DevIcons.html5Plain,
       'wordmark': DevIcons.html5PlainWordmark,
-      'doc': 'https://developer.mozilla.org/en-US/docs/Web/HTML'
+      'doc': 'https://developer.mozilla.org/en-US/docs/Web/HTML',
+      'alt': 'HTML Logo',
     },
     {
       'nombre': 'CSS',
       'icon': DevIcons.css3Plain,
       'wordmark': DevIcons.css3PlainWordmark,
-      'doc': 'https://developer.mozilla.org/en-US/docs/Web/CSS'
+      'doc': 'https://developer.mozilla.org/en-US/docs/Web/CSS',
+      'alt': 'CSS Logo',
     },
     {
       'nombre': 'JavaScript',
       'icon': DevIcons.javascriptPlain,
       'wordmark': DevIcons.javascriptPlain,
-      'doc': 'https://developer.mozilla.org/en-US/docs/Web/JavaScript'
+      'doc': 'https://developer.mozilla.org/en-US/docs/Web/JavaScript',
+      'alt': 'JavaScript Logo',
     }
   };
 

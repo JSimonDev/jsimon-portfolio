@@ -1,4 +1,4 @@
-# JSimonDev's Flutter Portfolio
+# JSimon Flutter Portfolio
 
 Comando para generar el build web en la rama gh-pages:
 ```dart run peanut:peanut```

@@ -1,14 +1,30 @@
 {
+<<<<<<< HEAD
     "name": "JSimon Portfolio",
     "short_name": "JSimon",
+=======
+    "name": "JSimonDev Portfolio",
+    "short_name": "JSimonDev",
+>>>>>>> fb026517b2f8e03d9e494b4cfd2687f331510268
     "start_url": "/",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
+<<<<<<< HEAD
     "description": "This is my porfolio website",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "categories": ["portfolio", "development", "design"],
+=======
+    "description": "JSimonDev Portfolio",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false,
+    "categories": [
+        "portfolio",
+        "development",
+        "design"
+    ],
+>>>>>>> fb026517b2f8e03d9e494b4cfd2687f331510268
     "lang": "en-US",
     "dir": "ltr",
     "icons": [
