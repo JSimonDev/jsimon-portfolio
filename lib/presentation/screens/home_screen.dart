@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:dev_icons/dev_icons.dart';
 import 'package:flutter/material.dart';
@@ -316,10 +318,11 @@ class ProjectList extends StatelessWidget {
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       sliver: SliverMasonryGrid.count(
-        crossAxisCount: isLargeScreen ? 2 : 1,
+        crossAxisCount: isLargeScreen ? 1 : 1,
         childCount: projects.length,
         itemBuilder: (context, index) {
           return ExpandableCard(
+            isLargeScreen: isLargeScreen,
             image: projects.elementAt(index)['image']!,
             name: projects.elementAt(index)['name']!,
             description: projects.elementAt(index)['description']!,
@@ -336,11 +339,13 @@ class ExpandableCard extends StatefulWidget {
     required this.image,
     required this.name,
     required this.description,
+    required this.isLargeScreen,
   });
 
   final String image;
   final String name;
   final String description;
+  final bool isLargeScreen;
 
   @override
   State<ExpandableCard> createState() => _ExpandableCardState();
@@ -376,7 +381,7 @@ class _ExpandableCardState extends State<ExpandableCard> {
         child: Column(
           children: [
             Image.asset(
-              height: 200,
+              height: widget.isLargeScreen ? 300 : 200,
               width: double.infinity,
               widget.image,
               fit: BoxFit.cover,
@@ -396,7 +401,7 @@ class _ExpandableCardState extends State<ExpandableCard> {
                   AnimatedCrossFade(
                     firstChild: Text(shortDescription),
                     secondChild: Text(longDescription),
-                    crossFadeState: _showMore
+                    crossFadeState: _showMore || widget.isLargeScreen
                         ? CrossFadeState.showSecond
                         : CrossFadeState.showFirst,
                     duration: const Duration(milliseconds: 300),
@@ -405,7 +410,7 @@ class _ExpandableCardState extends State<ExpandableCard> {
                   const SizedBox(
                     height: 10,
                   ),
-                  if (widget.description.length > 150)
+                  if (widget.description.length > 150 && !widget.isLargeScreen)
                     Center(
                       child: TextButton(
                         style: const ButtonStyle(
@@ -588,9 +593,9 @@ class CustomSliverAppBar extends StatelessWidget {
         SizedBox(
           width: isLargeScreen
               ? 10
-              : isMediumScreen
-                  ? 5
-                  : 0,
+              : isMediumScreen || isSmallScreen
+                  ? 0
+                  : 5,
         ),
         const TheSwitcherButton(),
         SizedBox(
@@ -745,7 +750,7 @@ class BoldTitle extends StatelessWidget {
   }
 }
 
-class TechnologiesList extends StatelessWidget {
+class TechnologiesList extends StatefulWidget {
   const TechnologiesList({
     super.key,
     required this.isLargeScreen,
@@ -756,6 +761,15 @@ class TechnologiesList extends StatelessWidget {
   final bool isLargeScreen;
   final bool wordmark;
   final bool onlyWordmark;
+
+  @override
+  State<TechnologiesList> createState() => _TechnologiesListState();
+}
+
+class _TechnologiesListState extends State<TechnologiesList> {
+  final ScrollController _scrollController = ScrollController();
+  late Timer _timer;
+  late int _currentItem = 0;
 
   //* Map with all the techs I have worked with
   static Set<Map<String, dynamic>> techs = {
@@ -859,80 +873,129 @@ class TechnologiesList extends StatelessWidget {
   }
 
   @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 2), (Timer t) {
+      _currentItem++;
+      if (_currentItem >= techs.length * 3) {
+        _currentItem = 0;
+        _scrollController.jumpTo(_currentItem * 100.0);
+      }
+      _scrollController.animateTo(
+        _currentItem * 100.0,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final TextTheme textStyles = Theme.of(context).textTheme;
     const double radius = 20;
 
-    return SliverPadding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      sliver: SliverGrid(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: isLargeScreen ? 5 : 4,
-          childAspectRatio: 1 / 1,
-        ),
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            final bool isIconEqualWordmark = techs.elementAt(index)['icon'] ==
-                techs.elementAt(index)['wordmark'];
+    final List<Map<String, dynamic>> loopTechs = widget.isLargeScreen
+        ? [
+            ...techs,
+            ...techs,
+            ...techs,
+          ]
+        : [...techs];
 
-            return AspectRatio(
-              aspectRatio: 1,
-              child: GestureDetector(
-                onTap: () {
-                  final Uri url = Uri.parse(techs.elementAt(index)['doc']);
+    return SliverToBoxAdapter(
+      child: SizedBox(
+        height: 150,
+        width: double.infinity,
+        child: RotatedBox(
+          quarterTurns: -1,
+          child: ListWheelScrollView.useDelegate(
+            scrollBehavior:
+                const MaterialScrollBehavior().copyWith(scrollbars: false),
+            physics: widget.isLargeScreen
+                ? const NeverScrollableScrollPhysics()
+                : const FixedExtentScrollPhysics(),
+            controller: widget.isLargeScreen
+                ? _scrollController
+                : FixedExtentScrollController(),
+            diameterRatio: 2,
+            perspective: 0.003,
+            clipBehavior: Clip.antiAlias,
+            overAndUnderCenterOpacity: widget.isLargeScreen ? 0.5 : 1.0,
+            childDelegate: ListWheelChildLoopingListDelegate(
+              children: loopTechs.map((tech) {
+                final bool isIconEqualWordmark =
+                    tech['icon'] == tech['wordmark'];
 
-                  _launchUrl(url);
-                },
-                child: Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(radius),
-                      bottomRight: Radius.circular(radius),
-                      bottomLeft: Radius.circular(radius),
-                    ),
-                    side: BorderSide(
-                      color: Theme.of(context).colorScheme.primary,
-                      width: 0.5,
+                return RotatedBox(
+                  quarterTurns: 1,
+                  child: AspectRatio(
+                    aspectRatio: 1,
+                    child: GestureDetector(
+                      onTap: () {
+                        final Uri url = Uri.parse(tech['doc']);
+
+                        _launchUrl(url);
+                      },
+                      child: Card(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(radius),
+                            bottomRight: Radius.circular(radius),
+                            bottomLeft: Radius.circular(radius),
+                          ),
+                          side: BorderSide(
+                            color: Theme.of(context).colorScheme.primary,
+                            width: 0.5,
+                          ),
+                        ),
+                        child: widget.wordmark && !isIconEqualWordmark ||
+                                widget.onlyWordmark
+                            ? Icon(
+                                tech['wordmark'],
+                                size: isIconEqualWordmark ? 50 : 60,
+                              )
+                            : Column(
+                                children: [
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                        top: 10.0,
+                                      ),
+                                      child: Icon(
+                                        tech['icon'],
+                                        size: widget.isLargeScreen ? 50 : 40,
+                                        // color: colors.primary,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      tech['nombre'],
+                                      style: widget.isLargeScreen
+                                          ? textStyles.titleLarge
+                                          : textStyles.bodyLarge,
+                                      textAlign: TextAlign.center,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                      ),
                     ),
                   ),
-                  child: wordmark && !isIconEqualWordmark || onlyWordmark
-                      ? Icon(
-                          techs.elementAt(index)['wordmark'],
-                          size: isIconEqualWordmark ? 50 : 60,
-                        )
-                      : Column(
-                          children: [
-                            Expanded(
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                  top: 10.0,
-                                ),
-                                child: Icon(
-                                  techs.elementAt(index)['icon'],
-                                  size: isLargeScreen ? 50 : 40,
-                                  // color: colors.primary,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                techs.elementAt(index)['nombre'],
-                                style: isLargeScreen
-                                    ? textStyles.titleLarge
-                                    : textStyles.bodyLarge,
-                                textAlign: TextAlign.center,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ],
-                        ),
-                ),
-              ),
-            );
-          },
-          childCount: techs.length,
+                );
+              }).toList(), // puedes ajustar este valor según tus necesidades
+            ),
+            itemExtent: 100,
+          ),
         ),
       ),
     );
@@ -978,7 +1041,12 @@ class SliverAppBarTitle extends StatelessWidget {
               : 1.5,
       titlePadding: const EdgeInsets.all(0),
       title: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: EdgeInsets.fromLTRB(
+          isMediumScreen || isSmallScreen ? 5 : 10,
+          10,
+          10,
+          10,
+        ),
         child: IntrinsicHeight(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
