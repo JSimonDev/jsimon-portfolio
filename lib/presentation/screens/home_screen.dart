@@ -3,9 +3,10 @@ import 'package:dev_icons/dev_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
+
 import 'package:jsimon/config/theme/app_theme.dart';
 import 'package:jsimon/widgets/widgets.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 final GlobalKey<HomeScreenState> homeScreenKey = GlobalKey();
 
@@ -25,14 +26,6 @@ class HomeScreenState extends State<HomeScreen> {
   final bool _isAppBarExpanded = true;
   double _opacity = 1;
 
-  @override
-  void initState() {
-    super.initState();
-    _scrollController.addListener(() {
-      _handleListener();
-    });
-  }
-
   void _handleListener() {
     double offset = _scrollController.offset;
     double maxOffset = 100.0;
@@ -50,35 +43,39 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   @override
-  void dispose() {
-    _scrollController.removeListener(() {
-      _handleListener();
-    });
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return ThemeSwitchingArea(
       child: Scaffold(
         key: homeScreenKey,
         body: LayoutBuilder(
           builder: (BuildContext context, BoxConstraints constraints) {
-            final bool isLargeScreen = constraints.maxWidth > 640;
-            final bool isExtraLargeScreen = constraints.maxWidth > 640;
+            final bool isSmallScreen = constraints.maxWidth <= 320;
+            final bool isMediumScreen =
+                constraints.maxWidth <= 375 && constraints.maxWidth > 320;
+            final bool isLargeScreen = constraints.maxWidth >= 640;
 
-            if (isLargeScreen || isExtraLargeScreen) {
+            if (isLargeScreen) {
               return Scrollbar(
                 controller: _scrollController,
                 child: Center(
                   child: SizedBox(
                     width: 640,
-                    child: buildBody(context, isLargeScreen),
+                    child: buildBody(
+                      context,
+                      isLargeScreen: isLargeScreen,
+                      isMediumScreen: isMediumScreen,
+                      isSmallScreen: isSmallScreen,
+                    ),
                   ),
                 ),
               );
             } else {
-              return buildBody(context, isLargeScreen);
+              return buildBody(
+                context,
+                isSmallScreen: isSmallScreen,
+                isMediumScreen: isMediumScreen,
+                isLargeScreen: isLargeScreen,
+              );
             }
           },
         ),
@@ -86,105 +83,122 @@ class HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget buildBody(BuildContext context, bool isLargeScreen) {
+  Widget buildBody(
+    BuildContext context, {
+    required bool isSmallScreen,
+    required bool isMediumScreen,
+    required bool isLargeScreen,
+  }) {
     final TextTheme textStyles = Theme.of(context).textTheme;
 
     return SafeArea(
-      child: CustomScrollView(
-        controller: _scrollController,
-        slivers: [
-          //* SLIVER APP BAR
-          CustomSliverAppBar(
-            opacity: _opacity,
-            isLargeScreen: isLargeScreen,
-            scrollController: _scrollController,
-          ),
-          const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 30,
+      child: NotificationListener<ScrollNotification>(
+        onNotification: (notification) {
+          if (notification is ScrollUpdateNotification) {
+            _handleListener();
+          }
+          return true;
+        },
+        child: CustomScrollView(
+          controller: _scrollController,
+          slivers: [
+            //* SLIVER APP BAR
+            CustomSliverAppBar(
+              opacity: _opacity,
+              isSmallScreen: isSmallScreen,
+              isMediumScreen: isMediumScreen,
+              isLargeScreen: isLargeScreen,
+              scrollController: _scrollController,
             ),
-          ),
-
-          //* PHRASE
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12.0),
-              child: SelectableText(
-                'Welcome to my digital garden 🌱, a space where I cultivate and share my discoveries about developing exceptional products, continually refining myself as a developer, and evolving my career in the vast world of technology.',
-                style: textStyles.titleLarge,
+            const SliverToBoxAdapter(
+              child: SizedBox(
+                height: 30,
               ),
             ),
-          ),
-          SliverToBoxAdapter(
-            child: SizedBox(
-              height: isLargeScreen ? 70 : 40,
-            ),
-          ),
 
-          //* EXPERIENCE SECTION
-          const BoldTitle(
-            title: 'Expirience:',
-          ),
-          const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 10,
+            //* PHRASE
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: SelectableText(
+                  'Welcome to my digital garden 🌱, a space where I cultivate and share my discoveries about developing exceptional products, continually refining myself as a developer, and evolving my career in the vast world of technology.',
+                  style: textStyles.titleLarge,
+                ),
+              ),
             ),
-          ),
-          const TimeLineWidget(),
-          const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 40,
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: isLargeScreen ? 70 : 40,
+              ),
             ),
-          ),
 
-          //* PROJECTS SECTION
-          const BoldTitle(
-            title: 'Projects:',
-          ),
-          const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 10,
+            //* EXPERIENCE SECTION
+            const BoldTitle(
+              title: 'Expirience:',
             ),
-          ),
-          ProjectList(
-            isLargeScreen: isLargeScreen,
-          ),
-          const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 40,
+            const SliverToBoxAdapter(
+              child: SizedBox(
+                height: 10,
+              ),
             ),
-          ),
+            const TimeLineWidget(),
+            const SliverToBoxAdapter(
+              child: SizedBox(
+                height: 40,
+              ),
+            ),
 
-          //* TECHNOLOGIES SECTION
-          const BoldTitle(
-            title: 'Technologies I have worked with:',
-          ),
-          const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 10,
+            //* PROJECTS SECTION
+            const BoldTitle(
+              title: 'Projects:',
             ),
-          ),
-          TechnologiesList(
-            wordmark: true,
-            onlyWordmark: true,
-            isLargeScreen: isLargeScreen,
-          ),
-          const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 50,
+            const SliverToBoxAdapter(
+              child: SizedBox(
+                height: 10,
+              ),
             ),
-          ),
+            ProjectList(
+              isLargeScreen: isLargeScreen,
+            ),
+            const SliverToBoxAdapter(
+              child: SizedBox(
+                height: 40,
+              ),
+            ),
 
-          //* CONTACT SECTION
-          const ContactSection(),
-
-          //* GRACE SPACE
-          const SliverToBoxAdapter(
-            child: SizedBox(
-              height: 100,
+            //* TECHNOLOGIES SECTION
+            const BoldTitle(
+              title: 'Technologies I have worked with:',
             ),
-          ),
-        ],
+            const SliverToBoxAdapter(
+              child: SizedBox(
+                height: 10,
+              ),
+            ),
+            TechnologiesList(
+              wordmark: true,
+              onlyWordmark: true,
+              isLargeScreen: isLargeScreen,
+            ),
+            const SliverToBoxAdapter(
+              child: SizedBox(
+                height: 50,
+              ),
+            ),
+
+            //* CONTACT SECTION
+            ContactSection(
+              isLargeScreen: isLargeScreen,
+            ),
+
+            //* GRACE SPACE
+            const SliverToBoxAdapter(
+              child: SizedBox(
+                height: 50,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -193,6 +207,26 @@ class HomeScreenState extends State<HomeScreen> {
 class ContactSection extends StatelessWidget {
   const ContactSection({
     super.key,
+    required this.isLargeScreen,
+  });
+
+  final bool isLargeScreen;
+
+  @override
+  Widget build(BuildContext context) {
+    return const SliverToBoxAdapter(
+      child: Column(
+        children: [
+          CustomDivider(),
+        ],
+      ),
+    );
+  }
+}
+
+class CustomDivider extends StatelessWidget {
+  const CustomDivider({
+    super.key,
   });
 
   @override
@@ -200,56 +234,50 @@ class ContactSection extends StatelessWidget {
     final Size size = MediaQuery.sizeOf(context);
     final ColorScheme colors = Theme.of(context).colorScheme;
 
-    return SliverToBoxAdapter(
-      child: Column(
+    return SizedBox(
+      width: size.width,
+      child: Row(
         children: [
-          SizedBox(
-            width: size.width,
-            child: Row(
-              children: [
-                Expanded(
-                  child: CustomPaint(
-                    size: Size(size.width, 30),
-                    painter: WavyLinePainter(
-                      direction: LineDirection.ltr,
-                      color: colors.primary,
-                    ),
+          Expanded(
+            child: CustomPaint(
+              size: Size(size.width, 30),
+              painter: WavyLinePainter(
+                direction: LineDirection.ltr,
+                color: colors.primary,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              height: 50,
+              width: 50,
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: colors.primary,
+                  width: 2,
+                ),
+                borderRadius: BorderRadius.circular(100),
+              ),
+              child: Center(
+                child: Text(
+                  '</>',
+                  style: TextStyle(
+                    fontFamily: GoogleFonts.acme().fontFamily,
+                    color: colors.primary,
+                    fontSize: 20,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: 50,
-                    width: 50,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: colors.primary,
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.circular(100),
-                    ),
-                    child: Center(
-                      child: Text(
-                        '</>',
-                        style: TextStyle(
-                          fontFamily: GoogleFonts.acme().fontFamily,
-                          color: colors.primary,
-                          fontSize: 20,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: CustomPaint(
-                    size: Size(size.width, 30),
-                    painter: WavyLinePainter(
-                      direction: LineDirection.rtl,
-                      color: colors.primary,
-                    ),
-                  ),
-                ),
-              ],
+              ),
+            ),
+          ),
+          Expanded(
+            child: CustomPaint(
+              size: Size(size.width, 30),
+              painter: WavyLinePainter(
+                direction: LineDirection.rtl,
+                color: colors.primary,
+              ),
             ),
           ),
         ],
@@ -512,12 +540,6 @@ class TimeLineCard extends StatelessWidget {
               right: 20.0,
               bottom: 10.0,
             ),
-            //* SPANISH VERSION
-            // child: Text(
-            //   'En el desarrollo de "Cotízame", una aplicación móvil innovadora que facilita la interacción entre compradores y vendedores mediante solicitudes de cotización directas, lidero la creación de la interfaz de usuario y el diseño, utilizando Flutter. Mi rol es fundamental en la conceptualización y ejecución de una experiencia de usuario intuitiva, contribuyendo significativamente al carácter distintivo y la usabilidad de la aplicación. Este proyecto ha sido una excelente oportunidad para profundizar en Flutter y Dart, reforzando mis habilidades en diseño de interfaces y colaboración para entregar una solución de mercado revolucionaria.',
-            //   style: textStyles.bodyLarge,
-            // ),
-            //* ENGLISH VERSION
             child: Text(
               description,
               style: textStyles.bodyLarge,
@@ -533,11 +555,15 @@ class CustomSliverAppBar extends StatelessWidget {
   const CustomSliverAppBar({
     super.key,
     required double opacity,
+    required this.isSmallScreen,
+    required this.isMediumScreen,
     required this.isLargeScreen,
     required this.scrollController,
   }) : _opacity = opacity;
 
   final double _opacity;
+  final bool isSmallScreen;
+  final bool isMediumScreen;
   final bool isLargeScreen;
   final ScrollController scrollController;
 
@@ -552,19 +578,27 @@ class CustomSliverAppBar extends StatelessWidget {
         opacity: _opacity,
       ),
       actions: [
-        ContactButton(
-          scrollController: scrollController,
-        ),
+        !isSmallScreen
+            ? ContactButton(
+                scrollController: scrollController,
+              )
+            : const SizedBox.shrink(),
         SizedBox(
-          width: isLargeScreen ? 10 : 5,
+          width: isLargeScreen
+              ? 10
+              : isMediumScreen
+                  ? 5
+                  : 0,
         ),
         const TheSwitcherButton(),
-        const SizedBox(
-          width: 5,
+        SizedBox(
+          width: isMediumScreen || isSmallScreen ? 0 : 5,
         ),
       ],
       flexibleSpace: SliverAppBarTitle(
         isLargeScreen: isLargeScreen,
+        isMediumScreen: isMediumScreen,
+        isSmallScreen: isSmallScreen,
       ),
     );
   }
@@ -662,15 +696,16 @@ class AppBarLeadingButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textStyles = Theme.of(context).textTheme;
+
     return Opacity(
       opacity: _opacity,
-      child: TextButton(
-        onPressed: () {},
+      child: Center(
         child: Text(
           '</>',
-          style: TextStyle(
+          style: textStyles.titleLarge!.copyWith(
             fontFamily: GoogleFonts.acme().fontFamily,
-            fontSize: 20,
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
       ),
@@ -701,7 +736,6 @@ class BoldTitle extends StatelessWidget {
             decoration: TextDecoration.underline,
             decorationThickness: 1,
             decorationColor: colors.primary,
-            decorationStyle: TextDecorationStyle.wavy,
           ),
         ),
       ),
@@ -924,35 +958,22 @@ class SliverAppBarTitle extends StatelessWidget {
   const SliverAppBarTitle({
     super.key,
     required this.isLargeScreen,
+    required this.isMediumScreen,
+    required this.isSmallScreen,
   });
 
   final bool isLargeScreen;
+  final bool isMediumScreen;
+  final bool isSmallScreen;
 
   @override
   Widget build(BuildContext context) {
     return FlexibleSpaceBar(
-      expandedTitleScale: isLargeScreen ? 2 : 1.5,
-      // background: ClipRRect(
-      //   child: BackdropFilter(
-      //     filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
-      //     child: Shimmer.fromColors(
-      //       period: const Duration(seconds: 3),
-      //       baseColor: colors.primary.withOpacity(0.3),
-      //       highlightColor: colors.primary.withOpacity(0.9),
-      //       enabled: true,
-      //       child: Container(
-      //         decoration: BoxDecoration(
-      //           color: colors.primary.withOpacity(0.1),
-      //           borderRadius: BorderRadius.circular(15.0),
-      //           border: Border.all(
-      //             width: 1.5,
-      //             color: colors.primary.withOpacity(0.5),
-      //           ),
-      //         ),
-      //       ),
-      //     ),
-      //   ),
-      // ),
+      expandedTitleScale: isLargeScreen
+          ? 2
+          : isMediumScreen || isSmallScreen
+              ? 1.2
+              : 1.5,
       titlePadding: const EdgeInsets.all(0),
       title: Padding(
         padding: const EdgeInsets.all(10.0),
@@ -962,7 +983,9 @@ class SliverAppBarTitle extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const AppBarCircleAvatar(),
-              const SizedBox(width: 10),
+              SizedBox(
+                width: isMediumScreen || isSmallScreen ? 5 : 10,
+              ),
               AppBarName(isLargeScreen: isLargeScreen),
             ],
           ),
