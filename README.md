@@ -1,10 +1,13 @@
 # JSimon Flutter Portfolio
 
 Comando para generar el build web en la rama gh-pages:
-```dart run peanut:peanut```
+```dart run peanut:peanut --web-renderer canvaskit```
 
 Comando para generar el build de la aplicacion movil version release e instalarla en un dispositivo conectado:
 ```flutter build apk --release && flutter install --release```
+
+Comando para generar el build de la aplicacion web version debug:
+```flutter run -d chrome --web-renderer canvaskit```
 
 Para generar los iconos de la aplicacion:
 ```dart run flutter_launcher_icons```
