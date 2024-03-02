@@ -2,7 +2,10 @@ import 'dart:async';
 
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:dev_icons/dev_icons.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -135,8 +138,10 @@ class HomeScreenState extends State<HomeScreen> {
             ),
 
             //* EXPERIENCE SECTION
-            const BoldTitle(
-              title: 'Expirience:',
+            const SliverToBoxAdapter(
+              child: BoldTitle(
+                title: 'Expirience:',
+              ),
             ),
             const SliverToBoxAdapter(
               child: SizedBox(
@@ -151,8 +156,10 @@ class HomeScreenState extends State<HomeScreen> {
             ),
 
             //* PROJECTS SECTION
-            const BoldTitle(
-              title: 'Projects:',
+            const SliverToBoxAdapter(
+              child: BoldTitle(
+                title: 'Projects:',
+              ),
             ),
             const SliverToBoxAdapter(
               child: SizedBox(
@@ -169,8 +176,10 @@ class HomeScreenState extends State<HomeScreen> {
             ),
 
             //* TECHNOLOGIES SECTION
-            const BoldTitle(
-              title: 'Technologies I have worked with:',
+            const SliverToBoxAdapter(
+              child: BoldTitle(
+                title: 'Technologies I have worked with:',
+              ),
             ),
             const SliverToBoxAdapter(
               child: SizedBox(
@@ -218,8 +227,140 @@ class ContactSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return const SliverToBoxAdapter(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          //* CUSTOM DIVIDER
           CustomDivider(),
+          SizedBox(
+            height: 20,
+          ),
+          //* CONTACT ME TITLE
+          BoldTitle(title: 'Contact me:'),
+          SizedBox(
+            height: 10,
+          ),
+          //* CONTACT ME SECTION
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Column(
+                  children: [
+                    //* DESCRIPTION
+                    Padding(
+                      padding: EdgeInsets.only(
+                        left: 12.0,
+                        right: 8.0,
+                        bottom: 8.0,
+                      ),
+                      child: Text(
+                        "If you want to know more about me, my work, or just want to chat, don't hesitate to contact me. I'm always open to new opportunities and collaborations.",
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    //* PHONE
+                    Padding(
+                      padding: EdgeInsets.only(
+                        top: 8.0,
+                        bottom: 8.0,
+                        left: 8.0,
+                        right: 8.0,
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.phone,
+                            size: 20,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "+1 (849) 527 1701",
+                          ),
+                        ],
+                      ),
+                    ),
+                    //* EMAIL
+                    Padding(
+                      padding: EdgeInsets.only(
+                        bottom: 8.0,
+                        left: 8.0,
+                        right: 8.0,
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.email,
+                            size: 20,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "jsimondev@gmail.com",
+                          ),
+                        ],
+                      ),
+                    ),
+                    //* SOCIAL MEDIA
+                    Padding(
+                      padding: EdgeInsets.only(
+                        bottom: 8.0,
+                        left: 8.0,
+                        right: 8.0,
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.public,
+                            size: 20,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "jsimon.dev",
+                          ),
+                        ],
+                      ),
+                    ),
+                    //* ADDRESS
+                    Padding(
+                      padding: EdgeInsets.only(
+                        bottom: 8.0,
+                        left: 8.0,
+                        right: 8.0,
+                      ),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(
+                            Icons.location_on,
+                            size: 20,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Santo Domingo Este, \nRepública Dominicana",
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ],
       ),
     );
@@ -733,17 +874,15 @@ class BoldTitle extends StatelessWidget {
     final TextTheme textStyles = Theme.of(context).textTheme;
     final ColorScheme colors = Theme.of(context).colorScheme;
 
-    return SliverToBoxAdapter(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12.0),
-        child: Text(
-          title,
-          style: textStyles.titleLarge!.copyWith(
-            fontWeight: FontWeight.bold,
-            decoration: TextDecoration.underline,
-            decorationThickness: 1,
-            decorationColor: colors.primary,
-          ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0),
+      child: Text(
+        title,
+        style: textStyles.titleLarge!.copyWith(
+          fontWeight: FontWeight.bold,
+          decoration: TextDecoration.underline,
+          decorationThickness: 1,
+          decorationColor: colors.primary,
         ),
       ),
     );
@@ -770,6 +909,7 @@ class _TechnologiesListState extends State<TechnologiesList> {
   final ScrollController _scrollController = ScrollController();
   late Timer _timer;
   late int _currentItem = 0;
+  double itemExtent = 100.0;
 
   //* Map with all the techs I have worked with
   static Set<Map<String, dynamic>> techs = {
@@ -877,15 +1017,19 @@ class _TechnologiesListState extends State<TechnologiesList> {
     super.initState();
     _timer = Timer.periodic(const Duration(seconds: 2), (Timer t) {
       _currentItem++;
-      if (_currentItem >= techs.length * 3) {
+      if (_currentItem >= techs.length * 3 &&
+          _scrollController.hasClients &&
+          widget.isLargeScreen) {
         _currentItem = 0;
-        _scrollController.jumpTo(_currentItem * 100.0);
+        _scrollController.jumpTo(_currentItem * itemExtent);
       }
-      _scrollController.animateTo(
-        _currentItem * 100.0,
-        duration: const Duration(milliseconds: 200),
-        curve: Curves.easeInOut,
-      );
+      if (_scrollController.hasClients && widget.isLargeScreen) {
+        _scrollController.animateTo(
+          _currentItem * itemExtent,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.easeInOut,
+        );
+      }
     });
   }
 
@@ -994,7 +1138,7 @@ class _TechnologiesListState extends State<TechnologiesList> {
                 );
               }).toList(), // puedes ajustar este valor según tus necesidades
             ),
-            itemExtent: 100,
+            itemExtent: itemExtent,
           ),
         ),
       ),
