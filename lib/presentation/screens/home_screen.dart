@@ -55,6 +55,7 @@ class HomeScreenState extends State<HomeScreen> {
             final bool isMediumScreen =
                 constraints.maxWidth <= 375 && constraints.maxWidth > 320;
             final bool isLargeScreen = constraints.maxWidth >= 640;
+            // final bool isXLargeScreen = constraints.maxWidth >= 1024;
 
             if (isLargeScreen) {
               return Scrollbar(
