@@ -5,6 +5,7 @@ import 'package:dev_icons/dev_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:rive/rive.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:jsimon/config/theme/app_theme.dart';
@@ -203,7 +204,7 @@ class HomeScreenState extends State<HomeScreen> {
             //* GRACE SPACE
             const SliverToBoxAdapter(
               child: SizedBox(
-                height: 50,
+                height: 20,
               ),
             ),
           ],
@@ -221,30 +222,62 @@ class ContactSection extends StatelessWidget {
 
   final bool isLargeScreen;
 
+  void _launchPhone(String phone) async {
+    final Uri tel = Uri.parse(phone);
+
+    if (await canLaunchUrl(tel)) {
+      await launchUrl(tel);
+    } else {
+      throw 'Could not launch $phone';
+    }
+  }
+
+  void _launchMail(String email) async {
+    final Uri mail = Uri.parse(email);
+
+    if (await canLaunchUrl(mail)) {
+      await launchUrl(mail);
+    } else {
+      throw 'Could not launch $email';
+    }
+  }
+
+  void _launchUrl(String link) async {
+    final Uri url = Uri.parse(link);
+
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const SliverToBoxAdapter(
+    return SliverToBoxAdapter(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           //* CUSTOM DIVIDER
-          CustomDivider(),
-          SizedBox(
+          const CustomDivider(),
+          const SizedBox(
             height: 20,
           ),
           //* CONTACT ME TITLE
-          BoldTitle(title: 'Contact me:'),
-          SizedBox(
+          const BoldTitle(title: 'Contact me:'),
+          const SizedBox(
             height: 10,
           ),
           //* CONTACT ME SECTION
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
+              const Expanded(
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     //* DESCRIPTION
                     Padding(
@@ -263,101 +296,121 @@ class ContactSection extends StatelessWidget {
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     //* PHONE
-                    Padding(
-                      padding: EdgeInsets.only(
-                        top: 8.0,
-                        bottom: 8.0,
-                        left: 8.0,
-                        right: 8.0,
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.phone,
-                            size: 20,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            "+1 (849) 527 1701",
-                          ),
-                        ],
-                      ),
+                    ContactAction(
+                      icon: Icons.phone,
+                      text: "+1 (849) 527-1701",
+                      onTap: () => _launchPhone('tel:+18495271701'),
                     ),
                     //* EMAIL
-                    Padding(
-                      padding: EdgeInsets.only(
-                        bottom: 8.0,
-                        left: 8.0,
-                        right: 8.0,
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.email,
-                            size: 20,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            "jsimondev@gmail.com",
-                          ),
-                        ],
-                      ),
+                    ContactAction(
+                      icon: Icons.email,
+                      text: "jsimondev@gmail.com",
+                      onTap: () => _launchMail('mailto:jsimondev@gmail.com'),
                     ),
                     //* SOCIAL MEDIA
-                    Padding(
-                      padding: EdgeInsets.only(
-                        bottom: 8.0,
-                        left: 8.0,
-                        right: 8.0,
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.public,
-                            size: 20,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            "jsimon.dev",
-                          ),
-                        ],
-                      ),
+                    ContactAction(
+                      icon: DevIcons.githubOriginal,
+                      text: "GitHub",
+                      onTap: () => _launchUrl('https://github.com/JSimonDev'),
                     ),
-                    //* ADDRESS
-                    Padding(
-                      padding: EdgeInsets.only(
-                        bottom: 8.0,
-                        left: 8.0,
-                        right: 8.0,
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Icon(
-                            Icons.location_on,
-                            size: 20,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            "Santo Domingo Este, \nRepública Dominicana",
-                          ),
-                        ],
+                    //* TELEGRAM
+                    ContactAction(
+                      icon: Icons.send,
+                      text: "Telegram",
+                      onTap: () => _launchUrl('https://t.me/MRPDWKDP'),
+                    ),
+                    //* LICENSE
+                    ContactAction(
+                      icon: Icons.info,
+                      text: "Licenses",
+                      onTap: () => showLicensePage(
+                        context: context,
                       ),
                     ),
                   ],
                 ),
               )
             ],
+          ),
+          const SizedBox(
+            height: 25,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('Made with'),
+              SizedBox(
+                height: 30,
+                width: 30,
+                child: RiveAnimation.asset(
+                  artboard: 'Heart',
+                  'assets/rive/heart.riv',
+                  fit: BoxFit.cover,
+                  alignment: Alignment.topCenter,
+                  onInit: (artboard) {
+                    artboard.addController(
+                      SimpleAnimation('Spin_Idle'),
+                    );
+                  },
+                ),
+              ),
+              const Text('by JSimonDev.'),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class ContactAction extends StatelessWidget {
+  const ContactAction({
+    super.key,
+    required this.icon,
+    required this.text,
+    required this.onTap,
+    this.padding = const EdgeInsets.only(
+      top: 8.0,
+      left: 8.0,
+      right: 8.0,
+    ),
+  });
+
+  final IconData icon;
+  final String text;
+  final void Function() onTap;
+  final EdgeInsetsGeometry padding;
+
+  @override
+  Widget build(BuildContext context) {
+    final TextTheme textStyles = Theme.of(context).textTheme;
+    final ColorScheme colors = Theme.of(context).colorScheme;
+
+    return Padding(
+      padding: padding,
+      child: Row(
+        children: [
+          Icon(
+            icon,
+            size: 20,
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          InkWell(
+            onTap: onTap,
+            child: Text(
+              text,
+              style: textStyles.bodyMedium!.copyWith(
+                color: colors.primary,
+                decoration: TextDecoration.underline,
+                decorationColor: colors.primary,
+                decorationStyle: TextDecorationStyle.dotted,
+              ),
+            ),
           ),
         ],
       ),
