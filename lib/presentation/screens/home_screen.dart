@@ -5,6 +5,7 @@ import 'package:dev_icons/dev_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jsimon/config/utils/rive_change_colors_api.dart';
 import 'package:rive/rive.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -56,7 +57,6 @@ class HomeScreenState extends State<HomeScreen> {
             final bool isMediumScreen =
                 constraints.maxWidth <= 375 && constraints.maxWidth > 320;
             final bool isLargeScreen = constraints.maxWidth >= 640;
-            // final bool isXLargeScreen = constraints.maxWidth >= 1024;
 
             if (isLargeScreen) {
               return Scrollbar(
@@ -204,7 +204,7 @@ class HomeScreenState extends State<HomeScreen> {
             //* GRACE SPACE
             const SliverToBoxAdapter(
               child: SizedBox(
-                height: 20,
+                height: 30,
               ),
             ),
           ],
@@ -214,13 +214,21 @@ class HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class ContactSection extends StatelessWidget {
+class ContactSection extends StatefulWidget {
   const ContactSection({
     super.key,
     required this.isLargeScreen,
   });
 
   final bool isLargeScreen;
+
+  @override
+  State<ContactSection> createState() => _ContactSectionState();
+}
+
+class _ContactSectionState extends State<ContactSection> {
+  Artboard? _contactArtboard;
+  late SMITrigger hoverTrigger;
 
   void _launchPhone(String phone) async {
     final Uri tel = Uri.parse(phone);
@@ -252,8 +260,34 @@ class ContactSection extends StatelessWidget {
     }
   }
 
+  Future<void> _load() async {
+    //* LOAD QUOTATION RIVE FILE
+    final contactFile = await RiveFile.asset('assets/rive/contact.riv');
+    final artboard = contactFile.artboards.first;
+    StateMachineController controller = RiveUtils.getRiveController(
+      artboard,
+      stateMachineName: 'Bird_Interactivity',
+    );
+
+    hoverTrigger = controller.findSMI('hover') as SMITrigger;
+
+    setState(
+      () {
+        _contactArtboard = artboard;
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final ColorScheme colors = Theme.of(context).colorScheme;
+
     return SliverToBoxAdapter(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -274,13 +308,14 @@ class ContactSection extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Expanded(
+              //* DESCRIPTION
+              Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    //* DESCRIPTION
-                    Padding(
+                    //* DESCRIPTION TEXT
+                    const Padding(
                       padding: EdgeInsets.only(
                         left: 12.0,
                         right: 8.0,
@@ -290,9 +325,43 @@ class ContactSection extends StatelessWidget {
                         "If you want to know more about me, my work, or just want to chat, don't hesitate to contact me. I'm always open to new opportunities and collaborations.",
                       ),
                     ),
+                    //* RIVE BIRD
+                    Center(
+                      child: SizedBox.fromSize(
+                        size: const Size(60, 134),
+                        child: MouseRegion(
+                          onHover: (_) => hoverTrigger.fire(),
+                          child: _contactArtboard != null
+                              ? RiveColorModifier(
+                                  alignment: Alignment.center,
+                                  artboard: _contactArtboard!,
+                                  fit: BoxFit.cover,
+                                  components: [
+                                    RiveColorComponent(
+                                      shapeName: 'Button',
+                                      fillName: 'Button Background Fill',
+                                      color: colors.primary,
+                                    ),
+                                    RiveColorComponent(
+                                      shapeName: 'Text 1',
+                                      fillName: 'Text Fill 1',
+                                      color: colors.onPrimary,
+                                    ),
+                                    RiveColorComponent(
+                                      shapeName: 'Text 2',
+                                      fillName: 'Text Fill 2',
+                                      color: colors.onPrimary,
+                                    ),
+                                  ],
+                                )
+                              : const SizedBox.shrink(),
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
+              //* CONTACT ACTIONS
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -335,9 +404,15 @@ class ContactSection extends StatelessWidget {
               )
             ],
           ),
-          const SizedBox(
-            height: 25,
+          const SizedBox(height: 25),
+          //* DIVIDER
+          const Divider(
+            thickness: 1,
+            indent: 20,
+            endIndent: 20,
           ),
+          const SizedBox(height: 20),
+          //* FOOTER
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -777,11 +852,10 @@ class CustomSliverAppBar extends StatelessWidget {
         opacity: _opacity,
       ),
       actions: [
-        !isSmallScreen
-            ? ContactButton(
-                scrollController: scrollController,
-              )
-            : const SizedBox.shrink(),
+        if (!isSmallScreen)
+          ContactButton(
+            scrollController: scrollController,
+          ),
         SizedBox(
           width: isLargeScreen
               ? 10
@@ -1325,5 +1399,15 @@ class AppBarName extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class RiveUtils {
+  static StateMachineController getRiveController(Artboard artboard,
+      {stateMachineName = 'State Machine 1'}) {
+    StateMachineController? controller =
+        StateMachineController.fromArtboard(artboard, stateMachineName);
+    artboard.addController(controller!);
+    return controller;
   }
 }
