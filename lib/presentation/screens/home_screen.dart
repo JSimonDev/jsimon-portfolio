@@ -534,6 +534,7 @@ class _CustomDividerState extends State<CustomDivider> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.sizeOf(context);
     final ColorScheme colors = Theme.of(context).colorScheme;
+    final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return SizedBox(
       width: size.width,
@@ -569,6 +570,18 @@ class _CustomDividerState extends State<CustomDivider> {
                         ? RiveColorModifier(
                             artboard: _eyeArtboard!,
                             fit: BoxFit.cover,
+                            components: [
+                              RiveColorComponent(
+                                shapeName: 'Eye Pupil Off',
+                                fillName: 'Pupil Fill',
+                                color: colors.primary,
+                              ),
+                              RiveColorComponent(
+                                shapeName: 'Eye Border Off',
+                                strokeName: 'Eye Border Stroke',
+                                color: colors.primary,
+                              ),
+                            ],
                           )
                         : const SizedBox.shrink(),
                   ),
