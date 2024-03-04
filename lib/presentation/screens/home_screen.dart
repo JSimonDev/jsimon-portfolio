@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:dev_icons/dev_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jsimon/config/utils/rive_utils.dart';
+import 'package:rive/math.dart';
 import 'package:rive/rive.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -504,6 +508,7 @@ class CustomDivider extends StatefulWidget {
 
 class _CustomDividerState extends State<CustomDivider> {
   Artboard? _eyeArtboard;
+  late StateMachineController _controller;
   late SMIBool pressedTrigger;
 
   Future<void> _load() async {
@@ -515,6 +520,8 @@ class _CustomDividerState extends State<CustomDivider> {
       stateMachineName: 'EYE_Interactivity',
     );
 
+    _controller = controller;
+
     pressedTrigger = controller.findSMI('Pressed') as SMIBool;
 
     setState(
@@ -522,6 +529,14 @@ class _CustomDividerState extends State<CustomDivider> {
         _eyeArtboard = artboard;
       },
     );
+  }
+
+  void move(Offset pointer) => _controller.pointerMoveFromOffset(pointer);
+
+  void onTapDown(TapDownDetails details) {
+    if (details.kind == PointerDeviceKind.touch) {
+      move(details.localPosition);
+    }
   }
 
   @override
@@ -534,7 +549,6 @@ class _CustomDividerState extends State<CustomDivider> {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.sizeOf(context);
     final ColorScheme colors = Theme.of(context).colorScheme;
-    final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
 
     return SizedBox(
       width: size.width,
@@ -561,29 +575,38 @@ class _CustomDividerState extends State<CustomDivider> {
                 ),
                 borderRadius: BorderRadius.circular(100),
               ),
-              child: Center(
-                child: SizedBox.fromSize(
-                  size: const Size(40, 40),
-                  child: GestureDetector(
-                    onTap: () => pressedTrigger.change(!pressedTrigger.value),
-                    child: _eyeArtboard != null
-                        ? RiveColorModifier(
-                            artboard: _eyeArtboard!,
-                            fit: BoxFit.cover,
-                            components: [
-                              RiveColorComponent(
-                                shapeName: 'Eye Pupil Off',
-                                fillName: 'Pupil Fill',
-                                color: colors.primary,
-                              ),
-                              RiveColorComponent(
-                                shapeName: 'Eye Border Off',
-                                strokeName: 'Eye Border Stroke',
-                                color: colors.primary,
-                              ),
-                            ],
-                          )
-                        : const SizedBox.shrink(),
+              child: OverflowBox(
+                maxHeight: 500,
+                maxWidth: 500,
+                child: SizedBox(
+                  width: 500,
+                  height: 500,
+                  child: MouseRegion(
+                    opaque: true,
+                    onHover: (event) => move(event.localPosition),
+                    child: GestureDetector(
+                      onTap: () => pressedTrigger.change(!pressedTrigger.value),
+                      onTapDown: onTapDown,
+                      onPanUpdate: (details) => move(details.localPosition),
+                      child: _eyeArtboard != null
+                          ? RiveColorModifier(
+                              artboard: _eyeArtboard!,
+                              fit: BoxFit.scaleDown,
+                              components: [
+                                RiveColorComponent(
+                                  shapeName: 'Eye Pupil Off',
+                                  fillName: 'Pupil Fill',
+                                  color: colors.primary,
+                                ),
+                                RiveColorComponent(
+                                  shapeName: 'Eye Border Off',
+                                  strokeName: 'Eye Border Stroke',
+                                  color: colors.primary,
+                                ),
+                              ],
+                            )
+                          : const SizedBox.shrink(),
+                    ),
                   ),
                 ),
               ),
@@ -1451,12 +1474,15 @@ class AppBarName extends StatelessWidget {
   }
 }
 
-class RiveUtils {
-  static StateMachineController getRiveController(Artboard artboard,
-      {stateMachineName = 'State Machine 1'}) {
-    StateMachineController? controller =
-        StateMachineController.fromArtboard(artboard, stateMachineName);
-    artboard.addController(controller!);
-    return controller;
+/// Helpers, that are not yet available in [StateMachineController].
+extension StateMachineControllerX on StateMachineController {
+  void pointerMoveFromOffset(Offset pointerOffset) => pointerMove(
+        Vec2D.fromValues(pointerOffset.dx, pointerOffset.dy),
+      );
+
+  SMITrigger? findTrigger(String name) {
+    final trigger = findInput<bool>(name);
+
+    return trigger is SMITrigger? ? trigger : null;
   }
 }
