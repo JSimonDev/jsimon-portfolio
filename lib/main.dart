@@ -26,7 +26,7 @@ class MyApp extends ConsumerWidget {
       initTheme: initTheme,
       builder: (context, theme) {
         return MaterialApp.router(
-          title: 'JSimon',
+          title: 'JSimon Portfolio',
           scrollBehavior: const MaterialScrollBehavior().copyWith(
             scrollbars: false,
           ),
