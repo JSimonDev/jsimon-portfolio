@@ -5,11 +5,11 @@ import 'package:dev_icons/dev_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:jsimon/config/utils/rive_change_colors_api.dart';
 import 'package:rive/rive.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:jsimon/config/theme/app_theme.dart';
+import 'package:jsimon/config/utils/rive_change_colors_api.dart';
 import 'package:jsimon/widgets/widgets.dart';
 
 final GlobalKey<HomeScreenState> homeScreenKey = GlobalKey();
@@ -308,7 +308,7 @@ class _ContactSectionState extends State<ContactSection> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              //* DESCRIPTION
+              //* DESCRIPTION & RIVE BIRD
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -493,10 +493,42 @@ class ContactAction extends StatelessWidget {
   }
 }
 
-class CustomDivider extends StatelessWidget {
+class CustomDivider extends StatefulWidget {
   const CustomDivider({
     super.key,
   });
+
+  @override
+  State<CustomDivider> createState() => _CustomDividerState();
+}
+
+class _CustomDividerState extends State<CustomDivider> {
+  Artboard? _eyeArtboard;
+  late SMIBool pressedTrigger;
+
+  Future<void> _load() async {
+    //* LOAD QUOTATION RIVE FILE
+    final eyeFile = await RiveFile.asset('assets/rive/eye.riv');
+    final artboard = eyeFile.mainArtboard;
+    StateMachineController controller = RiveUtils.getRiveController(
+      artboard,
+      stateMachineName: 'EYE_Interactivity',
+    );
+
+    pressedTrigger = controller.findSMI('Pressed') as SMIBool;
+
+    setState(
+      () {
+        _eyeArtboard = artboard;
+      },
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -529,12 +561,16 @@ class CustomDivider extends StatelessWidget {
                 borderRadius: BorderRadius.circular(100),
               ),
               child: Center(
-                child: Text(
-                  '</>',
-                  style: TextStyle(
-                    fontFamily: GoogleFonts.acme().fontFamily,
-                    color: colors.primary,
-                    fontSize: 20,
+                child: SizedBox.fromSize(
+                  size: const Size(40, 40),
+                  child: GestureDetector(
+                    onTap: () => pressedTrigger.change(!pressedTrigger.value),
+                    child: _eyeArtboard != null
+                        ? RiveColorModifier(
+                            artboard: _eyeArtboard!,
+                            fit: BoxFit.cover,
+                          )
+                        : const SizedBox.shrink(),
                   ),
                 ),
               ),
