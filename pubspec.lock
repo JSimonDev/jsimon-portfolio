@@ -704,6 +704,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.12.4"
+  rive_color_modifier:
+    dependency: "direct main"
+    description:
+      name: rive_color_modifier
+      sha256: "0dc67dc2e484d60fa9eaec85eccb0165006f4dde3412b5cd0b151b190e4db736"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.0"
   rive_common:
     dependency: transitive
     description:

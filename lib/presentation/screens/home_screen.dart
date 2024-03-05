@@ -6,13 +6,13 @@ import 'package:dev_icons/dev_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:jsimon/config/utils/rive_utils.dart';
 import 'package:rive/math.dart';
 import 'package:rive/rive.dart';
+import 'package:rive_color_modifier/rive_color_modifier.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:jsimon/config/theme/app_theme.dart';
-import 'package:jsimon/config/utils/rive_change_colors_api.dart';
+import 'package:jsimon/config/utils/rive_utils.dart';
 import 'package:jsimon/widgets/widgets.dart';
 
 final GlobalKey<HomeScreenState> homeScreenKey = GlobalKey();
@@ -479,6 +479,7 @@ class ContactAction extends StatelessWidget {
             width: 10,
           ),
           InkWell(
+            borderRadius: BorderRadius.circular(20),
             onTap: onTap,
             child: Text(
               text,
