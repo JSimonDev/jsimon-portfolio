@@ -479,15 +479,21 @@ class ContactAction extends StatelessWidget {
             width: 10,
           ),
           InkWell(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(5),
+              bottomRight: Radius.circular(5),
+              bottomLeft: Radius.circular(5),
+            ),
             onTap: onTap,
-            child: Text(
-              text,
-              style: textStyles.bodyMedium!.copyWith(
-                color: colors.primary,
-                decoration: TextDecoration.underline,
-                decorationColor: colors.primary,
-                decorationStyle: TextDecorationStyle.dotted,
+            child: Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Text(
+                text,
+                style: textStyles.bodyMedium!.copyWith(
+                  color: colors.primary,
+                  decoration: TextDecoration.underline,
+                  decorationColor: colors.primary,
+                ),
               ),
             ),
           ),
@@ -639,16 +645,34 @@ class ProjectList extends StatelessWidget {
     {
       'name': 'Cotízame',
       'description':
-          'In the development of "Cotízame", an innovative mobile application that facilitates interaction between buyers and sellers through direct quotation requests, I lead the creation of the user interface and design, using Flutter. My role is fundamental in the conceptualization and execution of an intuitive user experience, significantly contributing to the distinctive character and usability of the application. This project has been an excellent opportunity to delve deeper into Flutter and Dart, strengthening my skills in interface design and collaboration to deliver a revolutionary market solution.',
-      'image': 'assets/cotizame.png',
-      'alt': 'Cotízame App Picture',
+          'Cotízame is an innovative mobile application designed in Flutter, specifically aimed, though not exclusively, at the population of the Dominican Republic. Cotizame revolutionizes the way buyers and sellers interact, giving the buyer a more active role in the purchasing process. Through this application, users can draft and send detailed quotation requests specifying the desired product or service and the price they are willing to pay. These requests are sent directly to selected sellers, who can respond with personalized offers. Upon accepting an offer, a purchase order is automatically generated, initiating the payment and delivery process. Cotizame stands out for its modern and user-friendly interface, facilitating intuitive navigation and efficient processing of quotation requests, all within a fast and accessible mobile environment.',
+      'image': 'assets/cotizame.webp',
+      'alt': 'Cotízame App Mockup',
+      'github': '',
     },
     {
-      'name': 'WikiMovies',
+      'name': 'Rive Color Modifier',
+      'description': '''
+Rive Color Modifier is a Flutter package that allows you to dynamically modify the colors of your Rive animations. If you work with animations in your application, this package can be a valuable tool for adjusting colors in real time.
+
+Here are the key details about the package:
+
+- Usage: To use Rive Color Modifier, simply add the dependency to your `pubspec.yaml` file. Then, in your code, you can create instances of `RiveColorModifier` and apply color changes to your Rive animations.
+- Benefits:
+    1. Flexibility: Modify animation colors without altering the original Rive files.
+    2. Interactivity: Adjust colors in real time, useful for customizable themes or dynamic animations.
+    3. Optimization: Avoid duplicating Rive files just to change colors. Making use of RiveRenderObject to apply color changes directly to the Rive animation.''',
+      'image': 'assets/rive_color_modifier_poster.webp',
+      'alt': 'Rive Color Modifier Showcase',
+      'github': 'https://github.com/JSimonDev/rive_color_modifier',
+    },
+    {
+      'name': 'Cinemapedia',
       'description':
-          'In the development of "WikiMovies", an innovative mobile application that facilitates interaction between buyers and sellers through direct quotation requests, I lead the creation of the user interface and design, using Flutter.',
-      'image': 'assets/wikimovie.png',
-      'alt': 'WikiMovies App Picture',
+          'Cinemapedia is an application developed using Flutter and TheMovieDB API, providing users with a platform to explore detailed information about current movies, upcoming releases, and the most popular ones. The app allows users to mark movies as favorites, view trailers, learn about the cast, and perform searches by name, genre, or keywords. It also offers information on actors, film categories, and movie ratings, enabling users to have a comprehensive and enriching experience in their engagement with cinema.',
+      'image': 'assets/cinemapedia.webp',
+      'alt': 'Cinemapedia App Mockup',
+      'github': 'https://github.com/JSimonDev/cinemapedia',
     },
   };
 
@@ -657,6 +681,7 @@ class ProjectList extends StatelessWidget {
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       sliver: SliverMasonryGrid.count(
+        mainAxisSpacing: 10.0,
         crossAxisCount: isLargeScreen ? 1 : 1,
         childCount: projects.length,
         itemBuilder: (context, index) {
@@ -665,6 +690,7 @@ class ProjectList extends StatelessWidget {
             image: projects.elementAt(index)['image']!,
             name: projects.elementAt(index)['name']!,
             description: projects.elementAt(index)['description']!,
+            githubUrl: projects.elementAt(index)['github']!,
           );
         },
       ),
@@ -679,12 +705,14 @@ class ExpandableCard extends StatefulWidget {
     required this.name,
     required this.description,
     required this.isLargeScreen,
+    required this.githubUrl,
   });
 
   final String image;
   final String name;
   final String description;
   final bool isLargeScreen;
+  final String githubUrl;
 
   @override
   State<ExpandableCard> createState() => _ExpandableCardState();
@@ -693,13 +721,33 @@ class ExpandableCard extends StatefulWidget {
 class _ExpandableCardState extends State<ExpandableCard> {
   bool _showMore = false;
 
+  void _launchUrl(String link) async {
+    final Uri url = Uri.parse(link);
+
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    const int wordLimit = 200;
     final TextTheme textStyles = Theme.of(context).textTheme;
-    final String shortDescription = widget.description.length > 150
-        ? '${widget.description.substring(0, 150)}...'
+    final String shortDescription = widget.description.length > wordLimit
+        ? '${widget.description.substring(0, wordLimit)}...'
         : widget.description;
     final String longDescription = widget.description;
+    const buttonShape = MaterialStatePropertyAll(
+      RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20),
+          bottomRight: Radius.circular(20),
+          bottomLeft: Radius.circular(20),
+        ),
+      ),
+    );
 
     return Card(
       clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -719,24 +767,29 @@ class _ExpandableCardState extends State<ExpandableCard> {
         curve: Curves.fastOutSlowIn,
         child: Column(
           children: [
+            //* IMAGE
             Image.asset(
               height: widget.isLargeScreen ? 300 : 200,
               width: double.infinity,
               widget.image,
               fit: BoxFit.cover,
             ),
+            //* DESCRIPTION & BUTTONS
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  //* NAME
                   Text(
                     widget.name,
                     style: textStyles.titleMedium!.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),
+                  const SizedBox(height: 5),
+                  //* DESCRIPTION
                   AnimatedCrossFade(
                     firstChild: Text(shortDescription),
                     secondChild: Text(longDescription),
@@ -749,31 +802,48 @@ class _ExpandableCardState extends State<ExpandableCard> {
                   const SizedBox(
                     height: 10,
                   ),
-                  if (widget.description.length > 150 && !widget.isLargeScreen)
-                    Center(
-                      child: TextButton(
-                        style: const ButtonStyle(
-                          enableFeedback: true,
-                          shape: MaterialStatePropertyAll(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                bottomRight: Radius.circular(20),
-                                bottomLeft: Radius.circular(20),
-                              ),
-                            ),
+                  //* BUTTONS
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      //* GITHUB BUTTON
+                      if (widget.githubUrl.isNotEmpty)
+                        TextButton.icon(
+                          style: const ButtonStyle(
+                            visualDensity: VisualDensity.comfortable,
+                            enableFeedback: true,
+                            shape: buttonShape,
                           ),
+                          icon: const Icon(
+                            DevIcons.githubOriginal,
+                          ),
+                          label: const Text(
+                            'GitHub',
+                          ),
+                          onPressed: () => _launchUrl(widget.githubUrl),
                         ),
-                        child: Text(
-                          _showMore ? 'Mostrar menos' : 'Mostrar más',
+                      const SizedBox(width: 8),
+                      //* SHOW MORE BUTTON
+                      if (widget.description.length > wordLimit &&
+                          !widget.isLargeScreen)
+                        TextButton(
+                          style: const ButtonStyle(
+                            visualDensity: VisualDensity.comfortable,
+                            enableFeedback: true,
+                            shape: buttonShape,
+                          ),
+                          child: Text(
+                            _showMore ? 'Mostrar menos' : 'Mostrar más',
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _showMore = !_showMore;
+                            });
+                          },
                         ),
-                        onPressed: () {
-                          setState(() {
-                            _showMore = !_showMore;
-                          });
-                        },
-                      ),
-                    ),
+                      if (!widget.isLargeScreen) const SizedBox(width: 5),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -1425,7 +1495,7 @@ class AppBarCircleAvatar extends StatelessWidget {
         child: const CircleAvatar(
           radius: radius,
           backgroundImage: AssetImage(
-            'assets/portafolio.jpg',
+            'assets/portafolio.webp',
           ),
         ),
       ),
@@ -1474,7 +1544,6 @@ class AppBarName extends StatelessWidget {
   }
 }
 
-/// Helpers, that are not yet available in [StateMachineController].
 extension StateMachineControllerX on StateMachineController {
   void pointerMoveFromOffset(Offset pointerOffset) => pointerMove(
         Vec2D.fromValues(pointerOffset.dx, pointerOffset.dy),
