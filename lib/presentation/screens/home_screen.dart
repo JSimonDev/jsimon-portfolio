@@ -266,7 +266,7 @@ class _ContactSectionState extends State<ContactSection> {
   Future<void> _load() async {
     //* LOAD QUOTATION RIVE FILE
     final contactFile = await RiveFile.asset('assets/rive/contact.riv');
-    final artboard = contactFile.artboards.first;
+    final artboard = contactFile.artboardByName('Contact')!;
     StateMachineController controller = RiveUtils.getRiveController(
       artboard,
       stateMachineName: 'Bird_Interactivity',
