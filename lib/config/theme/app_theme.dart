@@ -20,6 +20,7 @@ class AppTheme {
   final String selectedColor;
   final bool isDarkMode;
   final fontFamily = GoogleFonts.quicksand();
+  final fallbackFontFamily = GoogleFonts.notoSans();
 
   AppTheme({
     this.selectedColor = "Morado Oscuro",
@@ -33,6 +34,7 @@ class AppTheme {
 
         ///* Texts
         fontFamily: fontFamily.fontFamily,
+        fontFamilyFallback: [fallbackFontFamily.fontFamily!],
 
         ///* Scaffold Background Color
         // scaffoldBackgroundColor: scaffoldBackgroundColor,

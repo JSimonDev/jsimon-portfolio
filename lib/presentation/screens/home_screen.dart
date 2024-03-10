@@ -4,18 +4,26 @@ import 'dart:ui';
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:dev_icons/dev_icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:jsimon/config/utils/utils.dart';
+import 'package:jsimon/presentation/providers/locale_provider.dart';
 import 'package:rive/math.dart';
 import 'package:rive/rive.dart';
 import 'package:rive_color_modifier/rive_color_modifier.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:jsimon/config/theme/app_theme.dart';
+import 'package:jsimon/config/utils/utils.dart';
 import 'package:jsimon/widgets/widgets.dart';
 
 final GlobalKey<HomeScreenState> homeScreenKey = GlobalKey();
+
+Map<String, String> languages = {
+  'Inglés': "en",
+  'Español': "es",
+  'Chino': "zh",
+};
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/';
@@ -35,7 +43,7 @@ class HomeScreenState extends State<HomeScreen> {
 
   void _handleListener() {
     double offset = _scrollController.offset;
-    double maxOffset = 100.0;
+    double maxOffset = 150.0;
     if (offset < maxOffset) {
       setState(() {
         _opacity = 1 - (offset / maxOffset);
@@ -52,39 +60,42 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return ThemeSwitchingArea(
-      child: Scaffold(
-        key: homeScreenKey,
-        body: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            final bool isSmallScreen = constraints.maxWidth <= 320;
-            final bool isMediumScreen =
-                constraints.maxWidth <= 375 && constraints.maxWidth > 320;
-            final bool isLargeScreen = constraints.maxWidth >= 640;
+      child: GestureDetector(
+        onTap: FocusScope.of(context).unfocus,
+        child: Scaffold(
+          key: homeScreenKey,
+          body: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              final bool isSmallScreen = constraints.maxWidth <= 320;
+              final bool isMediumScreen =
+                  constraints.maxWidth <= 375 && constraints.maxWidth > 320;
+              final bool isLargeScreen = constraints.maxWidth >= 640;
 
-            if (isLargeScreen) {
-              return Scrollbar(
-                controller: _scrollController,
-                child: Center(
-                  child: SizedBox(
-                    width: 640,
-                    child: buildBody(
-                      context,
-                      isLargeScreen: isLargeScreen,
-                      isMediumScreen: isMediumScreen,
-                      isSmallScreen: isSmallScreen,
+              if (isLargeScreen) {
+                return Scrollbar(
+                  controller: _scrollController,
+                  child: Center(
+                    child: SizedBox(
+                      width: 640,
+                      child: buildBody(
+                        context,
+                        isLargeScreen: isLargeScreen,
+                        isMediumScreen: isMediumScreen,
+                        isSmallScreen: isSmallScreen,
+                      ),
                     ),
                   ),
-                ),
-              );
-            } else {
-              return buildBody(
-                context,
-                isSmallScreen: isSmallScreen,
-                isMediumScreen: isMediumScreen,
-                isLargeScreen: isLargeScreen,
-              );
-            }
-          },
+                );
+              } else {
+                return buildBody(
+                  context,
+                  isSmallScreen: isSmallScreen,
+                  isMediumScreen: isMediumScreen,
+                  isLargeScreen: isLargeScreen,
+                );
+              }
+            },
+          ),
         ),
       ),
     );
@@ -97,6 +108,7 @@ class HomeScreenState extends State<HomeScreen> {
     required bool isLargeScreen,
   }) {
     final TextTheme textStyles = Theme.of(context).textTheme;
+    final appLocalizations = AppLocalizations.of(context)!;
 
     return SafeArea(
       child: NotificationListener<ScrollNotification>(
@@ -128,7 +140,7 @@ class HomeScreenState extends State<HomeScreen> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
                 child: SelectableText(
-                  'Welcome to my digital garden 🌱, a space where I cultivate and share my discoveries about developing exceptional products, continually refining myself as a developer, and evolving my career in the vast world of technology.',
+                  appLocalizations.phrase,
                   style: textStyles.titleLarge,
                 ),
               ),
@@ -140,9 +152,9 @@ class HomeScreenState extends State<HomeScreen> {
             ),
 
             //* EXPERIENCE SECTION
-            const SliverToBoxAdapter(
+            SliverToBoxAdapter(
               child: BoldTitle(
-                title: 'Expirience:',
+                title: '${appLocalizations.expirienceTitle}:',
               ),
             ),
             const SliverToBoxAdapter(
@@ -158,9 +170,9 @@ class HomeScreenState extends State<HomeScreen> {
             ),
 
             //* PROJECTS SECTION
-            const SliverToBoxAdapter(
+            SliverToBoxAdapter(
               child: BoldTitle(
-                title: 'Projects:',
+                title: '${appLocalizations.projectsTitle}:',
               ),
             ),
             const SliverToBoxAdapter(
@@ -178,9 +190,9 @@ class HomeScreenState extends State<HomeScreen> {
             ),
 
             //* TECHNOLOGIES SECTION
-            const SliverToBoxAdapter(
+            SliverToBoxAdapter(
               child: BoldTitle(
-                title: 'Technologies I have worked with:',
+                title: '${appLocalizations.technologiesTitle}:',
               ),
             ),
             const SliverToBoxAdapter(
@@ -290,6 +302,7 @@ class _ContactSectionState extends State<ContactSection> {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colors = Theme.of(context).colorScheme;
+    final appLocalizations = AppLocalizations.of(context)!;
 
     return SliverToBoxAdapter(
       child: Column(
@@ -302,7 +315,7 @@ class _ContactSectionState extends State<ContactSection> {
             height: 20,
           ),
           //* CONTACT ME TITLE
-          const BoldTitle(title: 'Contact me:'),
+          BoldTitle(title: '${appLocalizations.contactTitle}:'),
           const SizedBox(
             height: 10,
           ),
@@ -318,15 +331,14 @@ class _ContactSectionState extends State<ContactSection> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     //* DESCRIPTION TEXT
-                    const Padding(
-                      padding: EdgeInsets.only(
+                    Padding(
+                      padding: const EdgeInsets.only(
                         left: 12.0,
                         right: 8.0,
                         bottom: 8.0,
                       ),
-                      child: Text(
-                        "If you want to know more about me, my work, or just want to chat, don't hesitate to contact me. I'm always open to new opportunities and collaborations.",
-                      ),
+                      child:
+                          SelectableText(appLocalizations.contactDescription),
                     ),
                     //* RIVE BIRD
                     Center(
@@ -397,7 +409,7 @@ class _ContactSectionState extends State<ContactSection> {
                     //* LICENSE
                     ContactAction(
                       icon: Icons.info,
-                      text: "Licenses",
+                      text: appLocalizations.licenseButtonLabel,
                       onTap: () => showLicensePage(
                         context: context,
                       ),
@@ -419,7 +431,7 @@ class _ContactSectionState extends State<ContactSection> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('Made with'),
+              SelectableText(appLocalizations.footerPhrasePart1),
               SizedBox(
                 height: 30,
                 width: 30,
@@ -435,7 +447,7 @@ class _ContactSectionState extends State<ContactSection> {
                   },
                 ),
               ),
-              const Text('by JSimonDev.'),
+              SelectableText(appLocalizations.footerPhrasePart2),
             ],
           ),
         ],
@@ -641,43 +653,33 @@ class ProjectList extends StatelessWidget {
 
   final bool isLargeScreen;
 
-  static const Set<Map<String, String>> projects = {
-    {
-      'name': 'Cotízame',
-      'description':
-          'Cotízame is an innovative mobile application designed in Flutter, specifically aimed, though not exclusively, at the population of the Dominican Republic. Cotizame revolutionizes the way buyers and sellers interact, giving the buyer a more active role in the purchasing process. Through this application, users can draft and send detailed quotation requests specifying the desired product or service and the price they are willing to pay. These requests are sent directly to selected sellers, who can respond with personalized offers. Upon accepting an offer, a purchase order is automatically generated, initiating the payment and delivery process. Cotizame stands out for its modern and user-friendly interface, facilitating intuitive navigation and efficient processing of quotation requests, all within a fast and accessible mobile environment.',
-      'image': 'assets/cotizame.webp',
-      'alt': 'Cotízame App Mockup',
-      'github': '',
-    },
-    {
-      'name': 'Rive Color Modifier',
-      'description': '''
-Rive Color Modifier is a Flutter package that allows you to dynamically modify the colors of your Rive animations. If you work with animations in your application, this package can be a valuable tool for adjusting colors in real time.
-
-Here are the key details about the package:
-
-- Usage: To use Rive Color Modifier, simply add the dependency to your `pubspec.yaml` file. Then, in your code, you can create instances of `RiveColorModifier` and apply color changes to your Rive animations.
-- Benefits:
-    1. Flexibility: Modify animation colors without altering the original Rive files.
-    2. Interactivity: Adjust colors in real time, useful for customizable themes or dynamic animations.
-    3. Optimization: Avoid duplicating Rive files just to change colors. Making use of RiveRenderObject to apply color changes directly to the Rive animation.''',
-      'image': 'assets/rive_color_modifier_poster.webp',
-      'alt': 'Rive Color Modifier Showcase',
-      'github': 'https://github.com/JSimonDev/rive_color_modifier',
-    },
-    {
-      'name': 'Cinemapedia',
-      'description':
-          'Cinemapedia is an application developed using Flutter and TheMovieDB API, providing users with a platform to explore detailed information about current movies, upcoming releases, and the most popular ones. The app allows users to mark movies as favorites, view trailers, learn about the cast, and perform searches by name, genre, or keywords. It also offers information on actors, film categories, and movie ratings, enabling users to have a comprehensive and enriching experience in their engagement with cinema.',
-      'image': 'assets/cinemapedia.webp',
-      'alt': 'Cinemapedia App Mockup',
-      'github': 'https://github.com/JSimonDev/cinemapedia',
-    },
-  };
-
   @override
   Widget build(BuildContext context) {
+    final appLocalizations = AppLocalizations.of(context)!;
+    Set<Map<String, String>> projects = {
+      {
+        'name': appLocalizations.cotizameName,
+        'description': appLocalizations.cotizameProjectDescription,
+        'image': 'assets/cotizame.webp',
+        'alt': 'Cotízame App Mockup',
+        'github': '',
+      },
+      {
+        'name': appLocalizations.riveColorModifierProjectName,
+        'description': appLocalizations.riveColorModifierProjectDescription,
+        'image': 'assets/rive_color_modifier_poster.webp',
+        'alt': 'Rive Color Modifier Showcase',
+        'github': 'https://github.com/JSimonDev/rive_color_modifier',
+      },
+      {
+        'name': appLocalizations.cinemapediaName,
+        'description': appLocalizations.cinemapediaProjectDescription,
+        'image': 'assets/cinemapedia.webp',
+        'alt': 'Cinemapedia App Mockup',
+        'github': 'https://github.com/JSimonDev/cinemapedia',
+      },
+    };
+
     return SliverPadding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       sliver: SliverMasonryGrid.count(
@@ -782,7 +784,7 @@ class _ExpandableCardState extends State<ExpandableCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   //* NAME
-                  Text(
+                  SelectableText(
                     widget.name,
                     style: textStyles.titleMedium!.copyWith(
                       fontWeight: FontWeight.bold,
@@ -791,8 +793,8 @@ class _ExpandableCardState extends State<ExpandableCard> {
                   const SizedBox(height: 5),
                   //* DESCRIPTION
                   AnimatedCrossFade(
-                    firstChild: Text(shortDescription),
-                    secondChild: Text(longDescription),
+                    firstChild: SelectableText(shortDescription),
+                    secondChild: SelectableText(longDescription),
                     crossFadeState: _showMore || widget.isLargeScreen
                         ? CrossFadeState.showSecond
                         : CrossFadeState.showFirst,
@@ -862,6 +864,7 @@ class TimeLineWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final ColorScheme colors = Theme.of(context).colorScheme;
+    final appLocalizations = AppLocalizations.of(context)!;
 
     return SliverToBoxAdapter(
       child: Padding(
@@ -871,22 +874,20 @@ class TimeLineWidget extends StatelessWidget {
           indicatorSize: 20,
           strokeCap: StrokeCap.round,
           lineGap: 10,
-          children: const [
+          children: [
             //* COTIZAME APP
             TimeLineCard(
-              proyectName: 'Cotízame',
-              role: 'Mobile Developer (Flutter)',
-              timelapse: '2023 - Present',
-              description:
-                  'In the development of "Cotízame", an innovative mobile application that facilitates interaction between buyers and sellers through direct quotation requests, I lead the creation of the user interface and design, using Flutter. My role is fundamental in the conceptualization and execution of an intuitive user experience, significantly contributing to the distinctive character and usability of the application. This project has been an excellent opportunity to delve deeper into Flutter and Dart, strengthening my skills in interface design and collaboration to deliver a revolutionary market solution.',
+              proyectName: appLocalizations.cotizameName,
+              role: appLocalizations.cotizameRole,
+              timelapse: appLocalizations.cotizameTimelapse,
+              description: appLocalizations.cotizameExperienceDescription,
             ),
             //* FREELANCE
             TimeLineCard(
-              proyectName: 'Freelance',
-              role: 'Web Developer / Mobile Developer (Ionic, Flutter)',
-              timelapse: '2022 - 2023',
-              description:
-                  'Personal projects and freelance work have been key in expanding development and design skills, facilitating the exploration of innovative solutions independently. These experiences have reinforced the ability to manage projects and solve technical challenges with creativity, without relying on traditional structures.',
+              proyectName: appLocalizations.freelanceName,
+              role: appLocalizations.freelanceRole,
+              timelapse: appLocalizations.freelanceTimelapse,
+              description: appLocalizations.freelanceExperienceDescription,
             ),
           ],
         ),
@@ -931,17 +932,17 @@ class TimeLineCard extends StatelessWidget {
         children: [
           ListTile(
             contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
-            title: Text(
+            title: SelectableText(
               proyectName,
               style: textStyles.titleMedium,
             ),
-            subtitle: Text(
+            subtitle: SelectableText(
               role,
               style: textStyles.bodySmall!.copyWith(
                 color: colors.onSurface.withOpacity(0.6),
               ),
             ),
-            trailing: Text(
+            trailing: SelectableText(
               timelapse,
               style: textStyles.bodyMedium!.copyWith(
                 color: colors.onSurface.withOpacity(0.6),
@@ -954,7 +955,7 @@ class TimeLineCard extends StatelessWidget {
               right: 20.0,
               bottom: 10.0,
             ),
-            child: Text(
+            child: SelectableText(
               description,
               style: textStyles.bodyLarge,
             ),
@@ -990,8 +991,12 @@ class CustomSliverAppBar extends StatelessWidget {
       pinned: true,
       collapsedHeight: 70,
       expandedHeight: isLargeScreen ? 280 : 200.0,
-      leading: AppBarLeadingButton(
-        opacity: _opacity,
+      leadingWidth: 100,
+      leading: Padding(
+        padding: const EdgeInsets.only(top: 3.0),
+        child: AppBarLeadingButton(
+          opacity: _opacity,
+        ),
       ),
       actions: [
         if (!isSmallScreen)
@@ -1072,6 +1077,8 @@ class ContactButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appLocalizations = AppLocalizations.of(context)!;
+
     const BorderRadius borderRadius = BorderRadius.only(
       topLeft: Radius.circular(20),
       bottomRight: Radius.circular(20),
@@ -1100,9 +1107,58 @@ class ContactButton extends StatelessWidget {
           curve: Curves.easeInOut,
         );
       },
-      child: const Text(
-        'Contact',
+      child: Text(
+        appLocalizations.contactButtonLabel,
       ),
+    );
+  }
+}
+
+class SelectLanguageButton extends ConsumerStatefulWidget {
+  const SelectLanguageButton({super.key});
+
+  @override
+  ConsumerState<SelectLanguageButton> createState() =>
+      _SelectLanguageButtonState();
+}
+
+class _SelectLanguageButtonState extends ConsumerState<SelectLanguageButton> {
+  String dropdownValue = languages.keys.first;
+
+  @override
+  Widget build(BuildContext context) {
+    final ColorScheme colors = Theme.of(context).colorScheme;
+    final localeNotifier = ref.read(myLocaleProvider.notifier);
+
+    return DropdownButton(
+      disabledHint: Text(dropdownValue),
+      alignment: Alignment.center,
+      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+      borderRadius: BorderRadius.circular(10),
+      iconEnabledColor: colors.primary,
+      value: dropdownValue,
+      style: TextStyle(
+        color: colors.primary,
+      ),
+      underline: const SizedBox.shrink(),
+      onChanged: (String? value) {
+        setState(() {
+          dropdownValue = value!;
+          localeNotifier.changeLocale(Locale(languages[value]!));
+        });
+      },
+      items: languages.keys
+          .map<DropdownMenuItem<String>>(
+            (String value) => DropdownMenuItem<String>(
+              value: value,
+              child: Row(
+                children: <Widget>[
+                  Text(value),
+                ],
+              ),
+            ),
+          )
+          .toList(),
     );
   }
 }
@@ -1117,19 +1173,9 @@ class AppBarLeadingButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextTheme textStyles = Theme.of(context).textTheme;
-
     return Opacity(
       opacity: _opacity,
-      child: Center(
-        child: Text(
-          '</>',
-          style: textStyles.titleLarge!.copyWith(
-            fontFamily: GoogleFonts.acme().fontFamily,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-        ),
-      ),
+      child: const SelectLanguageButton(),
     );
   }
 }
@@ -1149,7 +1195,7 @@ class BoldTitle extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0),
-      child: Text(
+      child: SelectableText(
         title,
         style: textStyles.titleLarge!.copyWith(
           fontWeight: FontWeight.bold,
@@ -1419,23 +1465,6 @@ class _TechnologiesListState extends State<TechnologiesList> {
   }
 }
 
-class SliverAppBarBackground extends StatelessWidget {
-  const SliverAppBarBackground({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Opacity(
-      opacity: 0.3,
-      child: Image.network(
-        'https://d1m75rqqgidzqn.cloudfront.net/wp-data/2020/08/17160042/shutterstock_577183882.jpg',
-        fit: BoxFit.cover,
-      ),
-    );
-  }
-}
-
 class SliverAppBarTitle extends StatelessWidget {
   const SliverAppBarTitle({
     super.key,
@@ -1521,28 +1550,27 @@ class AppBarName extends StatelessWidget {
   Widget build(BuildContext context) {
     final ColorScheme colors = Theme.of(context).colorScheme;
     final TextTheme textStyles = Theme.of(context).textTheme;
+    final appLocalizations = AppLocalizations.of(context)!;
 
     return Flexible(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Jonathan Simon',
+          SelectableText(
+            appLocalizations.name,
             style: textStyles.titleLarge!.copyWith(
               fontWeight: FontWeight.bold,
             ),
             maxLines: 1,
-            overflow: TextOverflow.ellipsis,
           ),
-          Text(
+          SelectableText(
             isLargeScreen
-                ? 'Software Developer | Tech Enthusiast'
-                : 'Software Developer',
+                ? appLocalizations.roleLarge
+                : appLocalizations.roleSmall,
             style: textStyles.labelSmall!.copyWith(
               color: colors.onSurface.withOpacity(0.6),
             ),
-            softWrap: true,
           ),
         ],
       ),
