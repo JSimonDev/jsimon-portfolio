@@ -1,9 +1,11 @@
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:jsimon/config/router/app_router.dart';
 import 'package:jsimon/config/theme/app_theme.dart';
+import 'package:jsimon/presentation/providers/locale_provider.dart';
 
 import 'config/utils/utils.dart';
 
@@ -33,10 +35,9 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appRouter = ref.read(appRouterProvider);
-
+    final Locale locale = ref.watch(myLocaleProvider);
     final bool systemMode =
         MediaQuery.of(context).platformBrightness == Brightness.dark;
-
     final initTheme = AppTheme(
       selectedColor: "Morado Oscuro",
       isDarkMode: isDarkMode ?? systemMode,
@@ -47,6 +48,9 @@ class MyApp extends ConsumerWidget {
       builder: (context, theme) {
         return MaterialApp.router(
           title: 'JSimon Portfolio',
+          locale: locale,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
           scrollBehavior: const MaterialScrollBehavior().copyWith(
             scrollbars: false,
           ),

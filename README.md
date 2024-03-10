@@ -18,6 +18,9 @@ Para generar los splash de la aplicacion:
 Para cambiar el nombre del bundle de la app:
 ```flutter pub run change_app_package_name:main com.new.package.name```
 
+Para generar los archivos de traduccion:
+```flutter gen-l10n```
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
