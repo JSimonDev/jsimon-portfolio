@@ -1130,35 +1130,35 @@ class _SelectLanguageButtonState extends ConsumerState<SelectLanguageButton> {
     final ColorScheme colors = Theme.of(context).colorScheme;
     final localeNotifier = ref.read(myLocaleProvider.notifier);
 
-    return DropdownButton(
-      disabledHint: Text(dropdownValue),
-      alignment: Alignment.center,
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      borderRadius: BorderRadius.circular(10),
-      iconEnabledColor: colors.primary,
-      value: dropdownValue,
-      style: TextStyle(
-        color: colors.primary,
+    return DropdownButtonHideUnderline(
+      child: DropdownButton(
+        disabledHint: Text(dropdownValue),
+        alignment: Alignment.center,
+        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+        borderRadius: BorderRadius.circular(10),
+        iconEnabledColor: colors.primary,
+        value: dropdownValue,
+        style: TextStyle(
+          color: colors.primary,
+        ),
+        underline: const SizedBox.shrink(),
+        onChanged: (String? value) {
+          setState(() {
+            dropdownValue = value!;
+            localeNotifier.changeLocale(Locale(languages[value]!));
+          });
+        },
+        items: List.generate(
+          languages.keys.length,
+          (index) {
+            final String key = languages.keys.elementAt(index);
+            return DropdownMenuItem(
+              value: key,
+              child: Text(key),
+            );
+          },
+        ),
       ),
-      underline: const SizedBox.shrink(),
-      onChanged: (String? value) {
-        setState(() {
-          dropdownValue = value!;
-          localeNotifier.changeLocale(Locale(languages[value]!));
-        });
-      },
-      items: languages.keys
-          .map<DropdownMenuItem<String>>(
-            (String value) => DropdownMenuItem<String>(
-              value: value,
-              child: Row(
-                children: <Widget>[
-                  Text(value),
-                ],
-              ),
-            ),
-          )
-          .toList(),
     );
   }
 }
