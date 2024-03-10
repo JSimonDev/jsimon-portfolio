@@ -1,143 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    
-    <base href="$FLUTTER_BASE_HREF" />
 
-    <meta charset="UTF-8" />
-    <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
-    <meta name="description" content="Discover Jonathan Simon's professional portfolio showcasing skills in web and mobile app development." />
-    <meta
-      name="keywords"
-      content="Jonathan Simon, Jonathan Simon Peña Bertoli,Jonathan Simon Portfolio, JSimonDev, Portfolio, jsimon, jsimondev, portfolio, web, mobile, app, development, developer, software, engineer, software engineer, software developer, full stack, full stack developer, full stack engineer, front end, front end developer, front end engineer"
-    />
-    <meta name="author" content="Jonathan Simon" />
+<head>
 
-    <!-- Open Graph meta tags for Facebook -->
-    <meta property="og:title" content="JSimon Portfolio" />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="icons/Icon-maskable-192.png" />
-    <meta property="og:url" content="https://jsimon.dev" />
-    <meta property="og:description" content="Discover Jonathan Simon's professional portfolio showcasing skills in web and mobile app development." />
+  <base href="$FLUTTER_BASE_HREF" />
 
-    <!-- Twitter Card meta tags -->
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="JSimon Portfolio" />
-    <meta name="twitter:description" content="Discover Jonathan Simon's professional portfolio showcasing skills in web and mobile app development." />
-    <meta name="twitter:image" content="icons/Icon-maskable-192.png" />
+  <meta charset="UTF-8" />
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible" />
+  <meta name="description"
+    content="Discover Jonathan Simon's professional portfolio showcasing skills in web and mobile app development." />
+  <meta name="keywords"
+    content="Jonathan Simon, Jonathan Simon Peña Bertoli,Jonathan Simon Portfolio, JSimonDev, Portfolio, jsimon, jsimondev, portfolio, web, mobile, app, development, developer, software, engineer, software engineer, software developer, full stack, full stack developer, full stack engineer, front end, front end developer, front end engineer" />
+  <meta name="author" content="Jonathan Simon" />
 
-    <!-- iOS meta tags & icons -->
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-    <meta name="apple-mobile-web-app-title" content="JSimon Portfolio" />
-    <link rel="apple-touch-icon" href="icons/Icon-maskable-192.png" />
+  <!-- Open Graph meta tags for Facebook -->
+  <meta property="og:title" content="JSimon Portfolio" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="icons/Icon-maskable-192.png" />
+  <meta property="og:url" content="https://jsimon.dev" />
+  <meta property="og:description"
+    content="Discover Jonathan Simon's professional portfolio showcasing skills in web and mobile app development." />
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="favicon.png" />
+  <!-- Twitter Card meta tags -->
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="JSimon Portfolio" />
+  <meta name="twitter:description"
+    content="Discover Jonathan Simon's professional portfolio showcasing skills in web and mobile app development." />
+  <meta name="twitter:image" content="icons/Icon-maskable-192.png" />
 
-    <title>JSimon Portfolio</title>
-    <link rel="manifest" href="manifest.json" />
+  <!-- iOS meta tags & icons -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  <meta name="apple-mobile-web-app-title" content="JSimon Portfolio" />
+  <link rel="apple-touch-icon" href="icons/Icon-maskable-192.png" />
 
-    <link rel='canonical' href='https://jsimon.dev' />
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png" />
 
-    <script>
-      // The value below is injected by flutter build, do not touch.
-      const serviceWorkerVersion = null;
-    </script>
-    <!-- This script adds the flutter initialization JS code -->
-    <script src="flutter.js" defer=""></script>
-    <style id="splash-screen-style">
-      html {
-        height: 100%;
-      }
+  <title>JSimon Portfolio</title>
+  <link rel="manifest" href="manifest.json" />
 
+  <link rel='canonical' href='https://jsimon.dev' />
+
+  <script>
+    // The value below is injected by flutter build, do not touch.
+    const serviceWorkerVersion = null;
+  </script>
+  <!-- This script adds the flutter initialization JS code -->
+  <script src="flutter.js" defer></script>
+  <style id="splash-screen-style">
+    html {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100%;
+      background-color: #ffffff;
+      background-size: 100% 100%;
+    }
+
+    .center {
+      margin: 0;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -ms-transform: translate(-50%, -50%);
+      transform: translate(-50%, -50%);
+    }
+
+    .contain {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .stretch {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .cover {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .bottom {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      -ms-transform: translate(-50%, 0);
+      transform: translate(-50%, 0);
+    }
+
+    .bottomLeft {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+    }
+
+    .bottomRight {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+
+    /*------ Loader ------*/
+
+    @media (prefers-color-scheme: dark) {
       body {
-        margin: 0;
-        min-height: 100%;
-        background-color: #ffffff;
-        background-size: 100% 100%;
+        background-color: #1d1b1e;
+        color: #e6e1e6;
+      }
+    }
+
+    @media (prefers-color-scheme: light) {
+      body {
+        background-color: #fffbff;
+        color: #6f43c0;
+        /* color: #1d1b1e; */
+      }
+    }
+
+    #loading {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-size: 1.5em;
+    }
+
+    .loader {
+      font-weight: bold;
+      font-family: monospace;
+      font-size: 30px;
+      display: inline-grid;
+      overflow: hidden;
+    }
+
+    .loader:before,
+    .loader:after {
+      content: "Loading...";
+      grid-area: 1/1;
+      clip-path: inset(0 -200% 50%);
+      text-shadow: -10ch 0 0;
+      animation: l12 1s infinite;
+    }
+
+    .loader:after {
+      clip-path: inset(50% -200% 0%);
+      text-shadow: 10ch 0 0;
+      --s: -1;
+    }
+
+    @keyframes l12 {
+
+      50%,
+      100% {
+        transform: translateX(calc(var(--s, 1)*100%));
+      }
+    }
+
+    @keyframes l28 {
+      100% {
+        transform: rotate(1turn)
+      }
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
       }
 
-      .center {
-        margin: 0;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        -ms-transform: translate(-50%, -50%);
-        transform: translate(-50%, -50%);
+      100% {
+        transform: rotate(360deg);
       }
+    }
+  </style>
+  <script id="splash-screen-script">
+    function removeSplashFromWeb() {
+      document.getElementById("splash")?.remove();
+      document.getElementById("splash-branding")?.remove();
+      document.body.style.background = "transparent";
+    }
+  </script>
+  <meta content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" name="viewport" />
+</head>
 
-      .contain {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
+<body>
+  
+  <div id="loading">
+    <div class="loader"></div>
+  </div>
 
-      .stretch {
-        display: block;
-        width: 100%;
-        height: 100%;
-      }
-
-      .cover {
-        display: block;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-
-      .bottom {
-        position: absolute;
-        bottom: 0;
-        left: 50%;
-        -ms-transform: translate(-50%, 0);
-        transform: translate(-50%, 0);
-      }
-
-      .bottomLeft {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-      }
-
-      .bottomRight {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-      }
-
-      @media (prefers-color-scheme: dark) {
-        body {
-          background-color: #ffffff;
-        }
-      }
-    </style>
-    <script id="splash-screen-script">
-      function removeSplashFromWeb() {
-        document.getElementById("splash")?.remove();
-        document.getElementById("splash-branding")?.remove();
-        document.body.style.background = "transparent";
-      }
-    </script>
-    <meta
-      content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes"
-      name="viewport"
-    />
-  </head>
-  <body>
-    <script>
-      window.addEventListener("load", function (ev) {
-        // Download main.dart.js
-        _flutter.loader.loadEntrypoint({
-          serviceWorker: {
-            serviceWorkerVersion: serviceWorkerVersion,
-          },
-          onEntrypointLoaded: async function (engineInitializer) {
-            await engineInitializer.autoStart();
-          },
-        });
+  <script>
+    window.addEventListener("load", function (ev) {
+      // Download main.dart.js
+      _flutter.loader.loadEntrypoint({
+        serviceWorker: {
+          serviceWorkerVersion: serviceWorkerVersion,
+        },
+        onEntrypointLoaded: async function (engineInitializer) {
+          await engineInitializer.autoStart();
+        },
       });
-    </script>
-  </body>
+    });
+  </script>
+</body>
+
 </html>

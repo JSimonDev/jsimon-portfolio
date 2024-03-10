@@ -5,22 +5,42 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:jsimon/config/router/app_router.dart';
 import 'package:jsimon/config/theme/app_theme.dart';
 
-void main() {
+import 'config/utils/utils.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  final isDarkMode =
+      await KeyValueStorageServiceImpl().getValue<bool>('isDarkMode');
+
   runApp(
-    const ProviderScope(
-      child: MyApp(),
+    ProviderScope(
+      child: MyApp(
+        isDarkMode: isDarkMode,
+      ),
     ),
   );
 }
 
 class MyApp extends ConsumerWidget {
-  const MyApp({super.key});
+  final bool? isDarkMode;
+
+  const MyApp({
+    super.key,
+    required this.isDarkMode,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final appRouter = ref.read(appRouterProvider);
-    final initTheme =
-        AppTheme(selectedColor: "Morado Oscuro", isDarkMode: true).getTheme();
+
+    final bool systemMode =
+        MediaQuery.of(context).platformBrightness == Brightness.dark;
+
+    final initTheme = AppTheme(
+      selectedColor: "Morado Oscuro",
+      isDarkMode: isDarkMode ?? systemMode,
+    ).getTheme();
 
     return ThemeProvider(
       initTheme: initTheme,

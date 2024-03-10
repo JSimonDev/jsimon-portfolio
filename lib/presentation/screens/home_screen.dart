@@ -6,13 +6,13 @@ import 'package:dev_icons/dev_icons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:jsimon/config/utils/utils.dart';
 import 'package:rive/math.dart';
 import 'package:rive/rive.dart';
 import 'package:rive_color_modifier/rive_color_modifier.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:jsimon/config/theme/app_theme.dart';
-import 'package:jsimon/config/utils/rive_utils.dart';
 import 'package:jsimon/widgets/widgets.dart';
 
 final GlobalKey<HomeScreenState> homeScreenKey = GlobalKey();
@@ -1027,6 +1027,7 @@ class TheSwitcherButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
+    final keyValueStorageService = KeyValueStorageServiceImpl();
 
     //* LIGHT THEME
     final ThemeData appThemeLight = AppTheme(
@@ -1041,7 +1042,12 @@ class TheSwitcherButton extends StatelessWidget {
     return ThemeSwitcher.switcher(
       builder: (context, switcher) {
         return IconButton(
-          onPressed: () {
+          onPressed: () async {
+            await keyValueStorageService.setKeyValue<bool>(
+              'isDarkMode',
+              !isDarkMode,
+            );
+
             switcher.changeTheme(
               isReversed: isDarkMode ? true : false,
               theme: isDarkMode ? appThemeLight : appThemeDark,
