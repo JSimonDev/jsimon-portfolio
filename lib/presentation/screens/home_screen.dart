@@ -1435,18 +1435,17 @@ class _TechnologiesListState extends State<TechnologiesList> {
         child: RotatedBox(
           quarterTurns: -1,
           child: ListWheelScrollView.useDelegate(
-            scrollBehavior:
-                const MaterialScrollBehavior().copyWith(scrollbars: false),
-            physics: widget.isLargeScreen
-                ? const NeverScrollableScrollPhysics()
-                : const FixedExtentScrollPhysics(),
-            controller: widget.isLargeScreen
-                ? _scrollController
-                : FixedExtentScrollController(),
+            scrollBehavior: const MaterialScrollBehavior().copyWith(
+              scrollbars: false,
+              dragDevices: {
+                PointerDeviceKind.touch,
+                PointerDeviceKind.mouse,
+              },
+            ),
+            controller: _scrollController,
             diameterRatio: 2,
             perspective: 0.003,
             clipBehavior: Clip.antiAlias,
-            overAndUnderCenterOpacity: widget.isLargeScreen ? 0.5 : 1.0,
             childDelegate: ListWheelChildLoopingListDelegate(
               children: loopTechs.map((tech) {
                 final bool isIconEqualWordmark =
