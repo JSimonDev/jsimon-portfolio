@@ -3,7 +3,11 @@ import 'dart:ui';
 
 import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:dev_icons/dev_icons.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -20,9 +24,10 @@ import 'package:jsimon/widgets/widgets.dart';
 final GlobalKey<HomeScreenState> homeScreenKey = GlobalKey();
 
 Map<String, String> languages = {
-  'Inglés': "en",
+  'English': "en",
   'Español': "es",
-  'Chino': "zh",
+  '中文': "zh",
+  'हिंदी': "hi",
 };
 
 class HomeScreen extends StatefulWidget {
@@ -59,170 +64,171 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textStyles = Theme.of(context).textTheme;
+    final appLocalizations = AppLocalizations.of(context)!;
+    final Size size = MediaQuery.sizeOf(context);
+
     return ThemeSwitchingArea(
       child: GestureDetector(
         onTap: FocusScope.of(context).unfocus,
-        child: Scaffold(
-          key: homeScreenKey,
-          body: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-              final bool isSmallScreen = constraints.maxWidth <= 320;
-              final bool isMediumScreen =
-                  constraints.maxWidth <= 375 && constraints.maxWidth > 320;
-              final bool isLargeScreen = constraints.maxWidth >= 640;
+        child: Scrollbar(
+          controller: _scrollController,
+          interactive: true,
+          child: Scaffold(
+            key: homeScreenKey,
+            body: LayoutBuilder(
+              builder: (BuildContext context, BoxConstraints constraints) {
+                final bool isSmallScreen = constraints.maxWidth <= 320;
+                final bool isMediumScreen =
+                    constraints.maxWidth <= 375 && constraints.maxWidth > 320;
+                final bool isLargeScreen = constraints.maxWidth >= 640;
 
-              if (isLargeScreen) {
-                return Scrollbar(
-                  controller: _scrollController,
-                  child: Center(
-                    child: SizedBox(
-                      width: 640,
-                      child: buildBody(
-                        context,
-                        isLargeScreen: isLargeScreen,
-                        isMediumScreen: isMediumScreen,
-                        isSmallScreen: isSmallScreen,
-                      ),
+                final double padding = isLargeScreen ? size.width / 2 - 320 : 0;
+
+                return SafeArea(
+                  child: NotificationListener<ScrollNotification>(
+                    onNotification: (notification) {
+                      if (notification is ScrollUpdateNotification) {
+                        _handleListener();
+                      }
+                      return true;
+                    },
+                    child: CustomScrollView(
+                      controller: _scrollController,
+                      slivers: [
+                        //* SLIVER APP BAR
+                        SliverPadding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: isLargeScreen ? padding : 0,
+                          ),
+                          sliver: CustomSliverAppBar(
+                            opacity: _opacity,
+                            isSmallScreen: isSmallScreen,
+                            isMediumScreen: isMediumScreen,
+                            isLargeScreen: isLargeScreen,
+                            scrollController: _scrollController,
+                          ),
+                        ),
+                        const SliverToBoxAdapter(
+                          child: SizedBox(
+                            height: 30,
+                          ),
+                        ),
+
+                        //* PHRASE
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: isLargeScreen ? padding : 12,
+                            ),
+                            child: SelectableText(
+                              appLocalizations.phrase,
+                              style: textStyles.titleLarge,
+                            ),
+                          ),
+                        ),
+                        SliverToBoxAdapter(
+                          child: SizedBox(
+                            height: isLargeScreen ? 70 : 40,
+                          ),
+                        ),
+
+                        //* EXPERIENCE SECTION
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: padding),
+                            child: BoldTitle(
+                              title: '${appLocalizations.expirienceTitle}:',
+                            ),
+                          ),
+                        ),
+                        const SliverToBoxAdapter(
+                          child: SizedBox(
+                            height: 10,
+                          ),
+                        ),
+                        SliverPadding(
+                          padding: EdgeInsets.symmetric(horizontal: padding),
+                          sliver: const TimeLineWidget(),
+                        ),
+                        const SliverToBoxAdapter(
+                          child: SizedBox(
+                            height: 40,
+                          ),
+                        ),
+
+                        //* PROJECTS SECTION
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: padding),
+                            child: BoldTitle(
+                              title: '${appLocalizations.projectsTitle}:',
+                            ),
+                          ),
+                        ),
+                        const SliverToBoxAdapter(
+                          child: SizedBox(
+                            height: 10,
+                          ),
+                        ),
+                        SliverPadding(
+                          padding: EdgeInsets.symmetric(horizontal: padding),
+                          sliver: ProjectList(
+                            isLargeScreen: isLargeScreen,
+                          ),
+                        ),
+                        const SliverToBoxAdapter(
+                          child: SizedBox(
+                            height: 40,
+                          ),
+                        ),
+
+                        //* TECHNOLOGIES SECTION
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: padding),
+                            child: BoldTitle(
+                              title: '${appLocalizations.technologiesTitle}:',
+                            ),
+                          ),
+                        ),
+                        const SliverToBoxAdapter(
+                          child: SizedBox(
+                            height: 10,
+                          ),
+                        ),
+                        SliverPadding(
+                          padding: EdgeInsets.symmetric(horizontal: padding),
+                          sliver: TechnologiesList(
+                            wordmark: true,
+                            onlyWordmark: true,
+                            isLargeScreen: isLargeScreen,
+                          ),
+                        ),
+                        const SliverToBoxAdapter(
+                          child: SizedBox(
+                            height: 50,
+                          ),
+                        ),
+
+                        //* CONTACT SECTION
+                        ContactSection(
+                          isLargeScreen: isLargeScreen,
+                        ),
+
+                        //* GRACE SPACE
+                        const SliverToBoxAdapter(
+                          child: SizedBox(
+                            height: 30,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 );
-              } else {
-                return buildBody(
-                  context,
-                  isSmallScreen: isSmallScreen,
-                  isMediumScreen: isMediumScreen,
-                  isLargeScreen: isLargeScreen,
-                );
-              }
-            },
+              },
+            ),
           ),
-        ),
-      ),
-    );
-  }
-
-  Widget buildBody(
-    BuildContext context, {
-    required bool isSmallScreen,
-    required bool isMediumScreen,
-    required bool isLargeScreen,
-  }) {
-    final TextTheme textStyles = Theme.of(context).textTheme;
-    final appLocalizations = AppLocalizations.of(context)!;
-
-    return SafeArea(
-      child: NotificationListener<ScrollNotification>(
-        onNotification: (notification) {
-          if (notification is ScrollUpdateNotification) {
-            _handleListener();
-          }
-          return true;
-        },
-        child: CustomScrollView(
-          controller: _scrollController,
-          slivers: [
-            //* SLIVER APP BAR
-            CustomSliverAppBar(
-              opacity: _opacity,
-              isSmallScreen: isSmallScreen,
-              isMediumScreen: isMediumScreen,
-              isLargeScreen: isLargeScreen,
-              scrollController: _scrollController,
-            ),
-            const SliverToBoxAdapter(
-              child: SizedBox(
-                height: 30,
-              ),
-            ),
-
-            //* PHRASE
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                child: SelectableText(
-                  appLocalizations.phrase,
-                  style: textStyles.titleLarge,
-                ),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: isLargeScreen ? 70 : 40,
-              ),
-            ),
-
-            //* EXPERIENCE SECTION
-            SliverToBoxAdapter(
-              child: BoldTitle(
-                title: '${appLocalizations.expirienceTitle}:',
-              ),
-            ),
-            const SliverToBoxAdapter(
-              child: SizedBox(
-                height: 10,
-              ),
-            ),
-            const TimeLineWidget(),
-            const SliverToBoxAdapter(
-              child: SizedBox(
-                height: 40,
-              ),
-            ),
-
-            //* PROJECTS SECTION
-            SliverToBoxAdapter(
-              child: BoldTitle(
-                title: '${appLocalizations.projectsTitle}:',
-              ),
-            ),
-            const SliverToBoxAdapter(
-              child: SizedBox(
-                height: 10,
-              ),
-            ),
-            ProjectList(
-              isLargeScreen: isLargeScreen,
-            ),
-            const SliverToBoxAdapter(
-              child: SizedBox(
-                height: 40,
-              ),
-            ),
-
-            //* TECHNOLOGIES SECTION
-            SliverToBoxAdapter(
-              child: BoldTitle(
-                title: '${appLocalizations.technologiesTitle}:',
-              ),
-            ),
-            const SliverToBoxAdapter(
-              child: SizedBox(
-                height: 10,
-              ),
-            ),
-            TechnologiesList(
-              wordmark: true,
-              onlyWordmark: true,
-              isLargeScreen: isLargeScreen,
-            ),
-            const SliverToBoxAdapter(
-              child: SizedBox(
-                height: 50,
-              ),
-            ),
-
-            //* CONTACT SECTION
-            ContactSection(
-              isLargeScreen: isLargeScreen,
-            ),
-
-            //* GRACE SPACE
-            const SliverToBoxAdapter(
-              child: SizedBox(
-                height: 30,
-              ),
-            ),
-          ],
         ),
       ),
     );
@@ -315,140 +321,171 @@ class _ContactSectionState extends State<ContactSection> {
             height: 20,
           ),
           //* CONTACT ME TITLE
-          BoldTitle(title: '${appLocalizations.contactTitle}:'),
+          Center(
+            child: SizedBox(
+              width: 640,
+              child: BoldTitle(title: '${appLocalizations.contactTitle}:'),
+            ),
+          ),
           const SizedBox(
             height: 10,
           ),
           //* CONTACT ME SECTION
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              //* DESCRIPTION & RIVE BIRD
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    //* DESCRIPTION TEXT
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 12.0,
-                        right: 8.0,
-                        bottom: 8.0,
-                      ),
-                      child:
-                          SelectableText(appLocalizations.contactDescription),
-                    ),
-                    //* RIVE BIRD
-                    Center(
-                      child: SizedBox.fromSize(
-                        size: const Size(60, 134),
-                        child: MouseRegion(
-                          onHover: (_) => hoverTrigger.fire(),
-                          child: _contactArtboard != null
-                              ? RiveColorModifier(
-                                  alignment: Alignment.center,
-                                  artboard: _contactArtboard!,
-                                  fit: BoxFit.cover,
-                                  components: [
-                                    RiveColorComponent(
-                                      shapeName: 'Button',
-                                      fillName: 'Button Background Fill',
-                                      color: colors.primary,
-                                    ),
-                                    RiveColorComponent(
-                                      shapeName: 'Text 1',
-                                      fillName: 'Text Fill 1',
-                                      color: colors.onPrimary,
-                                    ),
-                                    RiveColorComponent(
-                                      shapeName: 'Text 2',
-                                      fillName: 'Text Fill 2',
-                                      color: colors.onPrimary,
-                                    ),
-                                  ],
-                                )
-                              : const SizedBox.shrink(),
+          Center(
+            child: SizedBox(
+              width: 640,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  //* DESCRIPTION & RIVE BIRD
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        //* DESCRIPTION TEXT
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 8.0,
+                            left: 12.0,
+                            right: 8.0,
+                            bottom: 8.0,
+                          ),
+                          child: SelectableText(
+                              appLocalizations.contactDescription),
                         ),
-                      ),
-                    )
-                  ],
-                ),
+                        //* RIVE BIRD
+                        Center(
+                          child: SizedBox.fromSize(
+                            size: const Size(60, 134),
+                            child: MouseRegion(
+                              onHover: (_) => hoverTrigger.fire(),
+                              child: _contactArtboard != null
+                                  ? RiveColorModifier(
+                                      alignment: Alignment.center,
+                                      artboard: _contactArtboard!,
+                                      fit: BoxFit.cover,
+                                      components: [
+                                        RiveColorComponent(
+                                          shapeName: 'Button',
+                                          fillName: 'Button Background Fill',
+                                          color: colors.primary,
+                                        ),
+                                        RiveColorComponent(
+                                          shapeName: 'Text 1',
+                                          fillName: 'Text Fill 1',
+                                          color: colors.onPrimary,
+                                        ),
+                                        RiveColorComponent(
+                                          shapeName: 'Text 2',
+                                          fillName: 'Text Fill 2',
+                                          color: colors.onPrimary,
+                                        ),
+                                      ],
+                                    )
+                                  : const SizedBox.shrink(),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  //* CONTACT ACTIONS
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        //* PHONE
+                        ContactAction(
+                          icon: Icons.phone,
+                          text: "+1 (849) 527-1701",
+                          onTap: () => _launchPhone('tel:+18495271701'),
+                        ),
+                        //* EMAIL
+                        ContactAction(
+                          icon: Icons.email,
+                          text: "jsimondev@gmail.com",
+                          onTap: () =>
+                              _launchMail('mailto:jsimondev@gmail.com'),
+                        ),
+                        //* SOCIAL MEDIA
+                        ContactAction(
+                          icon: DevIcons.githubOriginal,
+                          text: "GitHub",
+                          onTap: () =>
+                              _launchUrl('https://github.com/JSimonDev'),
+                        ),
+                        //* TELEGRAM
+                        ContactAction(
+                          icon: Icons.send,
+                          text: "Telegram",
+                          onTap: () => _launchUrl('https://t.me/MRPDWKDP'),
+                        ),
+                        //* LICENSE
+                        ContactAction(
+                          icon: Icons.info,
+                          text: appLocalizations.licenseButtonLabel,
+                          onTap: () => showLicensePage(
+                            context: context,
+                          ),
+                        ),
+                        //* LIFE POLICIES
+                        ContactAction(
+                          icon: Icons.policy,
+                          text: AppLocalizations.of(context)!.lifePolicies,
+                          onTap: () =>
+                              _launchUrl('https://ian.hixie.ch/bible/policies'),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
               ),
-              //* CONTACT ACTIONS
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    //* PHONE
-                    ContactAction(
-                      icon: Icons.phone,
-                      text: "+1 (849) 527-1701",
-                      onTap: () => _launchPhone('tel:+18495271701'),
-                    ),
-                    //* EMAIL
-                    ContactAction(
-                      icon: Icons.email,
-                      text: "jsimondev@gmail.com",
-                      onTap: () => _launchMail('mailto:jsimondev@gmail.com'),
-                    ),
-                    //* SOCIAL MEDIA
-                    ContactAction(
-                      icon: DevIcons.githubOriginal,
-                      text: "GitHub",
-                      onTap: () => _launchUrl('https://github.com/JSimonDev'),
-                    ),
-                    //* TELEGRAM
-                    ContactAction(
-                      icon: Icons.send,
-                      text: "Telegram",
-                      onTap: () => _launchUrl('https://t.me/MRPDWKDP'),
-                    ),
-                    //* LICENSE
-                    ContactAction(
-                      icon: Icons.info,
-                      text: appLocalizations.licenseButtonLabel,
-                      onTap: () => showLicensePage(
-                        context: context,
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
+            ),
           ),
           const SizedBox(height: 25),
           //* DIVIDER
-          const Divider(
-            thickness: 1,
-            indent: 20,
-            endIndent: 20,
+          const Center(
+            child: SizedBox(
+              width: 640,
+              child: Divider(
+                thickness: 1,
+                indent: 20,
+                endIndent: 20,
+              ),
+            ),
           ),
           const SizedBox(height: 20),
           //* FOOTER
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SelectableText(appLocalizations.footerPhrasePart1),
-              SizedBox(
-                height: 30,
-                width: 30,
-                child: RiveAnimation.asset(
-                  artboard: 'Heart',
-                  'assets/rive/heart.riv',
-                  fit: BoxFit.cover,
-                  alignment: Alignment.topCenter,
-                  onInit: (artboard) {
-                    artboard.addController(
-                      SimpleAnimation('Spin_Idle'),
-                    );
-                  },
-                ),
+          Center(
+            child: SizedBox(
+              width: 640,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SelectableText(appLocalizations.footerPhrasePart1),
+                  //* HEART RIVE ANIMATION
+                  SizedBox(
+                    height: 30,
+                    width: 30,
+                    child: RiveAnimation.asset(
+                      artboard: 'Heart',
+                      'assets/rive/heart.riv',
+                      fit: BoxFit.cover,
+                      alignment: Alignment.topCenter,
+                      onInit: (artboard) {
+                        artboard.addController(
+                          SimpleAnimation('Spin_Idle'),
+                        );
+                      },
+                    ),
+                  ),
+                  SelectableText(appLocalizations.footerPhrasePart2),
+                ],
               ),
-              SelectableText(appLocalizations.footerPhrasePart2),
-            ],
+            ),
           ),
         ],
       ),
@@ -581,6 +618,7 @@ class _CustomDividerState extends State<CustomDivider> {
               ),
             ),
           ),
+          //* EYE RIVE ANIMATION
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Container(
@@ -1129,6 +1167,7 @@ class _SelectLanguageButtonState extends ConsumerState<SelectLanguageButton> {
   Widget build(BuildContext context) {
     final ColorScheme colors = Theme.of(context).colorScheme;
     final localeNotifier = ref.read(myLocaleProvider.notifier);
+    final keyValueStorageService = KeyValueStorageServiceImpl();
 
     return DropdownButtonHideUnderline(
       child: DropdownButton(
@@ -1142,7 +1181,12 @@ class _SelectLanguageButtonState extends ConsumerState<SelectLanguageButton> {
           color: colors.primary,
         ),
         underline: const SizedBox.shrink(),
-        onChanged: (String? value) {
+        onChanged: (String? value) async {
+          keyValueStorageService.setKeyValue<String>(
+            'language',
+            languages[value]!,
+          );
+
           setState(() {
             dropdownValue = value!;
             localeNotifier.changeLocale(Locale(languages[value]!));
