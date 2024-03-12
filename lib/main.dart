@@ -15,32 +15,53 @@ void main() async {
   final isDarkMode =
       await KeyValueStorageServiceImpl().getValue<bool>('isDarkMode');
 
+  final language =
+      await KeyValueStorageServiceImpl().getValue<String>('language');
+
   runApp(
     ProviderScope(
-      child: MyApp(
+      child: MyPortfolio(
         isDarkMode: isDarkMode,
+        language: language,
       ),
     ),
   );
 }
 
-class MyApp extends ConsumerWidget {
+class MyPortfolio extends ConsumerStatefulWidget {
   final bool? isDarkMode;
+  final String? language;
 
-  const MyApp({
+  const MyPortfolio({
     super.key,
     required this.isDarkMode,
+    required this.language,
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<MyPortfolio> createState() => _MyPortfolioState();
+}
+
+class _MyPortfolioState extends ConsumerState<MyPortfolio> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final localeNotifier = ref.read(myLocaleProvider.notifier);
+
+      if (widget.language == null) return;
+      localeNotifier.changeLocale(Locale(widget.language!));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final appRouter = ref.read(appRouterProvider);
     final Locale locale = ref.watch(myLocaleProvider);
     final bool systemMode =
         MediaQuery.of(context).platformBrightness == Brightness.dark;
     final initTheme = AppTheme(
-      selectedColor: "Morado Oscuro",
-      isDarkMode: isDarkMode ?? systemMode,
+      isDarkMode: widget.isDarkMode ?? systemMode,
     ).getTheme();
 
     return ThemeProvider(
