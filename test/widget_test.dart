@@ -13,7 +13,8 @@ import 'package:jsimon/main.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp(isDarkMode: true));
+    await tester
+        .pumpWidget(const MyPortfolio(isDarkMode: true, language: 'en'));
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
