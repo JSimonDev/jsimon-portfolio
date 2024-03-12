@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:jsimon/presentation/providers/locale_provider.dart';
 import 'package:rive/math.dart';
 import 'package:rive/rive.dart';
 import 'package:rive_color_modifier/rive_color_modifier.dart';
@@ -16,6 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'package:jsimon/config/theme/app_theme.dart';
 import 'package:jsimon/config/utils/utils.dart';
+import 'package:jsimon/presentation/providers/locale_provider.dart';
 import 'package:jsimon/widgets/widgets.dart';
 
 final GlobalKey<HomeScreenState> homeScreenKey = GlobalKey();
@@ -1158,13 +1158,29 @@ class SelectLanguageButton extends ConsumerStatefulWidget {
 }
 
 class _SelectLanguageButtonState extends ConsumerState<SelectLanguageButton> {
-  String dropdownValue = languages.keys.first;
+  late String dropdownValue;
+  final keyValueStorageService = KeyValueStorageServiceImpl();
+
+  @override
+  void initState() {
+    final localeState = ref.read(myLocaleProvider);
+    dropdownValue = languages.keys
+        .firstWhere((key) => languages[key] == localeState.languageCode);
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    final localeState = ref.watch(myLocaleProvider);
+    dropdownValue = languages.keys
+        .firstWhere((key) => languages[key] == localeState.languageCode);
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
     final ColorScheme colors = Theme.of(context).colorScheme;
-    final localeNotifier = ref.read(myLocaleProvider.notifier);
-    final keyValueStorageService = KeyValueStorageServiceImpl();
+    final MyLocale localeNotifier = ref.read(myLocaleProvider.notifier);
 
     return DropdownButtonHideUnderline(
       child: DropdownButton(
@@ -1179,7 +1195,7 @@ class _SelectLanguageButtonState extends ConsumerState<SelectLanguageButton> {
         ),
         underline: const SizedBox.shrink(),
         onChanged: (String? value) async {
-          keyValueStorageService.setKeyValue<String>(
+          await keyValueStorageService.setKeyValue<String>(
             'language',
             languages[value]!,
           );
