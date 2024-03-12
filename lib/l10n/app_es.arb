@@ -25,6 +25,7 @@
   "cinemapediaProjectDescription": "Cinemapedia es una aplicación desarrollada utilizando Flutter y la API de TheMovieDB, brindando a los usuarios una plataforma para explorar información detallada sobre películas actuales, próximos estrenos y las más populares. La aplicación permite a los usuarios marcar películas como favoritas, ver tráileres, conocer sobre el elenco y realizar búsquedas por nombre, género o palabras clave. También ofrece información sobre actores, categorías de películas y calificaciones de películas, permitiendo a los usuarios tener una experiencia comprensiva y enriquecedora en su interacción con el cine.",
   "contactDescription": "Si quieres saber más sobre mí, mi trabajo o simplemente quieres charlar, no dudes en contactarme. Siempre estoy abierto a nuevas oportunidades y colaboraciones.",
   "licenseButtonLabel": "Licencias",
+  "lifePolicies": "Políticas de Vida",
   "footerPhrasePart1": "Hecho con",
   "footerPhrasePart2": "por JSimonDev"
 }
