@@ -5,6 +5,7 @@ import 'package:animated_theme_switcher/animated_theme_switcher.dart';
 import 'package:dev_icons/dev_icons.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -1286,6 +1287,7 @@ class _TechnologiesListState extends State<TechnologiesList> {
   late Timer _timer;
   late int _currentItem = 0;
   double itemExtent = 100.0;
+  bool userScrolling = false;
 
   //* Map with all the techs I have worked with
   static Set<Map<String, dynamic>> techs = {
@@ -1392,26 +1394,44 @@ class _TechnologiesListState extends State<TechnologiesList> {
   void initState() {
     super.initState();
     _timer = Timer.periodic(const Duration(seconds: 2), (Timer t) {
-      _currentItem++;
-      if (_currentItem >= techs.length * 3 &&
-          _scrollController.hasClients &&
-          widget.isLargeScreen) {
-        _currentItem = 0;
-        _scrollController.jumpTo(_currentItem * itemExtent);
-      }
-      if (_scrollController.hasClients && widget.isLargeScreen) {
-        _scrollController.animateTo(
-          _currentItem * itemExtent,
-          duration: const Duration(milliseconds: 200),
-          curve: Curves.easeInOut,
-        );
+      if (!userScrolling) {
+        _moveToNextItem();
       }
     });
+
+    _scrollController.addListener(_scrollListener);
+  }
+
+  void _moveToNextItem() {
+    _currentItem++;
+    if (_currentItem >= techs.length * 3 &&
+        _scrollController.hasClients &&
+        widget.isLargeScreen) {
+      _currentItem = 0;
+      _scrollController.jumpTo(_currentItem * itemExtent);
+    } else if (_scrollController.hasClients && widget.isLargeScreen) {
+      _scrollController.animateTo(
+        _currentItem * itemExtent,
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
+
+  void _scrollListener() {
+    if (_scrollController.position.userScrollDirection !=
+        ScrollDirection.idle) {
+      if (!userScrolling) {
+        userScrolling = true;
+      }
+    }
   }
 
   @override
   void dispose() {
     _timer.cancel();
+    _scrollController.removeListener(_scrollListener);
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -1434,86 +1454,106 @@ class _TechnologiesListState extends State<TechnologiesList> {
         width: double.infinity,
         child: RotatedBox(
           quarterTurns: -1,
-          child: ListWheelScrollView.useDelegate(
-            scrollBehavior: const MaterialScrollBehavior().copyWith(
-              scrollbars: false,
-              dragDevices: {
-                PointerDeviceKind.touch,
-                PointerDeviceKind.mouse,
-              },
-            ),
-            controller: _scrollController,
-            diameterRatio: 2,
-            perspective: 0.003,
-            clipBehavior: Clip.antiAlias,
-            childDelegate: ListWheelChildLoopingListDelegate(
-              children: loopTechs.map((tech) {
-                final bool isIconEqualWordmark =
-                    tech['icon'] == tech['wordmark'];
+          child: NotificationListener<ScrollNotification>(
+            onNotification: (ScrollNotification notification) {
+              if (notification is UserScrollNotification) {
+                switch (notification.direction) {
+                  case ScrollDirection.idle:
+                    if (userScrolling) {
+                      userScrolling = false;
+                      _currentItem =
+                          (_scrollController.offset / itemExtent).round();
+                    }
+                    break;
+                  case ScrollDirection.forward:
+                  case ScrollDirection.reverse:
+                    userScrolling = true;
+                    break;
+                }
+              }
+              return true;
+            },
+            child: ListWheelScrollView.useDelegate(
+              scrollBehavior: const MaterialScrollBehavior().copyWith(
+                scrollbars: false,
+                dragDevices: {
+                  PointerDeviceKind.touch,
+                  PointerDeviceKind.mouse,
+                },
+              ),
+              controller: _scrollController,
+              diameterRatio: 2,
+              perspective: 0.003,
+              clipBehavior: Clip.antiAlias,
+              childDelegate: ListWheelChildLoopingListDelegate(
+                children: loopTechs.map((tech) {
+                  final bool isIconEqualWordmark =
+                      tech['icon'] == tech['wordmark'];
 
-                return RotatedBox(
-                  quarterTurns: 1,
-                  child: AspectRatio(
-                    aspectRatio: 1,
-                    child: GestureDetector(
-                      onTap: () {
-                        final Uri url = Uri.parse(tech['doc']);
+                  return RotatedBox(
+                    quarterTurns: 1,
+                    child: AspectRatio(
+                      aspectRatio: 1,
+                      child: GestureDetector(
+                        onTap: () {
+                          final Uri url = Uri.parse(tech['doc']);
 
-                        _launchUrl(url);
-                      },
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: const BorderRadius.only(
-                            topLeft: Radius.circular(radius),
-                            bottomRight: Radius.circular(radius),
-                            bottomLeft: Radius.circular(radius),
+                          _launchUrl(url);
+                        },
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(radius),
+                              bottomRight: Radius.circular(radius),
+                              bottomLeft: Radius.circular(radius),
+                            ),
+                            side: BorderSide(
+                              color: Theme.of(context).colorScheme.primary,
+                              width: 0.5,
+                            ),
                           ),
-                          side: BorderSide(
-                            color: Theme.of(context).colorScheme.primary,
-                            width: 0.5,
-                          ),
+                          child: widget.wordmark && !isIconEqualWordmark ||
+                                  widget.onlyWordmark
+                              ? Icon(
+                                  tech['wordmark'],
+                                  size: isIconEqualWordmark ? 50 : 60,
+                                )
+                              : Column(
+                                  children: [
+                                    Expanded(
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                          top: 10.0,
+                                        ),
+                                        child: Icon(
+                                          tech['icon'],
+                                          size: widget.isLargeScreen ? 50 : 40,
+                                          // color: colors.primary,
+                                        ),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        tech['nombre'],
+                                        style: widget.isLargeScreen
+                                            ? textStyles.titleLarge
+                                            : textStyles.bodyLarge,
+                                        textAlign: TextAlign.center,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                         ),
-                        child: widget.wordmark && !isIconEqualWordmark ||
-                                widget.onlyWordmark
-                            ? Icon(
-                                tech['wordmark'],
-                                size: isIconEqualWordmark ? 50 : 60,
-                              )
-                            : Column(
-                                children: [
-                                  Expanded(
-                                    child: Padding(
-                                      padding: const EdgeInsets.only(
-                                        top: 10.0,
-                                      ),
-                                      child: Icon(
-                                        tech['icon'],
-                                        size: widget.isLargeScreen ? 50 : 40,
-                                        // color: colors.primary,
-                                      ),
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      tech['nombre'],
-                                      style: widget.isLargeScreen
-                                          ? textStyles.titleLarge
-                                          : textStyles.bodyLarge,
-                                      textAlign: TextAlign.center,
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                ],
-                              ),
                       ),
                     ),
-                  ),
-                );
-              }).toList(), // puedes ajustar este valor según tus necesidades
+                  );
+                }).toList(), // puedes ajustar este valor según tus necesidades
+              ),
+              itemExtent: itemExtent,
             ),
-            itemExtent: itemExtent,
           ),
         ),
       ),
