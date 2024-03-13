@@ -25,6 +25,7 @@
   "cinemapediaProjectDescription": "Cinemapedia是一个使用Flutter和TheMovieDB API开发的应用，为用户提供一个平台，探索关于当前电影、即将上映的影片和最受欢迎的电影的详细信息。应用允许用户将电影标记为最爱，观看预告片，了解演员阵容，并通过名称、类型或关键词执行搜索。它还提供有关演员、电影类别和电影评级的信息，使用户在与电影的互动中拥有全面且丰富的体验。",
   "contactDescription": "如果您想了解更多关于我、我的工作，或只是想聊天，请随时联系我。我始终对新的机会和合作持开放态度。",
   "licenseButtonLabel": "许可",
+  "goToTopButtonLabel": "回到顶部",
   "lifePolicies": "人寿保险政策",
   "footerPhrasePart1": "用心制作",
   "footerPhrasePart2": "由JSimonDev"

@@ -212,6 +212,7 @@ class HomeScreenState extends State<HomeScreen> {
                         //* CONTACT SECTION
                         ContactSection(
                           isLargeScreen: isLargeScreen,
+                          scrollController: _scrollController,
                         ),
 
                         //* GRACE SPACE
@@ -237,9 +238,11 @@ class ContactSection extends StatefulWidget {
   const ContactSection({
     super.key,
     required this.isLargeScreen,
+    required this.scrollController,
   });
 
   final bool isLargeScreen;
+  final ScrollController scrollController;
 
   @override
   State<ContactSection> createState() => _ContactSectionState();
@@ -315,19 +318,25 @@ class _ContactSectionState extends State<ContactSection> {
         children: [
           //* CUSTOM DIVIDER
           const CustomDivider(),
-          const SizedBox(
-            height: 20,
-          ),
-          //* CONTACT ME TITLE
+          const SizedBox(height: 20),
+          //* CONTACT ME TITLE & GO TO TOP BUTTON
           Center(
             child: SizedBox(
               width: 640,
-              child: BoldTitle(title: '${appLocalizations.contactTitle}:'),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  //* CONTACT ME TITLE
+                  BoldTitle(title: '${appLocalizations.contactTitle}:'),
+                  //* GO TO TOP BUTTON
+                  GoToTopButton(
+                    scrollController: widget.scrollController,
+                  )
+                ],
+              ),
             ),
           ),
-          const SizedBox(
-            height: 10,
-          ),
+          const SizedBox(height: 10),
           //* CONTACT ME SECTION
           Center(
             child: SizedBox(
@@ -487,6 +496,58 @@ class _ContactSectionState extends State<ContactSection> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class GoToTopButton extends StatelessWidget {
+  const GoToTopButton({
+    super.key,
+    required this.scrollController,
+  });
+
+  final ScrollController scrollController;
+
+  @override
+  Widget build(BuildContext context) {
+    final appLocalizations = AppLocalizations.of(context)!;
+
+    return TextButton(
+      style: const ButtonStyle(
+        visualDensity: VisualDensity.comfortable,
+        enableFeedback: true,
+        shape: MaterialStatePropertyAll(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
+              bottomLeft: Radius.circular(20),
+            ),
+          ),
+        ),
+        padding: MaterialStatePropertyAll(
+          EdgeInsets.only(right: 10.0, left: 0.0),
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(
+            Icons.arrow_drop_up_rounded,
+          ),
+          Text(
+            appLocalizations.goToTopButtonLabel,
+          ),
+        ],
+      ),
+      onPressed: () {
+        scrollController.animateTo(
+          0,
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+        );
+      },
     );
   }
 }
@@ -1138,7 +1199,7 @@ class ContactButton extends StatelessWidget {
       ),
       onPressed: () {
         scrollController.animateTo(
-          scrollController.position.maxScrollExtent,
+          scrollController.position.maxScrollExtent + 200,
           duration: const Duration(milliseconds: 500),
           curve: Curves.easeInOut,
         );
