@@ -1233,7 +1233,10 @@ class AppBarLeadingButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Opacity(
       opacity: _opacity,
-      child: const SelectLanguageButton(),
+      child: IgnorePointer(
+        ignoring: _opacity <= 0.3,
+        child: const SelectLanguageButton(),
+      ),
     );
   }
 }
@@ -1404,12 +1407,10 @@ class _TechnologiesListState extends State<TechnologiesList> {
 
   void _moveToNextItem() {
     _currentItem++;
-    if (_currentItem >= techs.length * 3 &&
-        _scrollController.hasClients &&
-        widget.isLargeScreen) {
+    if (_currentItem >= techs.length * 3 && _scrollController.hasClients) {
       _currentItem = 0;
       _scrollController.jumpTo(_currentItem * itemExtent);
-    } else if (_scrollController.hasClients && widget.isLargeScreen) {
+    } else if (_scrollController.hasClients) {
       _scrollController.animateTo(
         _currentItem * itemExtent,
         duration: const Duration(milliseconds: 200),
