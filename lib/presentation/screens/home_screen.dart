@@ -759,7 +759,7 @@ class ProjectList extends StatelessWidget {
         'description': appLocalizations.cotizameProjectDescription,
         'image': 'assets/cotizame.webp',
         'alt': 'Cotízame App Mockup',
-        'github': '',
+        'link': 'https://cotizame.com.do/',
       },
       {
         'name': appLocalizations.riveColorModifierProjectName,
@@ -789,7 +789,8 @@ class ProjectList extends StatelessWidget {
             image: projects.elementAt(index)['image']!,
             name: projects.elementAt(index)['name']!,
             description: projects.elementAt(index)['description']!,
-            githubUrl: projects.elementAt(index)['github']!,
+            githubUrl: projects.elementAt(index)['github'],
+            linkUrl: projects.elementAt(index)['link'],
           );
         },
       ),
@@ -805,13 +806,15 @@ class ExpandableCard extends StatefulWidget {
     required this.description,
     required this.isLargeScreen,
     required this.githubUrl,
+    required this.linkUrl,
   });
 
   final String image;
   final String name;
   final String description;
   final bool isLargeScreen;
-  final String githubUrl;
+  final String? githubUrl;
+  final String? linkUrl;
 
   @override
   State<ExpandableCard> createState() => _ExpandableCardState();
@@ -832,6 +835,7 @@ class _ExpandableCardState extends State<ExpandableCard> {
 
   @override
   Widget build(BuildContext context) {
+    final appLocalizations = AppLocalizations.of(context)!;
     const int wordLimit = 200;
     final TextTheme textStyles = Theme.of(context).textTheme;
     final String shortDescription = widget.description.length > wordLimit
@@ -905,8 +909,25 @@ class _ExpandableCardState extends State<ExpandableCard> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
+                      //* LINK BUTTON
+                      if (widget.linkUrl != null)
+                        TextButton.icon(
+                          style: const ButtonStyle(
+                            visualDensity: VisualDensity.comfortable,
+                            enableFeedback: true,
+                            shape: buttonShape,
+                          ),
+                          icon: const Icon(
+                            Icons.link,
+                          ),
+                          label: Text(
+                            appLocalizations.goToWebsiteButtonLabel,
+                          ),
+                          onPressed: () => _launchUrl(widget.linkUrl!),
+                        ),
+
                       //* GITHUB BUTTON
-                      if (widget.githubUrl.isNotEmpty)
+                      if (widget.githubUrl != null)
                         TextButton.icon(
                           style: const ButtonStyle(
                             visualDensity: VisualDensity.comfortable,
@@ -919,7 +940,7 @@ class _ExpandableCardState extends State<ExpandableCard> {
                           label: const Text(
                             'GitHub',
                           ),
-                          onPressed: () => _launchUrl(widget.githubUrl),
+                          onPressed: () => _launchUrl(widget.githubUrl!),
                         ),
                       const SizedBox(width: 8),
                       //* SHOW MORE BUTTON
