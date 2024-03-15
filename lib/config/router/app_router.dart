@@ -7,12 +7,19 @@ part 'app_router.g.dart';
 @riverpod
 GoRouter appRouter(AppRouterRef ref) {
   return GoRouter(
+    initialLocation: '/',
     routes: [
       GoRoute(
         path: '/',
         name: HomeScreen.routeName,
-        builder: (context, state) => const HomeScreen(),
+        builder: (context, state) => HomeScreen(),
+      ),
+      GoRoute(
+        path: '/404',
+        name: NotFoundPage.name,
+        builder: (context, state) => const NotFoundPage(),
       ),
     ],
+    errorBuilder: (context, state) => const NotFoundPage(),
   );
 }

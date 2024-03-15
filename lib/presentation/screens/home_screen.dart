@@ -9,6 +9,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:go_router/go_router.dart';
 import 'package:rive/math.dart';
 import 'package:rive/rive.dart';
 import 'package:rive_color_modifier/rive_color_modifier.dart';
@@ -18,8 +19,6 @@ import 'package:jsimon/config/theme/app_theme.dart';
 import 'package:jsimon/config/utils/utils.dart';
 import 'package:jsimon/presentation/providers/locale_provider.dart';
 import 'package:jsimon/widgets/widgets.dart';
-
-final GlobalKey<HomeScreenState> homeScreenKey = GlobalKey();
 
 Map<String, String> languages = {
   'English': "en",
@@ -31,7 +30,9 @@ Map<String, String> languages = {
 class HomeScreen extends StatefulWidget {
   static const routeName = '/';
 
-  const HomeScreen({
+  final GlobalKey _key = GlobalKey();
+
+  HomeScreen({
     super.key,
   });
 
@@ -73,7 +74,7 @@ class HomeScreenState extends State<HomeScreen> {
           controller: _scrollController,
           interactive: true,
           child: Scaffold(
-            key: homeScreenKey,
+            key: widget._key,
             body: LayoutBuilder(
               builder: (BuildContext context, BoxConstraints constraints) {
                 final bool isSmallScreen = constraints.maxWidth <= 320;
@@ -125,6 +126,30 @@ class HomeScreenState extends State<HomeScreen> {
                             ),
                           ),
                         ),
+
+                        const SliverToBoxAdapter(
+                          child: SizedBox(
+                            height: 30,
+                          ),
+                        ),
+
+                        //* NOT FOUND PAGE BUTTON
+                        SliverToBoxAdapter(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: isLargeScreen ? padding : 12,
+                            ),
+                            child: TextButton(
+                              onPressed: () {
+                                context.go('/hola');
+                              },
+                              child: const Text(
+                                'Go to Not Found Page',
+                              ),
+                            ),
+                          ),
+                        ),
+
                         SliverToBoxAdapter(
                           child: SizedBox(
                             height: isLargeScreen ? 70 : 40,
