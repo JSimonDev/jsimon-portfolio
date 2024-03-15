@@ -71,9 +71,6 @@ class _MyPortfolioState extends ConsumerState<MyPortfolio> {
           locale: locale,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
           supportedLocales: AppLocalizations.supportedLocales,
-          scrollBehavior: const MaterialScrollBehavior().copyWith(
-            scrollbars: false,
-          ),
           debugShowCheckedModeBanner: false,
           routerConfig: appRouter,
           theme: theme,

@@ -7,6 +7,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_improved_scrolling/flutter_improved_scrolling.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:rive/math.dart';
@@ -44,8 +45,7 @@ class HomeScreenState extends State<HomeScreen> {
   final bool _isAppBarExpanded = true;
   double _opacity = 1;
 
-  void _handleListener() {
-    double offset = _scrollController.offset;
+  void _handleListener(double offset) {
     double maxOffset = 150.0;
     if (offset < maxOffset) {
       setState(() {
@@ -63,177 +63,181 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final TextTheme textStyles = Theme.of(context).textTheme;
+    final ColorScheme colors = Theme.of(context).colorScheme;
     final appLocalizations = AppLocalizations.of(context)!;
     final Size size = MediaQuery.sizeOf(context);
 
     return ThemeSwitchingArea(
       child: GestureDetector(
         onTap: FocusScope.of(context).unfocus,
-        child: Scrollbar(
-          controller: _scrollController,
-          interactive: true,
-          child: Scaffold(
-            key: widget._key,
-            body: LayoutBuilder(
-              builder: (BuildContext context, BoxConstraints constraints) {
-                final bool isSmallScreen = constraints.maxWidth <= 320;
-                final bool isMediumScreen =
-                    constraints.maxWidth <= 375 && constraints.maxWidth > 320;
-                final bool isLargeScreen = constraints.maxWidth >= 640;
+        child: Scaffold(
+          key: widget._key,
+          body: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              final bool isSmallScreen = constraints.maxWidth <= 320;
+              final bool isMediumScreen =
+                  constraints.maxWidth <= 375 && constraints.maxWidth > 320;
+              final bool isLargeScreen = constraints.maxWidth >= 640;
 
-                final double padding = isLargeScreen ? size.width / 2 - 320 : 0;
+              final double padding = isLargeScreen ? size.width / 2 - 320 : 0;
 
-                return SafeArea(
-                  child: NotificationListener<ScrollNotification>(
-                    onNotification: (notification) {
-                      if (notification is ScrollUpdateNotification) {
-                        _handleListener();
-                      }
-                      return true;
-                    },
-                    child: CustomScrollView(
-                      controller: _scrollController,
-                      slivers: [
-                        //* SLIVER APP BAR
-                        SliverPadding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: isLargeScreen ? padding : 0,
-                          ),
-                          sliver: CustomSliverAppBar(
-                            opacity: _opacity,
-                            isSmallScreen: isSmallScreen,
-                            isMediumScreen: isMediumScreen,
-                            isLargeScreen: isLargeScreen,
-                            scrollController: _scrollController,
-                          ),
+              return SafeArea(
+                child: ImprovedScrolling(
+                  mmbScrollConfig: MMBScrollConfig(
+                    customScrollCursor: DefaultCustomScrollCursor(
+                      cursorColor: colors.primary,
+                      backgroundColor: colors.background,
+                      borderColor: colors.primary,
+                    ),
+                  ),
+                  onScroll: (offset) => _handleListener(offset),
+                  scrollController: _scrollController,
+                  enableMMBScrolling: true,
+                  enableKeyboardScrolling: true,
+                  enableCustomMouseWheelScrolling: true,
+                  child: CustomScrollView(
+                    controller: _scrollController,
+                    physics: const NeverScrollableScrollPhysics(),
+                    slivers: [
+                      //* SLIVER APP BAR
+                      SliverPadding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: isLargeScreen ? padding : 0,
                         ),
-                        const SliverToBoxAdapter(
-                          child: SizedBox(
-                            height: 30,
-                          ),
-                        ),
-
-                        //* PHRASE
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: isLargeScreen ? padding : 12,
-                            ),
-                            child: SelectableText(
-                              appLocalizations.phrase,
-                              style: textStyles.titleLarge,
-                            ),
-                          ),
-                        ),
-
-                        const SliverToBoxAdapter(
-                          child: SizedBox(
-                            height: 30,
-                          ),
-                        ),
-
-                        SliverToBoxAdapter(
-                          child: SizedBox(
-                            height: isLargeScreen ? 70 : 40,
-                          ),
-                        ),
-
-                        //* EXPERIENCE SECTION
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: padding),
-                            child: BoldTitle(
-                              title: '${appLocalizations.expirienceTitle}:',
-                            ),
-                          ),
-                        ),
-                        const SliverToBoxAdapter(
-                          child: SizedBox(
-                            height: 10,
-                          ),
-                        ),
-                        SliverPadding(
-                          padding: EdgeInsets.symmetric(horizontal: padding),
-                          sliver: const TimeLineWidget(),
-                        ),
-                        const SliverToBoxAdapter(
-                          child: SizedBox(
-                            height: 40,
-                          ),
-                        ),
-
-                        //* PROJECTS SECTION
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: padding),
-                            child: BoldTitle(
-                              title: '${appLocalizations.projectsTitle}:',
-                            ),
-                          ),
-                        ),
-                        const SliverToBoxAdapter(
-                          child: SizedBox(
-                            height: 10,
-                          ),
-                        ),
-                        SliverPadding(
-                          padding: EdgeInsets.symmetric(horizontal: padding),
-                          sliver: ProjectList(
-                            isLargeScreen: isLargeScreen,
-                          ),
-                        ),
-                        const SliverToBoxAdapter(
-                          child: SizedBox(
-                            height: 40,
-                          ),
-                        ),
-
-                        //* TECHNOLOGIES SECTION
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(horizontal: padding),
-                            child: BoldTitle(
-                              title: '${appLocalizations.technologiesTitle}:',
-                            ),
-                          ),
-                        ),
-                        const SliverToBoxAdapter(
-                          child: SizedBox(
-                            height: 10,
-                          ),
-                        ),
-                        SliverPadding(
-                          padding: EdgeInsets.symmetric(horizontal: padding),
-                          sliver: TechnologiesList(
-                            wordmark: true,
-                            onlyWordmark: true,
-                            isLargeScreen: isLargeScreen,
-                          ),
-                        ),
-                        const SliverToBoxAdapter(
-                          child: SizedBox(
-                            height: 50,
-                          ),
-                        ),
-
-                        //* CONTACT SECTION
-                        ContactSection(
+                        sliver: CustomSliverAppBar(
+                          opacity: _opacity,
+                          isSmallScreen: isSmallScreen,
+                          isMediumScreen: isMediumScreen,
                           isLargeScreen: isLargeScreen,
                           scrollController: _scrollController,
                         ),
+                      ),
+                      const SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: 30,
+                        ),
+                      ),
 
-                        //* GRACE SPACE
-                        const SliverToBoxAdapter(
-                          child: SizedBox(
-                            height: 30,
+                      //* PHRASE
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: isLargeScreen ? padding : 12,
+                          ),
+                          child: SelectableText(
+                            appLocalizations.phrase,
+                            style: textStyles.titleLarge,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+
+                      const SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: 30,
+                        ),
+                      ),
+
+                      SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: isLargeScreen ? 70 : 40,
+                        ),
+                      ),
+
+                      //* EXPERIENCE SECTION
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: padding),
+                          child: BoldTitle(
+                            title: '${appLocalizations.expirienceTitle}:',
+                          ),
+                        ),
+                      ),
+                      const SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: 10,
+                        ),
+                      ),
+                      SliverPadding(
+                        padding: EdgeInsets.symmetric(horizontal: padding),
+                        sliver: const TimeLineWidget(),
+                      ),
+                      const SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: 40,
+                        ),
+                      ),
+
+                      //* PROJECTS SECTION
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: padding),
+                          child: BoldTitle(
+                            title: '${appLocalizations.projectsTitle}:',
+                          ),
+                        ),
+                      ),
+                      const SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: 10,
+                        ),
+                      ),
+                      SliverPadding(
+                        padding: EdgeInsets.symmetric(horizontal: padding),
+                        sliver: ProjectList(
+                          isLargeScreen: isLargeScreen,
+                        ),
+                      ),
+                      const SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: 40,
+                        ),
+                      ),
+
+                      //* TECHNOLOGIES SECTION
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(horizontal: padding),
+                          child: BoldTitle(
+                            title: '${appLocalizations.technologiesTitle}:',
+                          ),
+                        ),
+                      ),
+                      const SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: 10,
+                        ),
+                      ),
+                      SliverPadding(
+                        padding: EdgeInsets.symmetric(horizontal: padding),
+                        sliver: TechnologiesList(
+                          wordmark: true,
+                          onlyWordmark: true,
+                          isLargeScreen: isLargeScreen,
+                        ),
+                      ),
+                      const SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: 50,
+                        ),
+                      ),
+
+                      //* CONTACT SECTION
+                      ContactSection(
+                        isLargeScreen: isLargeScreen,
+                        scrollController: _scrollController,
+                      ),
+
+                      //* GRACE SPACE
+                      const SliverToBoxAdapter(
+                        child: SizedBox(
+                          height: 30,
+                        ),
+                      ),
+                    ],
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
         ),
       ),
@@ -1380,6 +1384,7 @@ class _TechnologiesListState extends State<TechnologiesList> {
   late int _currentItem = 0;
   double itemExtent = 100.0;
   bool userScrolling = false;
+  MouseCursor cursorType = SystemMouseCursors.grab;
 
   //* Map with all the techs I have worked with
   static Set<Map<String, dynamic>> techs = {
@@ -1482,6 +1487,12 @@ class _TechnologiesListState extends State<TechnologiesList> {
     }
   }
 
+  void _updateCursorType(MouseCursor newCursorType) {
+    setState(() {
+      cursorType = newCursorType;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -1542,107 +1553,119 @@ class _TechnologiesListState extends State<TechnologiesList> {
       child: SizedBox(
         height: 150,
         width: double.infinity,
-        child: RotatedBox(
-          quarterTurns: -1,
-          child: NotificationListener<ScrollNotification>(
-            onNotification: (ScrollNotification notification) {
-              if (notification is UserScrollNotification) {
-                switch (notification.direction) {
-                  case ScrollDirection.idle:
-                    if (userScrolling) {
-                      userScrolling = false;
-                      _currentItem =
-                          (_scrollController.offset / itemExtent).round();
+        child: Listener(
+          onPointerUp: (event) => _updateCursorType(SystemMouseCursors.grab),
+          onPointerDown: (event) =>
+              _updateCursorType(SystemMouseCursors.grabbing),
+          child: MouseRegion(
+            cursor: cursorType,
+            child: RotatedBox(
+              quarterTurns: -1,
+              child: NotificationListener<ScrollNotification>(
+                onNotification: (ScrollNotification notification) {
+                  if (notification is UserScrollNotification) {
+                    switch (notification.direction) {
+                      case ScrollDirection.idle:
+                        if (userScrolling) {
+                          userScrolling = false;
+                          _currentItem =
+                              (_scrollController.offset / itemExtent).round();
+                        }
+                        break;
+                      case ScrollDirection.forward:
+                        userScrolling = true;
+                        break;
+                      case ScrollDirection.reverse:
+                        userScrolling = true;
+                        break;
                     }
-                    break;
-                  case ScrollDirection.forward:
-                  case ScrollDirection.reverse:
-                    userScrolling = true;
-                    break;
-                }
-              }
-              return true;
-            },
-            child: ListWheelScrollView.useDelegate(
-              scrollBehavior: const MaterialScrollBehavior().copyWith(
-                scrollbars: false,
-                dragDevices: {
-                  PointerDeviceKind.touch,
-                  PointerDeviceKind.mouse,
+                  }
+                  return true;
                 },
-              ),
-              controller: _scrollController,
-              diameterRatio: 2,
-              perspective: 0.003,
-              clipBehavior: Clip.antiAlias,
-              childDelegate: ListWheelChildLoopingListDelegate(
-                children: loopTechs.map((tech) {
-                  final bool isIconEqualWordmark =
-                      tech['icon'] == tech['wordmark'];
+                child: ListWheelScrollView.useDelegate(
+                  scrollBehavior: const MaterialScrollBehavior().copyWith(
+                    scrollbars: false,
+                    dragDevices: {
+                      PointerDeviceKind.touch,
+                      PointerDeviceKind.mouse,
+                    },
+                  ),
+                  controller: _scrollController,
+                  diameterRatio: 2,
+                  perspective: 0.003,
+                  clipBehavior: Clip.antiAlias,
+                  childDelegate: ListWheelChildLoopingListDelegate(
+                    children: loopTechs.map((tech) {
+                      final bool isIconEqualWordmark =
+                          tech['icon'] == tech['wordmark'];
 
-                  return RotatedBox(
-                    quarterTurns: 1,
-                    child: AspectRatio(
-                      aspectRatio: 1,
-                      child: GestureDetector(
-                        onTap: () {
-                          final Uri url = Uri.parse(tech['doc']);
+                      return RotatedBox(
+                        quarterTurns: 1,
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: GestureDetector(
+                            onTap: () {
+                              final Uri url = Uri.parse(tech['doc']);
 
-                          _launchUrl(url);
-                        },
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: const BorderRadius.only(
-                              topLeft: Radius.circular(radius),
-                              bottomRight: Radius.circular(radius),
-                              bottomLeft: Radius.circular(radius),
-                            ),
-                            side: BorderSide(
-                              color: Theme.of(context).colorScheme.primary,
-                              width: 0.5,
+                              _launchUrl(url);
+                            },
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(radius),
+                                  bottomRight: Radius.circular(radius),
+                                  bottomLeft: Radius.circular(radius),
+                                ),
+                                side: BorderSide(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  width: 0.5,
+                                ),
+                              ),
+                              child: widget.wordmark && !isIconEqualWordmark ||
+                                      widget.onlyWordmark
+                                  ? Icon(
+                                      tech['wordmark'],
+                                      size: isIconEqualWordmark ? 50 : 60,
+                                    )
+                                  : Column(
+                                      children: [
+                                        Expanded(
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                              top: 10.0,
+                                            ),
+                                            child: Icon(
+                                              tech['icon'],
+                                              size: widget.isLargeScreen
+                                                  ? 50
+                                                  : 40,
+                                              // color: colors.primary,
+                                            ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            tech['nombre'],
+                                            style: widget.isLargeScreen
+                                                ? textStyles.titleLarge
+                                                : textStyles.bodyLarge,
+                                            textAlign: TextAlign.center,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                             ),
                           ),
-                          child: widget.wordmark && !isIconEqualWordmark ||
-                                  widget.onlyWordmark
-                              ? Icon(
-                                  tech['wordmark'],
-                                  size: isIconEqualWordmark ? 50 : 60,
-                                )
-                              : Column(
-                                  children: [
-                                    Expanded(
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                          top: 10.0,
-                                        ),
-                                        child: Icon(
-                                          tech['icon'],
-                                          size: widget.isLargeScreen ? 50 : 40,
-                                          // color: colors.primary,
-                                        ),
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        tech['nombre'],
-                                        style: widget.isLargeScreen
-                                            ? textStyles.titleLarge
-                                            : textStyles.bodyLarge,
-                                        textAlign: TextAlign.center,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                  ],
-                                ),
                         ),
-                      ),
-                    ),
-                  );
-                }).toList(), // puedes ajustar este valor según tus necesidades
+                      );
+                    }).toList(), // puedes ajustar este valor según tus necesidades
+                  ),
+                  itemExtent: itemExtent,
+                ),
               ),
-              itemExtent: itemExtent,
             ),
           ),
         ),
