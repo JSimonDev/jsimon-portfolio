@@ -9,7 +9,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:go_router/go_router.dart';
 import 'package:rive/math.dart';
 import 'package:rive/rive.dart';
 import 'package:rive_color_modifier/rive_color_modifier.dart';
@@ -130,23 +129,6 @@ class HomeScreenState extends State<HomeScreen> {
                         const SliverToBoxAdapter(
                           child: SizedBox(
                             height: 30,
-                          ),
-                        ),
-
-                        //* NOT FOUND PAGE BUTTON
-                        SliverToBoxAdapter(
-                          child: Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: isLargeScreen ? padding : 12,
-                            ),
-                            child: TextButton(
-                              onPressed: () {
-                                context.go('/hola');
-                              },
-                              child: const Text(
-                                'Go to Not Found Page',
-                              ),
-                            ),
                           ),
                         ),
 
