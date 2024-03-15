@@ -7,7 +7,7 @@ import 'package:rive/rive.dart';
 import 'package:rive_color_modifier/rive_color_modifier.dart';
 
 class NotFoundPage extends StatefulWidget {
-  static const String name = 'not_found_page';
+  static const String routeName = 'not_found_page';
 
   const NotFoundPage({super.key});
 
@@ -44,10 +44,12 @@ class _NotFoundPageState extends State<NotFoundPage> {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDarkMode = Theme.of(context).brightness == Brightness.dark;
     final TextTheme textStyles = Theme.of(context).textTheme;
     final ColorScheme colors = Theme.of(context).colorScheme;
     final Size size = MediaQuery.sizeOf(context);
-    Color backgroundColor = colors.primary;
+    Color backgroundColor =
+        isDarkMode ? colors.primaryContainer : colors.primary;
 
     // Background Accent
     const int clarify = 30;
@@ -90,7 +92,8 @@ class _NotFoundPageState extends State<NotFoundPage> {
               Text(
                 'Opps! Page not found.',
                 style: textStyles.displayLarge!.copyWith(
-                  color: colors.onPrimary,
+                  color:
+                      isDarkMode ? colors.onPrimaryContainer : colors.onPrimary,
                 ),
               ),
               if (_notFoundArtboard == null)
@@ -235,7 +238,9 @@ class _NotFoundPageState extends State<NotFoundPage> {
                 child: Text(
                   'Go to Home',
                   style: textStyles.titleLarge!.copyWith(
-                    color: colors.onPrimary,
+                    color: isDarkMode
+                        ? colors.onPrimaryContainer
+                        : colors.onPrimary,
                   ),
                 ),
               ),

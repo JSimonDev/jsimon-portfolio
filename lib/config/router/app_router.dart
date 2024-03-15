@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:jsimon/presentation/screens/screens.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -14,12 +15,9 @@ GoRouter appRouter(AppRouterRef ref) {
         name: HomeScreen.routeName,
         builder: (context, state) => HomeScreen(),
       ),
-      GoRoute(
-        path: '/404',
-        name: NotFoundPage.name,
-        builder: (context, state) => const NotFoundPage(),
-      ),
     ],
-    errorBuilder: (context, state) => const NotFoundPage(),
+    errorPageBuilder: (context, state) => const MaterialPage(
+      child: NotFoundPage(),
+    ),
   );
 }
