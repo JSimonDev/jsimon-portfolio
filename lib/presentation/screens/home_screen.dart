@@ -635,6 +635,8 @@ class _CustomDividerState extends State<CustomDivider> {
   Artboard? _eyeArtboard;
   late StateMachineController _controller;
   late SMIBool pressedTrigger;
+  bool isClicked = false;
+  MouseCursor cursorType = SystemMouseCursors.click;
 
   Future<void> _load() async {
     //* LOAD QUOTATION RIVE FILE
@@ -662,6 +664,12 @@ class _CustomDividerState extends State<CustomDivider> {
     if (details.kind == PointerDeviceKind.touch) {
       move(details.localPosition);
     }
+  }
+
+  void _updateCursorType(MouseCursor newCursorType) {
+    setState(() {
+      cursorType = newCursorType;
+    });
   }
 
   @override
@@ -708,10 +716,17 @@ class _CustomDividerState extends State<CustomDivider> {
                   width: 500,
                   height: 500,
                   child: MouseRegion(
+                    cursor: cursorType,
                     opaque: true,
                     onHover: (event) => move(event.localPosition),
                     child: GestureDetector(
-                      onTap: () => pressedTrigger.change(!pressedTrigger.value),
+                      onTap: () {
+                        pressedTrigger.change(!pressedTrigger.value);
+                        _updateCursorType(isClicked
+                            ? SystemMouseCursors.click
+                            : SystemMouseCursors.basic);
+                        isClicked = !isClicked;
+                      },
                       onTapDown: onTapDown,
                       onPanUpdate: (details) => move(details.localPosition),
                       child: _eyeArtboard != null
