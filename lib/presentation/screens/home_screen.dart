@@ -97,7 +97,9 @@ class HomeScreenState extends State<HomeScreen> {
                   enableCustomMouseWheelScrolling: true,
                   child: CustomScrollView(
                     controller: _scrollController,
-                    physics: const NeverScrollableScrollPhysics(),
+                    physics: isLargeScreen
+                        ? const NeverScrollableScrollPhysics()
+                        : const AlwaysScrollableScrollPhysics(),
                     slivers: [
                       //* SLIVER APP BAR
                       SliverPadding(
