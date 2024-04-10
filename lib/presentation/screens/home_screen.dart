@@ -7,7 +7,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_improved_scrolling/flutter_improved_scrolling.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:rive/math.dart';
@@ -45,6 +44,14 @@ class HomeScreenState extends State<HomeScreen> {
   final bool _isAppBarExpanded = true;
   double _opacity = 1;
 
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      _handleListener(_scrollController.offset);
+    });
+  }
+
   void _handleListener(double offset) {
     double maxOffset = 150.0;
     if (offset < maxOffset) {
@@ -61,9 +68,14 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final TextTheme textStyles = Theme.of(context).textTheme;
-    final ColorScheme colors = Theme.of(context).colorScheme;
     final appLocalizations = AppLocalizations.of(context)!;
     final Size size = MediaQuery.sizeOf(context);
 
@@ -82,161 +94,144 @@ class HomeScreenState extends State<HomeScreen> {
               final double padding = isLargeScreen ? size.width / 2 - 320 : 0;
 
               return SafeArea(
-                child: ImprovedScrolling(
-                  mmbScrollConfig: MMBScrollConfig(
-                    customScrollCursor: DefaultCustomScrollCursor(
-                      cursorColor: colors.primary,
-                      backgroundColor: colors.background,
-                      borderColor: colors.primary,
-                    ),
-                  ),
-                  onScroll: (offset) => _handleListener(offset),
-                  scrollController: _scrollController,
-                  enableMMBScrolling: true,
-                  enableKeyboardScrolling: true,
-                  enableCustomMouseWheelScrolling: true,
-                  child: CustomScrollView(
-                    controller: _scrollController,
-                    physics: isLargeScreen
-                        ? const NeverScrollableScrollPhysics()
-                        : const AlwaysScrollableScrollPhysics(),
-                    slivers: [
-                      //* SLIVER APP BAR
-                      SliverPadding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: isLargeScreen ? padding : 0,
-                        ),
-                        sliver: CustomSliverAppBar(
-                          opacity: _opacity,
-                          isSmallScreen: isSmallScreen,
-                          isMediumScreen: isMediumScreen,
-                          isLargeScreen: isLargeScreen,
-                          scrollController: _scrollController,
-                        ),
+                child: CustomScrollView(
+                  controller: _scrollController,
+                  slivers: [
+                    //* SLIVER APP BAR
+                    SliverPadding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: isLargeScreen ? padding : 0,
                       ),
-                      const SliverToBoxAdapter(
-                        child: SizedBox(
-                          height: 30,
-                        ),
-                      ),
-
-                      //* PHRASE
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: isLargeScreen ? padding : 12,
-                          ),
-                          child: SelectableText(
-                            appLocalizations.phrase,
-                            style: textStyles.titleLarge,
-                          ),
-                        ),
-                      ),
-
-                      const SliverToBoxAdapter(
-                        child: SizedBox(
-                          height: 30,
-                        ),
-                      ),
-
-                      SliverToBoxAdapter(
-                        child: SizedBox(
-                          height: isLargeScreen ? 70 : 40,
-                        ),
-                      ),
-
-                      //* EXPERIENCE SECTION
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: padding),
-                          child: BoldTitle(
-                            title: '${appLocalizations.expirienceTitle}:',
-                          ),
-                        ),
-                      ),
-                      const SliverToBoxAdapter(
-                        child: SizedBox(
-                          height: 10,
-                        ),
-                      ),
-                      SliverPadding(
-                        padding: EdgeInsets.symmetric(horizontal: padding),
-                        sliver: const TimeLineWidget(),
-                      ),
-                      const SliverToBoxAdapter(
-                        child: SizedBox(
-                          height: 40,
-                        ),
-                      ),
-
-                      //* PROJECTS SECTION
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: padding),
-                          child: BoldTitle(
-                            title: '${appLocalizations.projectsTitle}:',
-                          ),
-                        ),
-                      ),
-                      const SliverToBoxAdapter(
-                        child: SizedBox(
-                          height: 10,
-                        ),
-                      ),
-                      SliverPadding(
-                        padding: EdgeInsets.symmetric(horizontal: padding),
-                        sliver: ProjectList(
-                          isLargeScreen: isLargeScreen,
-                        ),
-                      ),
-                      const SliverToBoxAdapter(
-                        child: SizedBox(
-                          height: 40,
-                        ),
-                      ),
-
-                      //* TECHNOLOGIES SECTION
-                      SliverToBoxAdapter(
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: padding),
-                          child: BoldTitle(
-                            title: '${appLocalizations.technologiesTitle}:',
-                          ),
-                        ),
-                      ),
-                      const SliverToBoxAdapter(
-                        child: SizedBox(
-                          height: 10,
-                        ),
-                      ),
-                      SliverPadding(
-                        padding: EdgeInsets.symmetric(horizontal: padding),
-                        sliver: TechnologiesList(
-                          wordmark: true,
-                          onlyWordmark: true,
-                          isLargeScreen: isLargeScreen,
-                        ),
-                      ),
-                      const SliverToBoxAdapter(
-                        child: SizedBox(
-                          height: 50,
-                        ),
-                      ),
-
-                      //* CONTACT SECTION
-                      ContactSection(
+                      sliver: CustomSliverAppBar(
+                        opacity: _opacity,
+                        isSmallScreen: isSmallScreen,
+                        isMediumScreen: isMediumScreen,
                         isLargeScreen: isLargeScreen,
                         scrollController: _scrollController,
                       ),
+                    ),
+                    const SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 30,
+                      ),
+                    ),
 
-                      //* GRACE SPACE
-                      const SliverToBoxAdapter(
-                        child: SizedBox(
-                          height: 30,
+                    //* PHRASE
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: isLargeScreen ? padding : 12,
+                        ),
+                        child: SelectableText(
+                          appLocalizations.phrase,
+                          style: textStyles.titleLarge,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+
+                    const SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 30,
+                      ),
+                    ),
+
+                    SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: isLargeScreen ? 70 : 40,
+                      ),
+                    ),
+
+                    //* EXPERIENCE SECTION
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: padding),
+                        child: BoldTitle(
+                          title: '${appLocalizations.expirienceTitle}:',
+                        ),
+                      ),
+                    ),
+                    const SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 10,
+                      ),
+                    ),
+                    SliverPadding(
+                      padding: EdgeInsets.symmetric(horizontal: padding),
+                      sliver: const TimeLineWidget(),
+                    ),
+                    const SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 40,
+                      ),
+                    ),
+
+                    //* PROJECTS SECTION
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: padding),
+                        child: BoldTitle(
+                          title: '${appLocalizations.projectsTitle}:',
+                        ),
+                      ),
+                    ),
+                    const SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 10,
+                      ),
+                    ),
+                    SliverPadding(
+                      padding: EdgeInsets.symmetric(horizontal: padding),
+                      sliver: ProjectList(
+                        isLargeScreen: isLargeScreen,
+                      ),
+                    ),
+                    const SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 40,
+                      ),
+                    ),
+
+                    //* TECHNOLOGIES SECTION
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: padding),
+                        child: BoldTitle(
+                          title: '${appLocalizations.technologiesTitle}:',
+                        ),
+                      ),
+                    ),
+                    const SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 10,
+                      ),
+                    ),
+                    SliverPadding(
+                      padding: EdgeInsets.symmetric(horizontal: padding),
+                      sliver: TechnologiesList(
+                        wordmark: true,
+                        onlyWordmark: true,
+                        isLargeScreen: isLargeScreen,
+                      ),
+                    ),
+                    const SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 50,
+                      ),
+                    ),
+
+                    //* CONTACT SECTION
+                    ContactSection(
+                      isLargeScreen: isLargeScreen,
+                      scrollController: _scrollController,
+                    ),
+
+                    //* GRACE SPACE
+                    const SliverToBoxAdapter(
+                      child: SizedBox(
+                        height: 30,
+                      ),
+                    ),
+                  ],
                 ),
               );
             },
@@ -1016,6 +1011,7 @@ class TimeLineWidget extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(right: 10.0),
         child: Timeline(
+          physics: const NeverScrollableScrollPhysics(),
           indicatorColor: colors.primary,
           indicatorSize: 20,
           strokeCap: StrokeCap.round,
@@ -1095,17 +1091,15 @@ class TimeLineCard extends StatelessWidget {
               ),
             ),
           ),
-          Flexible(
-            child: Padding(
-              padding: const EdgeInsets.only(
-                left: 20.0,
-                right: 20.0,
-                bottom: 10.0,
-              ),
-              child: SelectableText(
-                description,
-                style: textStyles.bodyLarge,
-              ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 20.0,
+              right: 20.0,
+              bottom: 10.0,
+            ),
+            child: SelectableText(
+              description,
+              style: textStyles.bodyLarge,
             ),
           ),
         ],
