@@ -26,7 +26,7 @@ Map<String, String> languages = {
   'हिंदी': "hi",
 };
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   static const routeName = '/';
 
   final GlobalKey _key = GlobalKey();
@@ -36,10 +36,10 @@ class HomeScreen extends StatefulWidget {
   });
 
   @override
-  State<HomeScreen> createState() => HomeScreenState();
+  ConsumerState<HomeScreen> createState() => HomeScreenState();
 }
 
-class HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends ConsumerState<HomeScreen> {
   final ScrollController _scrollController = ScrollController();
   final bool _isAppBarExpanded = true;
   double _opacity = 1;
@@ -78,6 +78,7 @@ class HomeScreenState extends State<HomeScreen> {
     final TextTheme textStyles = Theme.of(context).textTheme;
     final appLocalizations = AppLocalizations.of(context)!;
     final Size size = MediaQuery.sizeOf(context);
+    // final locale = ref.watch(myLocaleProvider);
 
     return ThemeSwitchingArea(
       child: GestureDetector(
@@ -86,9 +87,14 @@ class HomeScreenState extends State<HomeScreen> {
           key: widget._key,
           body: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
+              // ENGLISH
+              /* 
+              smallScreen = 
+              */
+
               final bool isSmallScreen = constraints.maxWidth <= 320;
               final bool isMediumScreen =
-                  constraints.maxWidth <= 375 && constraints.maxWidth > 320;
+                  constraints.maxWidth <= 355 && constraints.maxWidth > 320;
               final bool isLargeScreen = constraints.maxWidth >= 640;
 
               final double padding = isLargeScreen ? size.width / 2 - 320 : 0;
@@ -524,7 +530,7 @@ class GoToTopButton extends StatelessWidget {
       style: const ButtonStyle(
         visualDensity: VisualDensity.comfortable,
         enableFeedback: true,
-        shape: MaterialStatePropertyAll(
+        shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(20),
@@ -533,7 +539,7 @@ class GoToTopButton extends StatelessWidget {
             ),
           ),
         ),
-        padding: MaterialStatePropertyAll(
+        padding: WidgetStatePropertyAll(
           EdgeInsets.only(right: 10.0, left: 0.0),
         ),
       ),
@@ -865,7 +871,7 @@ class _ExpandableCardState extends State<ExpandableCard> {
         ? '${widget.description.substring(0, wordLimit)}...'
         : widget.description;
     final String longDescription = widget.description;
-    const buttonShape = MaterialStatePropertyAll(
+    const buttonShape = WidgetStatePropertyAll(
       RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
@@ -1229,13 +1235,13 @@ class ContactButton extends StatelessWidget {
 
     return FilledButton(
       style: const ButtonStyle(
-        shape: MaterialStatePropertyAll(
+        shape: WidgetStatePropertyAll(
           RoundedRectangleBorder(
             borderRadius: borderRadius,
           ),
         ),
         enableFeedback: true,
-        padding: MaterialStatePropertyAll(
+        padding: WidgetStatePropertyAll(
           EdgeInsets.symmetric(
             horizontal: 15.0,
           ),
