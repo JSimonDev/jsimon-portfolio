@@ -1078,22 +1078,24 @@ class TimeLineCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          ListTile(
-            contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
-            title: SelectableText(
-              proyectName,
-              style: textStyles.titleMedium,
-            ),
-            subtitle: SelectableText(
-              role,
-              style: textStyles.bodySmall!.copyWith(
-                color: colors.onSurface.withOpacity(0.6),
+          Expanded(
+            child: ListTile(
+              contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
+              title: SelectableText(
+                proyectName,
+                style: textStyles.titleMedium,
               ),
-            ),
-            trailing: SelectableText(
-              timelapse,
-              style: textStyles.bodyMedium!.copyWith(
-                color: colors.onSurface.withOpacity(0.6),
+              subtitle: SelectableText(
+                role,
+                style: textStyles.bodySmall!.copyWith(
+                  color: colors.onSurface.withOpacity(0.6),
+                ),
+              ),
+              trailing: SelectableText(
+                timelapse,
+                style: textStyles.bodyMedium!.copyWith(
+                  color: colors.onSurface.withOpacity(0.6),
+                ),
               ),
             ),
           ),
