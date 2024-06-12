@@ -43,6 +43,8 @@
 
   <link rel='canonical' href='https://jsimon.dev' />
 
+  <script src="https://unpkg.com/@rive-app/canvas@2.17.3"></script>
+
   <style id="splash-screen-style">
     html {
       height: 100%;
@@ -188,10 +190,30 @@
 
 <body>
 
-  <div id="loading">
-    <div class="loader"></div>
-  </div>
+  <canvas style="
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background-color: inherit;
+" id="canvas"></canvas>
 
+  <script>
+    const layout = new rive.Layout({
+      fit: rive.Fit.Contain,
+      alignment: rive.Alignment.Center,
+    });
+
+    const r = new rive.Rive({
+      src: "../assets/rive/loading_robot.riv",
+      layout: layout,
+      canvas: document.getElementById("canvas"),
+      autoplay: true,
+      stateMachines: "Final Animation",
+      onLoad: () => {
+        r.resizeDrawingSurfaceToCanvas();
+      },
+    });
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 
