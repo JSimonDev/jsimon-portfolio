@@ -1736,30 +1736,72 @@ class SliverAppBarTitle extends StatelessWidget {
   }
 }
 
-class AppBarCircleAvatar extends StatelessWidget {
+class AppBarCircleAvatar extends StatefulWidget {
   const AppBarCircleAvatar({
     super.key,
   });
+
+  @override
+  State<AppBarCircleAvatar> createState() => _AppBarCircleAvatarState();
+}
+
+class _AppBarCircleAvatarState extends State<AppBarCircleAvatar> {
+  Artboard? _myAvatarArtboard;
+
+  @override
+  initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    final riveFile = await RiveFile.asset('assets/rive/profile_pic.riv');
+    final artboard = riveFile.artboardByName('Main')!;
+    RiveUtils.getRiveController(
+      artboard,
+      stateMachineName: 'State Machine 1',
+    );
+    setState(() {
+      _myAvatarArtboard = artboard;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final ColorScheme colors = Theme.of(context).colorScheme;
     const double radius = 20;
 
-    return CircleAvatar(
-      radius: radius + 6,
-      backgroundColor: colors.primary.withOpacity(0.1),
-      child: CircleAvatar(
-        radius: radius + 3,
-        backgroundColor: colors.primary.withOpacity(0.5),
-        child: const CircleAvatar(
-          radius: radius,
-          backgroundImage: AssetImage(
-            'assets/portafolio.webp',
-          ),
-        ),
-      ),
-    );
+    return _myAvatarArtboard != null
+        ? CircleAvatar(
+            backgroundColor: Colors.transparent,
+            foregroundColor: Colors.transparent,
+            radius: 25,
+            child: RiveColorModifier(
+              artboard: _myAvatarArtboard!,
+              fit: BoxFit.cover,
+              components: [
+                RiveColorComponent(
+                  shapePattern: '.*',
+                  fillPattern: '.*',
+                  color: colors.primary,
+                ),
+              ],
+            ),
+          )
+        : CircleAvatar(
+            radius: radius + 6,
+            backgroundColor: colors.primary.withOpacity(0.1),
+            child: CircleAvatar(
+              radius: radius + 3,
+              backgroundColor: colors.primary.withOpacity(0.5),
+              child: const CircleAvatar(
+                radius: radius,
+                backgroundImage: AssetImage(
+                  'assets/portafolio.webp',
+                ),
+              ),
+            ),
+          );
   }
 }
 
