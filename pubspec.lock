@@ -721,10 +721,10 @@ packages:
     dependency: "direct main"
     description:
       name: rive_color_modifier
-      sha256: "249b5949d847a95d0a05e62a841d1604cd5bf14c7203bb9ffc8674647db27be9"
+      sha256: "3457b4797d4b7add856732a14e57e074ddcb90f191d0a049041e828d0625b14e"
       url: "https://pub.dev"
     source: hosted
-    version: "1.0.6"
+    version: "2.0.0"
   rive_common:
     dependency: transitive
     description:
