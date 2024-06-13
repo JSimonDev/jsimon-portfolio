@@ -1747,6 +1747,8 @@ class AppBarCircleAvatar extends StatefulWidget {
 
 class _AppBarCircleAvatarState extends State<AppBarCircleAvatar> {
   Artboard? _myAvatarArtboard;
+  late SMIBool _isHovering;
+  late SMIBool _isPressed;
 
   @override
   initState() {
@@ -1757,13 +1759,16 @@ class _AppBarCircleAvatarState extends State<AppBarCircleAvatar> {
   Future<void> _load() async {
     final riveFile = await RiveFile.asset('assets/rive/profile_pic.riv');
     final artboard = riveFile.artboardByName('Main')!;
-    RiveUtils.getRiveController(
+    final controller = RiveUtils.getRiveController(
       artboard,
       stateMachineName: 'State Machine 1',
     );
-    setState(() {
-      _myAvatarArtboard = artboard;
-    });
+
+    _isHovering = controller.findSMI('isHovering') as SMIBool;
+    _isPressed = controller.findSMI('active') as SMIBool;
+    _myAvatarArtboard = artboard;
+
+    setState(() {});
   }
 
   @override
@@ -1772,20 +1777,26 @@ class _AppBarCircleAvatarState extends State<AppBarCircleAvatar> {
     const double radius = 20;
 
     return _myAvatarArtboard != null
-        ? CircleAvatar(
-            backgroundColor: Colors.transparent,
-            foregroundColor: Colors.transparent,
-            radius: 25,
-            child: RiveColorModifier(
-              artboard: _myAvatarArtboard!,
-              fit: BoxFit.cover,
-              components: [
-                RiveColorComponent(
-                  shapePattern: '.*',
-                  fillPattern: '.*',
-                  color: colors.primary,
+        ? MouseRegion(
+            onEnter: (event) {
+              _isHovering.change(true);
+            },
+            onExit: (event) {
+              _isHovering.change(false);
+            },
+            child: GestureDetector(
+              onTap: () {
+                _isPressed.change(!_isPressed.value);
+              },
+              child: CircleAvatar(
+                backgroundColor: Colors.transparent,
+                foregroundColor: Colors.transparent,
+                radius: 28,
+                child: RiveColorModifier(
+                  artboard: _myAvatarArtboard!,
+                  fit: BoxFit.cover,
                 ),
-              ],
+              ),
             ),
           )
         : CircleAvatar(
