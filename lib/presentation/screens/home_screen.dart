@@ -87,11 +87,6 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
           key: widget._key,
           body: LayoutBuilder(
             builder: (BuildContext context, BoxConstraints constraints) {
-              // ENGLISH
-              /* 
-              smallScreen = 
-              */
-
               final bool isSmallScreen = constraints.maxWidth <= 320;
               final bool isMediumScreen =
                   constraints.maxWidth <= 355 && constraints.maxWidth > 320;
@@ -389,18 +384,18 @@ class _ContactSectionState extends State<ContactSection> {
                                       fit: BoxFit.cover,
                                       components: [
                                         RiveColorComponent(
-                                          shapeName: 'Button',
-                                          fillName: 'Button Background Fill',
+                                          shapePattern: 'Button',
+                                          fillPattern: 'Button Background Fill',
                                           color: colors.primary,
                                         ),
                                         RiveColorComponent(
-                                          shapeName: 'Text 1',
-                                          fillName: 'Text Fill 1',
+                                          shapePattern: 'Text 1',
+                                          fillPattern: 'Text Fill 1',
                                           color: colors.onPrimary,
                                         ),
                                         RiveColorComponent(
-                                          shapeName: 'Text 2',
-                                          fillName: 'Text Fill 2',
+                                          shapePattern: 'Text 2',
+                                          fillPattern: 'Text Fill 2',
                                           color: colors.onPrimary,
                                         ),
                                       ],
@@ -738,13 +733,13 @@ class _CustomDividerState extends State<CustomDivider> {
                               fit: BoxFit.scaleDown,
                               components: [
                                 RiveColorComponent(
-                                  shapeName: 'Eye Pupil Off',
-                                  fillName: 'Pupil Fill',
+                                  shapePattern: 'Eye Pupil Off',
+                                  fillPattern: 'Pupil Fill',
                                   color: colors.primary,
                                 ),
                                 RiveColorComponent(
-                                  shapeName: 'Eye Border Off',
-                                  strokeName: 'Eye Border Stroke',
+                                  shapePattern: 'Eye Border Off',
+                                  strokePattern: 'Eye Border Stroke',
                                   color: colors.primary,
                                 ),
                               ],

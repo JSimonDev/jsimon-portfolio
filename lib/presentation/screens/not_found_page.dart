@@ -110,121 +110,121 @@ class _NotFoundPageState extends State<NotFoundPage> {
                     components: [
                       //* Background
                       RiveColorComponent(
-                        shapeName: 'Background',
-                        fillName: 'Background Fill',
+                        shapePattern: 'Background',
+                        fillPattern: 'Background Fill',
                         color: backgroundColor,
                       ),
                       //* Background Mask
                       RiveColorComponent(
-                        shapeName: 'Mask',
-                        fillName: 'Mask Fill',
+                        shapePattern: 'Mask',
+                        fillPattern: 'Mask Fill',
                         color: backgroundColor,
                       ),
                       //* Number 4 Front
                       RiveColorComponent(
-                        shapeName: '4 Front Up',
-                        fillName: '4 Front Up Fill',
+                        shapePattern: '4 Front Up',
+                        fillPattern: '4 Front Up Fill',
                         color: backgroundAccentColor,
                       ),
                       RiveColorComponent(
-                        shapeName: '4 Front Lateral',
-                        fillName: '4 Front Lateral Fill',
+                        shapePattern: '4 Front Lateral',
+                        fillPattern: '4 Front Lateral Fill',
                         color: shadowColor,
                       ),
                       //* Number 4 Back
                       RiveColorComponent(
-                        shapeName: '4 Back Up',
-                        fillName: '4 Back Up Fill',
+                        shapePattern: '4 Back Up',
+                        fillPattern: '4 Back Up Fill',
                         color: backgroundAccentColor,
                       ),
                       RiveColorComponent(
-                        shapeName: '4 Back Lateral',
-                        fillName: '4 Back Lateral Fill',
+                        shapePattern: '4 Back Lateral',
+                        fillPattern: '4 Back Lateral Fill',
                         color: shadowColor,
                       ),
                       //* Plant Right
                       RiveColorComponent(
-                        shapeName: 'Plant R Sheet 1',
-                        fillName: 'Plant R Sheet 1 Fill',
+                        shapePattern: 'Plant R Sheet 1',
+                        fillPattern: 'Plant R Sheet 1 Fill',
                         color: backgroundColor,
                       ),
                       RiveColorComponent(
-                        shapeName: 'Plant R Sheet 1 Shadow',
-                        fillName: 'Plant R Sheet 1 Shadow Fill',
+                        shapePattern: 'Plant R Sheet 1 Shadow',
+                        fillPattern: 'Plant R Sheet 1 Shadow Fill',
                         color: shadowColor,
                       ),
                       RiveColorComponent(
-                        shapeName: 'Plant R Sheet 2 Shadow',
-                        fillName: 'Plant R Sheet 2 Shadow Fill',
+                        shapePattern: 'Plant R Sheet 2 Shadow',
+                        fillPattern: 'Plant R Sheet 2 Shadow Fill',
                         color: shadowColor,
                       ),
                       RiveColorComponent(
-                        shapeName: 'Plant R Sheet 2',
-                        fillName: 'Plant R Sheet 2 Fill',
+                        shapePattern: 'Plant R Sheet 2',
+                        fillPattern: 'Plant R Sheet 2 Fill',
                         color: backgroundColor,
                       ),
                       //* Plant Left
                       RiveColorComponent(
-                        shapeName: 'Plant L Sheet 1',
-                        fillName: 'Plant L Sheet 1 Fill',
+                        shapePattern: 'Plant L Sheet 1',
+                        fillPattern: 'Plant L Sheet 1 Fill',
                         color: backgroundColor,
                       ),
                       RiveColorComponent(
-                        shapeName: 'Plant L Sheet 2',
-                        fillName: 'Plant L Sheet 2 Fill',
+                        shapePattern: 'Plant L Sheet 2',
+                        fillPattern: 'Plant L Sheet 2 Fill',
                         color: backgroundColor,
                       ),
                       RiveColorComponent(
-                        shapeName: 'Plant L Sheet 3',
-                        fillName: 'Plant L Sheet 3 Fill',
+                        shapePattern: 'Plant L Sheet 3',
+                        fillPattern: 'Plant L Sheet 3 Fill',
                         color: backgroundColor,
                       ),
                       RiveColorComponent(
-                        shapeName: 'Sheets Shadow',
-                        fillName: 'Sheets Shadow Fill',
+                        shapePattern: 'Sheets Shadow',
+                        fillPattern: 'Sheets Shadow Fill',
                         color: shadowColor,
                       ),
                       RiveColorComponent(
-                        shapeName: 'Stem Shadow',
-                        strokeName: 'Stem Shadow Stroke',
+                        shapePattern: 'Stem Shadow',
+                        strokePattern: 'Stem Shadow Stroke',
                         color: shadowColor,
                       ),
                       //* Hole
                       RiveColorComponent(
-                        shapeName: 'Hole',
-                        fillName: 'Hole Fill',
+                        shapePattern: 'Hole',
+                        fillPattern: 'Hole Fill',
                         color: shadowColor,
                       ),
                       RiveColorComponent(
-                        shapeName: 'Stair Shadow',
-                        strokeName: 'Stair Shadow Stroke',
+                        shapePattern: 'Stair Shadow',
+                        strokePattern: 'Stair Shadow Stroke',
                         color: stairShadowColor,
                       ),
                       //* Char 1 and 2 Shadow
                       for (int i = 1; i <= 2; i++)
                         RiveColorComponent(
-                          shapeName: 'Char $i Shadow',
-                          fillName: 'Char $i Shadow Fill',
+                          shapePattern: 'Char $i Shadow',
+                          fillPattern: 'Char $i Shadow Fill',
                           color: shadowColor,
                         ),
                       //* Char 2 Shadow Jump
                       RiveColorComponent(
-                        shapeName: 'Char 2 Shadow Jump 1',
-                        fillName: 'Char 2 Shadow Jump 1 Fill',
+                        shapePattern: 'Char 2 Shadow Jump 1',
+                        fillPattern: 'Char 2 Shadow Jump 1 Fill',
                         color: shadowColor,
                       ),
                       //* Small Plants
                       for (int i = 1; i <= 8; i++)
                         RiveColorComponent(
-                          shapeName: 'Plants $i',
-                          fillName: 'Plants Fills $i',
+                          shapePattern: 'Plants $i',
+                          fillPattern: 'Plants Fills $i',
                           color: backgroundColor,
                         ),
                       //* Small Plants Shadow
                       for (int i = 1; i <= 6; i++)
                         RiveColorComponent(
-                          shapeName: 'Plants Shadow $i',
-                          fillName: 'Plants Shadow Fills $i',
+                          shapePattern: 'Plants Shadow $i',
+                          fillPattern: 'Plants Shadow Fills $i',
                           color: shadowColor,
                         ),
                     ],
