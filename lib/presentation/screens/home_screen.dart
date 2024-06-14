@@ -1780,14 +1780,28 @@ class _AppBarCircleAvatarState extends State<AppBarCircleAvatar> {
     return _myAvatarArtboard != null
         ? MouseRegion(
             onEnter: (event) {
-              _isHovering.change(true);
+              if (event.kind == PointerDeviceKind.mouse) {
+                _isHovering.change(true);
+              }
             },
             onExit: (event) {
-              _isHovering.change(false);
+              if (event.kind == PointerDeviceKind.mouse) {
+                _isHovering.change(false);
+              }
             },
-            child: GestureDetector(
-              onTap: () {
-                _isPressed.change(!_isPressed.value);
+            child: TapRegion(
+              onTapInside: (event) {
+                if (event.kind == PointerDeviceKind.touch) {
+                  _isHovering.change(true);
+
+                  _isPressed.change(!_isPressed.value);
+                }
+              },
+              onTapOutside: (event) {
+                if (event.kind == PointerDeviceKind.touch) {
+                  _isHovering.change(false);
+                  _isPressed.change(false);
+                }
               },
               child: CircleAvatar(
                 backgroundColor: Colors.transparent,
