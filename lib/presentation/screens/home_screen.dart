@@ -1797,12 +1797,6 @@ class _AppBarCircleAvatarState extends State<AppBarCircleAvatar> {
                   _isPressed.change(!_isPressed.value);
                 }
               },
-              onTapOutside: (event) {
-                if (event.kind == PointerDeviceKind.touch) {
-                  _isHovering.change(false);
-                  _isPressed.change(false);
-                }
-              },
               child: CircleAvatar(
                 backgroundColor: Colors.transparent,
                 foregroundColor: Colors.transparent,
