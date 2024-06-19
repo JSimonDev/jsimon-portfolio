@@ -1420,11 +1420,25 @@ class _TechnologiesListState extends State<TechnologiesList> {
       'alt': 'Flutter Logo',
     },
     {
+      'nombre': 'Ionic',
+      'icon': DevIcons.ionicOriginal,
+      'wordmark': DevIcons.ionicOriginalWordmark,
+      'doc': 'https://ionic.io/docs',
+      'alt': 'Ionic Logo',
+    },
+    {
       'nombre': 'Firebase',
       'icon': DevIcons.firebasePlain,
       'wordmark': DevIcons.firebasePlainWordmark,
       'doc': 'https://firebase.google.com/',
       'alt': 'Firebase Logo',
+    },
+    {
+      'nombre': 'NPM',
+      'icon': DevIcons.npmOriginalWordmark,
+      'wordmark': DevIcons.npmOriginalWordmark,
+      'doc': 'https://docs.npmjs.com/',
+      'alt': 'NPM Logo',
     },
     {
       'nombre': 'Node.js',
@@ -1448,13 +1462,6 @@ class _TechnologiesListState extends State<TechnologiesList> {
       'alt': 'MongoDB Logo',
     },
     {
-      'nombre': 'Figma',
-      'icon': DevIcons.figmaPlain,
-      'wordmark': DevIcons.figmaPlain,
-      'doc': 'https://www.figma.com/',
-      'alt': 'Figma Logo',
-    },
-    {
       'nombre': 'Git',
       'icon': DevIcons.gitPlain,
       'wordmark': DevIcons.gitPlainWordmark,
@@ -1468,13 +1475,13 @@ class _TechnologiesListState extends State<TechnologiesList> {
       'doc': 'https://docs.github.com/',
       'alt': 'GitHub Logo',
     },
-    {
-      'nombre': 'Python',
-      'icon': DevIcons.pythonPlain,
-      'wordmark': DevIcons.pythonPlainWordmark,
-      'doc': 'https://www.python.org/',
-      'alt': 'Python Logo',
-    },
+    // {
+    //   'nombre': 'Python',
+    //   'icon': DevIcons.pythonPlain,
+    //   'wordmark': DevIcons.pythonPlainWordmark,
+    //   'doc': 'https://www.python.org/',
+    //   'alt': 'Python Logo',
+    // },
     {
       'nombre': 'HTML',
       'icon': DevIcons.html5Plain,
@@ -1495,6 +1502,20 @@ class _TechnologiesListState extends State<TechnologiesList> {
       'wordmark': DevIcons.javascriptPlain,
       'doc': 'https://developer.mozilla.org/en-US/docs/Web/JavaScript',
       'alt': 'JavaScript Logo',
+    },
+    {
+      'nombre': 'TypeScript',
+      'icon': DevIcons.typescriptPlain,
+      'wordmark': DevIcons.typescriptPlain,
+      'doc': 'https://www.typescriptlang.org/docs/',
+      'alt': 'TypeScript Logo',
+    },
+    {
+      'nombre': 'Tailwind CSS',
+      'icon': DevIcons.tailwindcssPlain,
+      'wordmark': DevIcons.tailwindcssOriginalWordmark,
+      'doc': 'https://tailwindcss.com/docs/installation',
+      'alt': 'Tailwind CSS Logo',
     }
   };
 
