@@ -1073,33 +1073,40 @@ class TimeLineCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Expanded(
-            child: ListTile(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 20.0),
-              title: SelectableText(
-                proyectName,
-                style: textStyles.titleMedium,
-              ),
-              subtitle: SelectableText(
-                role,
-                style: textStyles.bodySmall!.copyWith(
-                  color: colors.onSurface.withOpacity(0.6),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 10.0),
+            child: Row(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SelectableText(
+                      proyectName,
+                      style: textStyles.titleMedium,
+                    ),
+                    SelectableText(
+                      role,
+                      style: textStyles.bodySmall!.copyWith(
+                        color: colors.onSurface.withOpacity(0.6),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              trailing: SelectableText(
-                timelapse,
-                style: textStyles.bodyMedium!.copyWith(
-                  color: colors.onSurface.withOpacity(0.6),
+                const Spacer(),
+                SelectableText(
+                  timelapse,
+                  style: textStyles.bodyMedium!.copyWith(
+                    color: colors.onSurface.withOpacity(0.6),
+                  ),
                 ),
-              ),
+              ],
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(
-              top: 10.0,
               left: 20.0,
               right: 20.0,
-              bottom: 10.0,
+              bottom: 15.0,
             ),
             child: SelectableText(
               description,
@@ -1868,7 +1875,8 @@ class AppBarName extends StatelessWidget {
           SelectableText(
             appLocalizations.name,
             style: textStyles.titleLarge!.copyWith(
-              fontWeight: FontWeight.bold,
+              fontFamily: 'Cookie',
+              letterSpacing: 1.0,
             ),
             maxLines: 1,
           ),
