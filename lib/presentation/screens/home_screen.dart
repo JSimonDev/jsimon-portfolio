@@ -1075,31 +1075,38 @@ class TimeLineCard extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 10.0),
-            child: Row(
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SelectableText(
-                      proyectName,
-                      style: textStyles.titleMedium,
+            child: IntrinsicWidth(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SelectableText(
+                          proyectName,
+                          style: textStyles.titleMedium,
+                        ),
+                        SelectableText(
+                          role,
+                          style: textStyles.bodySmall!.copyWith(
+                            color: colors.onSurface.withOpacity(0.6),
+                          ),
+                        ),
+                      ],
                     ),
-                    SelectableText(
-                      role,
-                      style: textStyles.bodySmall!.copyWith(
+                  ),
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: SelectableText(
+                      timelapse,
+                      style: textStyles.bodyMedium!.copyWith(
                         color: colors.onSurface.withOpacity(0.6),
                       ),
                     ),
-                  ],
-                ),
-                const Spacer(),
-                SelectableText(
-                  timelapse,
-                  style: textStyles.bodyMedium!.copyWith(
-                    color: colors.onSurface.withOpacity(0.6),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
           Padding(
