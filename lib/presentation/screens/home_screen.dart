@@ -1071,56 +1071,51 @@ class TimeLineCard extends StatelessWidget {
           width: 1,
         ),
       ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 10.0),
-            child: IntrinsicWidth(
+      child: IntrinsicWidth(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 10.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Flexible(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SelectableText(
-                          proyectName,
-                          style: textStyles.titleMedium,
-                        ),
-                        SelectableText(
-                          role,
-                          style: textStyles.bodySmall!.copyWith(
-                            color: colors.onSurface.withOpacity(0.6),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: SelectableText(
-                      timelapse,
-                      style: textStyles.bodyMedium!.copyWith(
-                        color: colors.onSurface.withOpacity(0.6),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SelectableText(
+                        proyectName,
+                        style: textStyles.titleMedium,
                       ),
+                      SelectableText(
+                        role,
+                        style: textStyles.bodySmall!.copyWith(
+                          color: colors.onSurface.withOpacity(0.6),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SelectableText(
+                    timelapse,
+                    style: textStyles.bodyMedium!.copyWith(
+                      color: colors.onSurface.withOpacity(0.6),
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 20.0,
-              right: 20.0,
-              bottom: 15.0,
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 20.0,
+                right: 20.0,
+                bottom: 15.0,
+              ),
+              child: SelectableText(
+                description,
+                style: textStyles.bodyLarge,
+              ),
             ),
-            child: SelectableText(
-              description,
-              style: textStyles.bodyLarge,
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
