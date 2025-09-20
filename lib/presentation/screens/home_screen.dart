@@ -6,18 +6,17 @@ import 'package:dev_icons/dev_icons.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
-import 'package:rive/math.dart';
-import 'package:rive/rive.dart';
-import 'package:rive_color_modifier/rive_color_modifier.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 import 'package:jsimon/config/theme/app_theme.dart';
 import 'package:jsimon/config/utils/utils.dart';
+import 'package:jsimon/l10n/app_localizations.dart';
 import 'package:jsimon/presentation/providers/locale_provider.dart';
 import 'package:jsimon/widgets/widgets.dart';
+import 'package:rive/math.dart';
+import 'package:rive/rive.dart' hide Image;
+import 'package:rive_color_modifier/rive_color_modifier.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 Map<String, String> languages = {
   'English': "en",
@@ -259,7 +258,38 @@ class ContactSection extends StatefulWidget {
 
 class _ContactSectionState extends State<ContactSection> {
   Artboard? _contactArtboard;
+  Artboard? _coffeeArtboard;
   late SMITrigger hoverTrigger;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    //* LOAD CONTACT RIVE FILE
+    final contactFile = await RiveFile.asset('assets/rive/contact.riv');
+    final artboard = contactFile.artboardByName('Contact')!;
+    StateMachineController controller = RiveUtils.getRiveController(
+      artboard,
+      stateMachineName: 'Bird_Interactivity',
+    );
+
+    hoverTrigger = controller.findSMI('hover') as SMITrigger;
+
+    //* LOAD CONTACT RIVE FILE
+    final coffeeFile = await RiveFile.asset('assets/rive/coffee.riv');
+    final coffeeArtboard = coffeeFile.artboardByName('Coffee')!;
+    coffeeArtboard.addController(SimpleAnimation('Cup'));
+
+    setState(
+      () {
+        _contactArtboard = artboard;
+        _coffeeArtboard = coffeeArtboard;
+      },
+    );
+  }
 
   void _launchPhone(String phone) async {
     final Uri tel = Uri.parse(phone);
@@ -289,30 +319,6 @@ class _ContactSectionState extends State<ContactSection> {
     } else {
       throw 'Could not launch $url';
     }
-  }
-
-  Future<void> _load() async {
-    //* LOAD QUOTATION RIVE FILE
-    final contactFile = await RiveFile.asset('assets/rive/contact.riv');
-    final artboard = contactFile.artboardByName('Contact')!;
-    StateMachineController controller = RiveUtils.getRiveController(
-      artboard,
-      stateMachineName: 'Bird_Interactivity',
-    );
-
-    hoverTrigger = controller.findSMI('hover') as SMITrigger;
-
-    setState(
-      () {
-        _contactArtboard = artboard;
-      },
-    );
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _load();
   }
 
   @override
@@ -499,6 +505,37 @@ class _ContactSectionState extends State<ContactSection> {
                     ),
                   ),
                   SelectableText(appLocalizations.footerPhrasePart2),
+                  //* COFFEE RIVE ANIMATION
+                  if (_coffeeArtboard != null)
+                    SizedBox(
+                      height: 35,
+                      width: 35,
+                      child: RiveColorModifier(
+                        artboard: _coffeeArtboard!,
+                        fit: BoxFit.cover,
+                        components: [
+                          RiveColorComponent(
+                            shapePattern: '.*Cup',
+                            strokePattern: '.*',
+                            fillPattern: '.*',
+                            color: colors.onSurface,
+                          ),
+                          RiveColorComponent(
+                            shapePattern: '.*Hand',
+                            strokePattern: '.*',
+                            fillPattern: '.*',
+                            color: colors.onSurface,
+                          ),
+                          RiveColorComponent(
+                            shapePattern: '.*Loader',
+                            strokePattern: '.*',
+                            fillPattern: '.*',
+                            // color: const Color.fromARGB(255, 63, 42, 34),
+                            color: colors.onSurface,
+                          ),
+                        ],
+                      ),
+                    ),
                 ],
               ),
             ),
