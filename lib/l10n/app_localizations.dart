@@ -234,6 +234,36 @@ abstract class AppLocalizations {
   /// **'Cinemapedia is an application developed using Flutter and TheMovieDB API, providing users with a platform to explore detailed information about current movies, upcoming releases, and the most popular ones. The app allows users to mark movies as favorites, view trailers, learn about the cast, and perform searches by name, genre, or keywords. It also offers information on actors, film categories, and movie ratings, enabling users to have a comprehensive and enriching experience in their engagement with cinema.'**
   String get cinemapediaProjectDescription;
 
+  /// No description provided for @frescomaxName.
+  ///
+  /// In en, this message translates to:
+  /// **'Frescomax'**
+  String get frescomaxName;
+
+  /// No description provided for @frescomaxRole.
+  ///
+  /// In en, this message translates to:
+  /// **'Full Stack & Cloud Engineer'**
+  String get frescomaxRole;
+
+  /// No description provided for @frescomaxTimelapse.
+  ///
+  /// In en, this message translates to:
+  /// **'2025 - Present'**
+  String get frescomaxTimelapse;
+
+  /// No description provided for @frescomaxExperienceDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'As the sole developer, I built the entire ecosystem from scratch. I developed both the application (Flutter) and the Backend (API). Designed and deployed the infrastructure on AWS using Elastic Beanstalk, S3, and CloudFront for video streaming. Implemented Clean Architecture with Riverpod, ensuring a scalable and high-performance product on iOS, Android, and Web.'**
+  String get frescomaxExperienceDescription;
+
+  /// No description provided for @frescomaxProjectDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Frescomax is a cross-platform app (iOS, Android, Web) that serves as an interactive catalog and visualization tool for fans. It features a detailed product catalog, advanced customization with real-time color selection, and an AR-like virtual assembly tool to visualize fans in real spaces. Built with Flutter and Clean Architecture, it ensures a premium user experience with smooth animations and a responsive design.'**
+  String get frescomaxProjectDescription;
+
   /// No description provided for @contactDescription.
   ///
   /// In en, this message translates to:
@@ -273,7 +303,7 @@ abstract class AppLocalizations {
   /// No description provided for @footerPhrasePart2.
   ///
   /// In en, this message translates to:
-  /// **'and lots of'**
+  /// **'from Dominican Republic'**
   String get footerPhrasePart2;
 }
 

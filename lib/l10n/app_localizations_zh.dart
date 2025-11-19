@@ -81,6 +81,23 @@ class AppLocalizationsZh extends AppLocalizations {
       'Cinemapedia是一个使用Flutter和TheMovieDB API开发的应用，为用户提供一个平台，探索关于当前电影、即将上映的影片和最受欢迎的电影的详细信息。应用允许用户将电影标记为最爱，观看预告片，了解演员阵容，并通过名称、类型或关键词执行搜索。它还提供有关演员、电影类别和电影评级的信息，使用户在与电影的互动中拥有全面且丰富的体验。';
 
   @override
+  String get frescomaxName => 'Frescomax';
+
+  @override
+  String get frescomaxRole => '全栈与云工程师';
+
+  @override
+  String get frescomaxTimelapse => '2025 - 现在';
+
+  @override
+  String get frescomaxExperienceDescription =>
+      '作为唯一的开发者（独立开发者），我从零开始构建了整个生态系统。我开发了应用程序（Flutter）和后端（API）。使用 Elastic Beanstalk、S3 和 CloudFront 在 AWS 上设计并部署了基础设施，用于视频流传输。使用 Riverpod 实施了整洁架构（Clean Architecture），确保了在 iOS、Android 和 Web 上的可扩展性和高性能产品。';
+
+  @override
+  String get frescomaxProjectDescription =>
+      'Frescomax 是一个跨平台应用程序（iOS、Android、Web），作为风扇的交互式目录和可视化工具。它具有详细的产品目录、带有实时颜色选择的高级定制功能，以及一个类似 AR 的虚拟组装工具，用于在真实空间中可视化风扇。使用 Flutter 和整洁架构（Clean Architecture）构建，确保了具有流畅动画和响应式设计的优质用户体验。';
+
+  @override
   String get contactDescription =>
       '如果您想了解更多关于我、我的工作，或只是想聊天，请随时联系我。我始终对新的机会和合作持开放态度。';
 
@@ -100,5 +117,5 @@ class AppLocalizationsZh extends AppLocalizations {
   String get footerPhrasePart1 => '用心制作';
 
   @override
-  String get footerPhrasePart2 => '和大量的';
+  String get footerPhrasePart2 => '来自多米尼加共和国';
 }

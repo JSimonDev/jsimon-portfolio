@@ -77,7 +77,6 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
     final TextTheme textStyles = Theme.of(context).textTheme;
     final appLocalizations = AppLocalizations.of(context)!;
     final Size size = MediaQuery.sizeOf(context);
-    // final locale = ref.watch(myLocaleProvider);
 
     return ThemeSwitchingArea(
       child: GestureDetector(
@@ -258,7 +257,6 @@ class ContactSection extends StatefulWidget {
 
 class _ContactSectionState extends State<ContactSection> {
   Artboard? _contactArtboard;
-  Artboard? _coffeeArtboard;
   late SMITrigger hoverTrigger;
 
   @override
@@ -278,15 +276,9 @@ class _ContactSectionState extends State<ContactSection> {
 
     hoverTrigger = controller.findSMI('hover') as SMITrigger;
 
-    //* LOAD CONTACT RIVE FILE
-    final coffeeFile = await RiveFile.asset('assets/rive/coffee.riv');
-    final coffeeArtboard = coffeeFile.artboardByName('Coffee')!;
-    coffeeArtboard.addController(SimpleAnimation('Cup'));
-
     setState(
       () {
         _contactArtboard = artboard;
-        _coffeeArtboard = coffeeArtboard;
       },
     );
   }
@@ -505,37 +497,6 @@ class _ContactSectionState extends State<ContactSection> {
                     ),
                   ),
                   SelectableText(appLocalizations.footerPhrasePart2),
-                  //* COFFEE RIVE ANIMATION
-                  if (_coffeeArtboard != null)
-                    SizedBox(
-                      height: 35,
-                      width: 35,
-                      child: RiveColorModifier(
-                        artboard: _coffeeArtboard!,
-                        fit: BoxFit.cover,
-                        components: [
-                          RiveColorComponent(
-                            shapePattern: '.*Cup',
-                            strokePattern: '.*',
-                            fillPattern: '.*',
-                            color: colors.onSurface,
-                          ),
-                          RiveColorComponent(
-                            shapePattern: '.*Hand',
-                            strokePattern: '.*',
-                            fillPattern: '.*',
-                            color: colors.onSurface,
-                          ),
-                          RiveColorComponent(
-                            shapePattern: '.*Loader',
-                            strokePattern: '.*',
-                            fillPattern: '.*',
-                            // color: const Color.fromARGB(255, 63, 42, 34),
-                            color: colors.onSurface,
-                          ),
-                        ],
-                      ),
-                    ),
                 ],
               ),
             ),
@@ -816,11 +777,24 @@ class ProjectList extends StatelessWidget {
     final appLocalizations = AppLocalizations.of(context)!;
     Set<Map<String, String>> projects = {
       {
+        'name': appLocalizations.frescomaxName,
+        'description': appLocalizations.frescomaxProjectDescription,
+        'image': 'assets/frescomax.webp',
+        'alt': 'Frescomax App Mockup',
+        'link': 'https://frescomax.shop',
+        'playStore':
+            'https://play.google.com/store/apps/details?id=dev.jsimon.frescomax',
+        'appStore': 'https://apps.apple.com/do/app/frescomax/id6754563826',
+      },
+      {
         'name': appLocalizations.cotizameName,
         'description': appLocalizations.cotizameProjectDescription,
         'image': 'assets/cotizame.webp',
         'alt': 'Cotízame App Mockup',
-        'link': 'https://cotizame.com.do/',
+        'link': 'https://cotizame.com.do',
+        'playStore':
+            'https://play.google.com/store/apps/details?id=com.xutrom.cotizame',
+        'appStore': 'https://apps.apple.com/do/app/cotízame/id6739175202',
       },
       {
         'name': appLocalizations.riveColorModifierProjectName,
@@ -829,13 +803,13 @@ class ProjectList extends StatelessWidget {
         'alt': 'Rive Color Modifier Showcase',
         'github': 'https://github.com/JSimonDev/rive_color_modifier',
       },
-      {
-        'name': appLocalizations.cinemapediaName,
-        'description': appLocalizations.cinemapediaProjectDescription,
-        'image': 'assets/cinemapedia.webp',
-        'alt': 'Cinemapedia App Mockup',
-        'github': 'https://github.com/JSimonDev/cinemapedia',
-      },
+      // {
+      //   'name': appLocalizations.cinemapediaName,
+      //   'description': appLocalizations.cinemapediaProjectDescription,
+      //   'image': 'assets/cinemapedia.webp',
+      //   'alt': 'Cinemapedia App Mockup',
+      //   'github': 'https://github.com/JSimonDev/cinemapedia',
+      // },
     };
 
     return SliverPadding(
@@ -852,6 +826,8 @@ class ProjectList extends StatelessWidget {
             description: projects.elementAt(index)['description']!,
             githubUrl: projects.elementAt(index)['github'],
             linkUrl: projects.elementAt(index)['link'],
+            playStoreUrl: projects.elementAt(index)['playStore'],
+            appStoreUrl: projects.elementAt(index)['appStore'],
           );
         },
       ),
@@ -868,6 +844,8 @@ class ExpandableCard extends StatefulWidget {
     required this.isLargeScreen,
     required this.githubUrl,
     required this.linkUrl,
+    this.playStoreUrl,
+    this.appStoreUrl,
   });
 
   final String image;
@@ -876,6 +854,8 @@ class ExpandableCard extends StatefulWidget {
   final bool isLargeScreen;
   final String? githubUrl;
   final String? linkUrl;
+  final String? playStoreUrl;
+  final String? appStoreUrl;
 
   @override
   State<ExpandableCard> createState() => _ExpandableCardState();
@@ -1003,6 +983,42 @@ class _ExpandableCardState extends State<ExpandableCard> {
                           ),
                           onPressed: () => _launchUrl(widget.githubUrl!),
                         ),
+                      //* PLAY STORE BUTTON
+                      if (widget.playStoreUrl != null) ...[
+                        const SizedBox(width: 8),
+                        TextButton.icon(
+                          style: const ButtonStyle(
+                            visualDensity: VisualDensity.comfortable,
+                            enableFeedback: true,
+                            shape: buttonShape,
+                          ),
+                          icon: const Icon(
+                            Icons.android,
+                          ),
+                          label: const Text(
+                            'Play Store',
+                          ),
+                          onPressed: () => _launchUrl(widget.playStoreUrl!),
+                        ),
+                      ],
+                      //* APP STORE BUTTON
+                      if (widget.appStoreUrl != null) ...[
+                        const SizedBox(width: 8),
+                        TextButton.icon(
+                          style: const ButtonStyle(
+                            visualDensity: VisualDensity.comfortable,
+                            enableFeedback: true,
+                            shape: buttonShape,
+                          ),
+                          icon: const Icon(
+                            Icons.phone_iphone,
+                          ),
+                          label: const Text(
+                            'App Store',
+                          ),
+                          onPressed: () => _launchUrl(widget.appStoreUrl!),
+                        ),
+                      ],
                       const SizedBox(width: 8),
                       //* SHOW MORE BUTTON
                       if (widget.description.length > wordLimit &&
@@ -1053,8 +1069,16 @@ class TimeLineWidget extends StatelessWidget {
           indicatorColor: colors.primary,
           indicatorSize: 20,
           strokeCap: StrokeCap.round,
+          lineColor: colors.primary.withValues(alpha: 0.5),
           lineGap: 10,
           children: [
+            //* FRESCOMAX
+            TimeLineCard(
+              proyectName: appLocalizations.frescomaxName,
+              role: appLocalizations.frescomaxRole,
+              timelapse: appLocalizations.frescomaxTimelapse,
+              description: appLocalizations.frescomaxExperienceDescription,
+            ),
             //* COTIZAME APP
             TimeLineCard(
               proyectName: appLocalizations.cotizameName,
@@ -1104,7 +1128,7 @@ class TimeLineCard extends StatelessWidget {
           bottomLeft: Radius.circular(radius),
         ),
         side: BorderSide(
-          color: colors.primary.withOpacity(0.5),
+          color: colors.primary.withValues(alpha: 0.5),
           width: 1,
         ),
       ),
@@ -1115,26 +1139,30 @@ class TimeLineCard extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 10.0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SelectableText(
-                        proyectName,
-                        style: textStyles.titleMedium,
-                      ),
-                      SelectableText(
-                        role,
-                        style: textStyles.bodySmall!.copyWith(
-                          color: colors.onSurface.withOpacity(0.6),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SelectableText(
+                          proyectName,
+                          style: textStyles.titleMedium,
                         ),
-                      ),
-                    ],
+                        SelectableText(
+                          role,
+                          style: textStyles.bodySmall!.copyWith(
+                            color: colors.onSurface.withValues(alpha: 0.6),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
+                  const SizedBox(width: 8),
                   SelectableText(
                     timelapse,
                     style: textStyles.bodyMedium!.copyWith(
-                      color: colors.onSurface.withOpacity(0.6),
+                      color: colors.onSurface.withValues(alpha: 0.6),
                     ),
                   ),
                 ],
@@ -1877,10 +1905,10 @@ class _AppBarCircleAvatarState extends State<AppBarCircleAvatar> {
           )
         : CircleAvatar(
             radius: radius + 6,
-            backgroundColor: colors.primary.withOpacity(0.1),
+            backgroundColor: colors.primary.withValues(alpha: 0.1),
             child: CircleAvatar(
               radius: radius + 3,
-              backgroundColor: colors.primary.withOpacity(0.5),
+              backgroundColor: colors.primary.withValues(alpha: 0.5),
               child: const CircleAvatar(
                 radius: radius,
                 backgroundImage: AssetImage(
@@ -1924,7 +1952,7 @@ class AppBarName extends StatelessWidget {
                 ? appLocalizations.roleLarge
                 : appLocalizations.roleSmall,
             style: textStyles.labelSmall!.copyWith(
-              color: colors.onSurface.withOpacity(0.6),
+              color: colors.onSurface.withValues(alpha: 0.6),
             ),
           ),
         ],

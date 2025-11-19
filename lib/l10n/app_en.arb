@@ -23,11 +23,16 @@
   "riveColorModifierProjectDescription": "Rive Color Modifier is a Flutter package that allows you to dynamically modify the colors of your Rive animations. If you work with animations in your application, this package can be a valuable tool for adjusting colors in real time.\n\nHere are the key details about the package:\n\n- Usage: To use Rive Color Modifier, simply add the dependency to your `pubspec.yaml` file. Then, in your code, you can create instances of `RiveColorModifier` and apply color changes to your Rive animations.\n- Benefits:\n    1. Flexibility: Modify animation colors without altering the original Rive files.\n    2. Interactivity: Adjust colors in real time, useful for customizable themes or dynamic animations.\n    3. Optimization: Avoid duplicating Rive files just to change colors. Making use of RiveRenderObject to apply color changes directly to the Rive animation.",
   "cinemapediaName": "Cinemapedia",
   "cinemapediaProjectDescription": "Cinemapedia is an application developed using Flutter and TheMovieDB API, providing users with a platform to explore detailed information about current movies, upcoming releases, and the most popular ones. The app allows users to mark movies as favorites, view trailers, learn about the cast, and perform searches by name, genre, or keywords. It also offers information on actors, film categories, and movie ratings, enabling users to have a comprehensive and enriching experience in their engagement with cinema.",
+  "frescomaxName": "Frescomax",
+  "frescomaxRole": "Full Stack & Cloud Engineer",
+  "frescomaxTimelapse": "2025 - Present",
+  "frescomaxExperienceDescription": "As the sole developer, I built the entire ecosystem from scratch. I developed both the application (Flutter) and the Backend (API). Designed and deployed the infrastructure on AWS using Elastic Beanstalk, S3, and CloudFront for video streaming. Implemented Clean Architecture with Riverpod, ensuring a scalable and high-performance product on iOS, Android, and Web.",
+  "frescomaxProjectDescription": "Frescomax is a cross-platform app (iOS, Android, Web) that serves as an interactive catalog and visualization tool for fans. It features a detailed product catalog, advanced customization with real-time color selection, and an AR-like virtual assembly tool to visualize fans in real spaces. Built with Flutter and Clean Architecture, it ensures a premium user experience with smooth animations and a responsive design.",
   "contactDescription": "If you want to know more about me, my work, or just want to chat, don't hesitate to contact me. I'm always open to new opportunities and collaborations.",
   "licenseButtonLabel": "Licenses",
   "goToTopButtonLabel": "Go to top",
   "goToWebsiteButtonLabel": "Go to website",
   "lifePolicies": "Life Policies",
   "footerPhrasePart1": "Made with",
-  "footerPhrasePart2": "and lots of"
+  "footerPhrasePart2": "from Dominican Republic"
 }

@@ -82,6 +82,23 @@ class AppLocalizationsEn extends AppLocalizations {
       'Cinemapedia is an application developed using Flutter and TheMovieDB API, providing users with a platform to explore detailed information about current movies, upcoming releases, and the most popular ones. The app allows users to mark movies as favorites, view trailers, learn about the cast, and perform searches by name, genre, or keywords. It also offers information on actors, film categories, and movie ratings, enabling users to have a comprehensive and enriching experience in their engagement with cinema.';
 
   @override
+  String get frescomaxName => 'Frescomax';
+
+  @override
+  String get frescomaxRole => 'Full Stack & Cloud Engineer';
+
+  @override
+  String get frescomaxTimelapse => '2025 - Present';
+
+  @override
+  String get frescomaxExperienceDescription =>
+      'As the sole developer, I built the entire ecosystem from scratch. I developed both the application (Flutter) and the Backend (API). Designed and deployed the infrastructure on AWS using Elastic Beanstalk, S3, and CloudFront for video streaming. Implemented Clean Architecture with Riverpod, ensuring a scalable and high-performance product on iOS, Android, and Web.';
+
+  @override
+  String get frescomaxProjectDescription =>
+      'Frescomax is a cross-platform app (iOS, Android, Web) that serves as an interactive catalog and visualization tool for fans. It features a detailed product catalog, advanced customization with real-time color selection, and an AR-like virtual assembly tool to visualize fans in real spaces. Built with Flutter and Clean Architecture, it ensures a premium user experience with smooth animations and a responsive design.';
+
+  @override
   String get contactDescription =>
       'If you want to know more about me, my work, or just want to chat, don\'t hesitate to contact me. I\'m always open to new opportunities and collaborations.';
 
@@ -101,5 +118,5 @@ class AppLocalizationsEn extends AppLocalizations {
   String get footerPhrasePart1 => 'Made with';
 
   @override
-  String get footerPhrasePart2 => 'and lots of';
+  String get footerPhrasePart2 => 'from Dominican Republic';
 }

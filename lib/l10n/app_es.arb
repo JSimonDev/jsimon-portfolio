@@ -8,7 +8,7 @@
   "contactButtonLabel": "Contáctame",
   "expirienceTitle": "Experiencia",
   "projectsTitle": "Proyectos",
-  "technologiesTitle": "Tecnologías con las que he trabajado", 
+  "technologiesTitle": "Tecnologías con las que he trabajado",
   "contactTitle": "Contáctame",
   "cotizameName": "Cotízame",
   "cotizameRole": "Desarrollador Móvil (Flutter)",
@@ -23,11 +23,16 @@
   "riveColorModifierProjectDescription": "Rive Color Modifier es un paquete de Flutter que te permite modificar dinámicamente los colores de tus animaciones Rive. Si trabajas con animaciones en tu aplicación, este paquete puede ser una herramienta valiosa para ajustar colores en tiempo real.\n\nAquí están los detalles clave sobre el paquete:\n\n- Uso: Para usar Rive Color Modifier, simplemente agrega la dependencia a tu archivo pubspec.yaml. Luego, en tu código, puedes crear instancias de RiveColorModifier y aplicar cambios de color a tus animaciones Rive.\n- Beneficios:\n    1. Flexibilidad: Modifica los colores de las animaciones sin alterar los archivos Rive originales.\n    2. Interactividad: Ajusta los colores en tiempo real, útil para temas personalizables o animaciones dinámicas.\n    3. Optimización: Evita duplicar archivos Rive solo para cambiar colores. Haciendo uso de RiveRenderObject para aplicar cambios de color directamente en la animación Rive.",
   "cinemapediaName": "Cinemapedia",
   "cinemapediaProjectDescription": "Cinemapedia es una aplicación desarrollada utilizando Flutter y la API de TheMovieDB, brindando a los usuarios una plataforma para explorar información detallada sobre películas actuales, próximos estrenos y las más populares. La aplicación permite a los usuarios marcar películas como favoritas, ver tráileres, conocer sobre el elenco y realizar búsquedas por nombre, género o palabras clave. También ofrece información sobre actores, categorías de películas y calificaciones de películas, permitiendo a los usuarios tener una experiencia comprensiva y enriquecedora en su interacción con el cine.",
+  "frescomaxName": "Frescomax",
+  "frescomaxRole": "Ingeniero Full Stack & Cloud",
+  "frescomaxTimelapse": "2025 - Presente",
+  "frescomaxExperienceDescription": "Como desarrollador único (Solo Developer), construí todo el ecosistema desde cero. Desarrollé tanto la aplicación (Flutter) como el Backend (API). Diseñé y desplegué la infraestructura en AWS utilizando Elastic Beanstalk, S3 y CloudFront para streaming de video. Implementé Clean Architecture con Riverpod, garantizando un producto escalable y de alto rendimiento en iOS, Android y Web.",
+  "frescomaxProjectDescription": "Frescomax es una aplicación multiplataforma (iOS, Android, Web) que funciona como catálogo interactivo y herramienta de visualización de ventiladores. Cuenta con un catálogo detallado, personalización avanzada con selección de colores en tiempo real y una herramienta de montaje virtual (tipo AR) para visualizar ventiladores en espacios reales. Construida con Flutter y Clean Architecture, garantiza una experiencia de usuario premium con animaciones fluidas y diseño responsive.",
   "contactDescription": "Si quieres saber más sobre mí, mi trabajo o simplemente quieres charlar, no dudes en contactarme. Siempre estoy abierto a nuevas oportunidades y colaboraciones.",
   "licenseButtonLabel": "Licencias",
   "goToTopButtonLabel": "Ir arriba",
   "goToWebsiteButtonLabel": "Ir al sitio web",
   "lifePolicies": "Políticas de Vida",
   "footerPhrasePart1": "Hecho con",
-  "footerPhrasePart2": "y mucho"
+  "footerPhrasePart2": "desde República Dominicana"
 }

@@ -82,6 +82,23 @@ class AppLocalizationsEs extends AppLocalizations {
       'Cinemapedia es una aplicación desarrollada utilizando Flutter y la API de TheMovieDB, brindando a los usuarios una plataforma para explorar información detallada sobre películas actuales, próximos estrenos y las más populares. La aplicación permite a los usuarios marcar películas como favoritas, ver tráileres, conocer sobre el elenco y realizar búsquedas por nombre, género o palabras clave. También ofrece información sobre actores, categorías de películas y calificaciones de películas, permitiendo a los usuarios tener una experiencia comprensiva y enriquecedora en su interacción con el cine.';
 
   @override
+  String get frescomaxName => 'Frescomax';
+
+  @override
+  String get frescomaxRole => 'Ingeniero Full Stack & Cloud';
+
+  @override
+  String get frescomaxTimelapse => '2025 - Presente';
+
+  @override
+  String get frescomaxExperienceDescription =>
+      'Como desarrollador único (Solo Developer), construí todo el ecosistema desde cero. Desarrollé tanto la aplicación (Flutter) como el Backend (API). Diseñé y desplegué la infraestructura en AWS utilizando Elastic Beanstalk, S3 y CloudFront para streaming de video. Implementé Clean Architecture con Riverpod, garantizando un producto escalable y de alto rendimiento en iOS, Android y Web.';
+
+  @override
+  String get frescomaxProjectDescription =>
+      'Frescomax es una aplicación multiplataforma (iOS, Android, Web) que funciona como catálogo interactivo y herramienta de visualización de ventiladores. Cuenta con un catálogo detallado, personalización avanzada con selección de colores en tiempo real y una herramienta de montaje virtual (tipo AR) para visualizar ventiladores en espacios reales. Construida con Flutter y Clean Architecture, garantiza una experiencia de usuario premium con animaciones fluidas y diseño responsive.';
+
+  @override
   String get contactDescription =>
       'Si quieres saber más sobre mí, mi trabajo o simplemente quieres charlar, no dudes en contactarme. Siempre estoy abierto a nuevas oportunidades y colaboraciones.';
 
@@ -101,5 +118,5 @@ class AppLocalizationsEs extends AppLocalizations {
   String get footerPhrasePart1 => 'Hecho con';
 
   @override
-  String get footerPhrasePart2 => 'y mucho';
+  String get footerPhrasePart2 => 'desde República Dominicana';
 }
