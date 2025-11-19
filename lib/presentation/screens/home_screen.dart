@@ -1243,6 +1243,7 @@ class CustomSliverAppBar extends StatelessWidget {
       elevation: 0,
       scrolledUnderElevation: 0,
       pinned: true,
+      toolbarHeight: 70,
       collapsedHeight: 70,
       expandedHeight: isLargeScreen ? 280 : 200.0,
       leadingWidth: 100,
