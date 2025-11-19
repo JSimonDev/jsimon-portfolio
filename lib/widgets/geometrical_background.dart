@@ -1,4 +1,5 @@
 import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 class GeometricalBackground extends StatelessWidget {
@@ -45,7 +46,7 @@ class GeometricalBackground extends StatelessWidget {
             decoration: BoxDecoration(
                 color: color ??
                     (isDarkMode
-                        ? colors.onPrimary.withOpacity(0.6)
+                        ? colors.onPrimary.withValues(alpha: 0.6)
                         : colors.onPrimaryContainer)),
             child: ListView(
               children: rows,

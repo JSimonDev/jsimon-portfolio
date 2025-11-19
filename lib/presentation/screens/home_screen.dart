@@ -8,11 +8,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:jsimon/config/theme/app_theme.dart';
 import 'package:jsimon/config/utils/utils.dart';
 import 'package:jsimon/l10n/app_localizations.dart';
 import 'package:jsimon/presentation/providers/locale_provider.dart';
 import 'package:jsimon/widgets/widgets.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:rive/math.dart';
 import 'package:rive/rive.dart' hide Image;
 import 'package:rive_color_modifier/rive_color_modifier.dart';
@@ -413,13 +415,13 @@ class _ContactSectionState extends State<ContactSection> {
                       children: [
                         //* PHONE
                         ContactAction(
-                          icon: Icons.phone,
+                          icon: Symbols.phone,
                           text: "+1 (849) 527-1701",
                           onTap: () => _launchPhone('tel:+18495271701'),
                         ),
                         //* EMAIL
                         ContactAction(
-                          icon: Icons.email,
+                          icon: Symbols.email,
                           text: "jsimondev@gmail.com",
                           onTap: () =>
                               _launchMail('mailto:jsimondev@gmail.com'),
@@ -433,13 +435,13 @@ class _ContactSectionState extends State<ContactSection> {
                         ),
                         //* TELEGRAM
                         ContactAction(
-                          icon: Icons.send,
+                          icon: Symbols.send,
                           text: "Telegram",
                           onTap: () => _launchUrl('https://t.me/MRPDWKDP'),
                         ),
                         //* LICENSE
                         ContactAction(
-                          icon: Icons.info,
+                          icon: Symbols.info,
                           text: appLocalizations.licenseButtonLabel,
                           onTap: () => showLicensePage(
                             context: context,
@@ -447,7 +449,7 @@ class _ContactSectionState extends State<ContactSection> {
                         ),
                         //* LIFE POLICIES
                         ContactAction(
-                          icon: Icons.policy,
+                          icon: Symbols.policy,
                           text: AppLocalizations.of(context)!.lifePolicies,
                           onTap: () =>
                               _launchUrl('https://ian.hixie.ch/bible/policies'),
@@ -541,7 +543,7 @@ class GoToTopButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Icon(
-            Icons.arrow_drop_up_rounded,
+            Symbols.arrow_drop_up_rounded,
           ),
           Text(
             appLocalizations.goToTopButtonLabel,
@@ -913,10 +915,9 @@ class _ExpandableCardState extends State<ExpandableCard> {
           children: [
             //* IMAGE
             Image.asset(
-              height: widget.isLargeScreen ? 300 : 200,
               width: double.infinity,
               widget.image,
-              fit: BoxFit.cover,
+              fit: BoxFit.fitWidth,
             ),
             //* DESCRIPTION & BUTTONS
             Padding(
@@ -952,72 +953,105 @@ class _ExpandableCardState extends State<ExpandableCard> {
                     children: [
                       //* LINK BUTTON
                       if (widget.linkUrl != null)
-                        TextButton.icon(
-                          style: const ButtonStyle(
-                            visualDensity: VisualDensity.comfortable,
-                            enableFeedback: true,
-                            shape: buttonShape,
-                          ),
-                          icon: const Icon(
-                            Icons.link,
-                          ),
-                          label: Text(
-                            appLocalizations.goToWebsiteButtonLabel,
-                          ),
-                          onPressed: () => _launchUrl(widget.linkUrl!),
-                        ),
+                        widget.isLargeScreen
+                            ? TextButton.icon(
+                                style: const ButtonStyle(
+                                  visualDensity: VisualDensity.comfortable,
+                                  enableFeedback: true,
+                                  shape: buttonShape,
+                                ),
+                                icon: const Icon(
+                                  Symbols.captive_portal_rounded,
+                                ),
+                                label: Text(
+                                  appLocalizations.goToWebsiteButtonLabel,
+                                ),
+                                onPressed: () => _launchUrl(widget.linkUrl!),
+                              )
+                            : IconButton(
+                                icon:
+                                    const Icon(Symbols.captive_portal_rounded),
+                                tooltip:
+                                    appLocalizations.goToWebsiteButtonLabel,
+                                onPressed: () => _launchUrl(widget.linkUrl!),
+                              ),
 
                       //* GITHUB BUTTON
                       if (widget.githubUrl != null)
-                        TextButton.icon(
-                          style: const ButtonStyle(
-                            visualDensity: VisualDensity.comfortable,
-                            enableFeedback: true,
-                            shape: buttonShape,
-                          ),
-                          icon: const Icon(
-                            DevIcons.githubOriginal,
-                          ),
-                          label: const Text(
-                            'GitHub',
-                          ),
-                          onPressed: () => _launchUrl(widget.githubUrl!),
-                        ),
+                        widget.isLargeScreen
+                            ? TextButton.icon(
+                                style: const ButtonStyle(
+                                  visualDensity: VisualDensity.comfortable,
+                                  enableFeedback: true,
+                                  shape: buttonShape,
+                                ),
+                                icon: const Icon(
+                                  DevIcons.githubOriginal,
+                                ),
+                                label: const Text(
+                                  'GitHub',
+                                ),
+                                onPressed: () => _launchUrl(widget.githubUrl!),
+                              )
+                            : IconButton(
+                                icon: const Icon(DevIcons.githubOriginal),
+                                tooltip: 'GitHub',
+                                onPressed: () => _launchUrl(widget.githubUrl!),
+                              ),
+
                       //* PLAY STORE BUTTON
                       if (widget.playStoreUrl != null) ...[
                         const SizedBox(width: 8),
-                        TextButton.icon(
-                          style: const ButtonStyle(
-                            visualDensity: VisualDensity.comfortable,
-                            enableFeedback: true,
-                            shape: buttonShape,
-                          ),
-                          icon: const Icon(
-                            Icons.android,
-                          ),
-                          label: const Text(
-                            'Play Store',
-                          ),
-                          onPressed: () => _launchUrl(widget.playStoreUrl!),
-                        ),
+                        widget.isLargeScreen
+                            ? TextButton.icon(
+                                style: const ButtonStyle(
+                                  visualDensity: VisualDensity.comfortable,
+                                  enableFeedback: true,
+                                  shape: buttonShape,
+                                ),
+                                icon: const Icon(
+                                  FontAwesomeIcons.googlePlay,
+                                ),
+                                label: const Text(
+                                  'Play Store',
+                                ),
+                                onPressed: () =>
+                                    _launchUrl(widget.playStoreUrl!),
+                              )
+                            : IconButton(
+                                icon: const Icon(FontAwesomeIcons.googlePlay),
+                                tooltip: 'Play Store',
+                                iconSize: 20,
+                                onPressed: () =>
+                                    _launchUrl(widget.playStoreUrl!),
+                              ),
                       ],
                       //* APP STORE BUTTON
                       if (widget.appStoreUrl != null) ...[
                         const SizedBox(width: 8),
-                        TextButton.icon(
-                          style: const ButtonStyle(
-                            visualDensity: VisualDensity.comfortable,
-                            enableFeedback: true,
-                            shape: buttonShape,
-                          ),
-                          icon: const Icon(
-                            Icons.phone_iphone,
-                          ),
-                          label: const Text(
-                            'App Store',
-                          ),
-                          onPressed: () => _launchUrl(widget.appStoreUrl!),
-                        ),
+                        widget.isLargeScreen
+                            ? TextButton.icon(
+                                style: const ButtonStyle(
+                                  visualDensity: VisualDensity.comfortable,
+                                  enableFeedback: true,
+                                  shape: buttonShape,
+                                ),
+                                icon: const Icon(
+                                  FontAwesomeIcons.appStore,
+                                ),
+                                label: const Text(
+                                  'App Store',
+                                ),
+                                onPressed: () =>
+                                    _launchUrl(widget.appStoreUrl!),
+                              )
+                            : IconButton(
+                                icon: const Icon(FontAwesomeIcons.appStoreIos),
+                                iconSize: 22,
+                                tooltip: 'App Store',
+                                onPressed: () =>
+                                    _launchUrl(widget.appStoreUrl!),
+                              ),
                       ],
                       const SizedBox(width: 8),
                       //* SHOW MORE BUTTON
@@ -1279,7 +1313,7 @@ class TheSwitcherButton extends StatelessWidget {
             );
           },
           icon: Icon(
-            isDarkMode ? Icons.wb_sunny_rounded : Icons.nights_stay_rounded,
+            isDarkMode ? Symbols.wb_sunny_rounded : Symbols.nights_stay_rounded,
           ),
         );
       },
@@ -1508,6 +1542,13 @@ class _TechnologiesListState extends State<TechnologiesList> {
       'alt': 'Firebase Logo',
     },
     {
+      'nombre': 'AWS',
+      'icon': FontAwesomeIcons.aws,
+      'wordmark': FontAwesomeIcons.aws,
+      'doc': 'https://aws.amazon.com/',
+      'alt': 'AWS Logo',
+    },
+    {
       'nombre': 'NPM',
       'icon': DevIcons.npmOriginalWordmark,
       'wordmark': DevIcons.npmOriginalWordmark,
@@ -1593,7 +1634,7 @@ class _TechnologiesListState extends State<TechnologiesList> {
     }
   };
 
-  Future<void> _launchUrl(url) async {
+  Future<void> _launchUrl(Uri url) async {
     if (!await launchUrl(url)) {
       throw Exception('Could not launch $url');
     }

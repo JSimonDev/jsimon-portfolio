@@ -20,7 +20,7 @@ class _NotFoundPageState extends State<NotFoundPage> {
   late SMITrigger jumpOneTrigger;
   late SMITrigger jumpTwoTrigger;
 
-  _load() async {
+  Future<void> _load() async {
     final notFoundFile = await RiveFile.asset('assets/rive/404.riv');
     final notFoundArtboard = notFoundFile.artboardByName('404')!;
     StateMachineController controller = RiveUtils.getRiveController(
@@ -53,24 +53,33 @@ class _NotFoundPageState extends State<NotFoundPage> {
 
     // Background Accent
     const int clarify = 30;
-    int redLight = min(255, backgroundColor.red + clarify);
-    int greenLight = min(255, backgroundColor.green + clarify);
-    int blueLight = min(255, backgroundColor.blue + clarify);
+    int redLight =
+        min(255, (backgroundColor.r * 255).round().clamp(0, 255) + clarify);
+    int greenLight =
+        min(255, (backgroundColor.g * 255).round().clamp(0, 255) + clarify);
+    int blueLight =
+        min(255, (backgroundColor.b * 255).round().clamp(0, 255) + clarify);
     Color backgroundAccentColor =
         Color.fromRGBO(redLight, greenLight, blueLight, 1);
 
     // Shadow
     const int shadowDarken = 50;
-    int redDark = max(0, backgroundColor.red - shadowDarken);
-    int greenDark = max(0, backgroundColor.green - shadowDarken);
-    int blueDark = max(0, backgroundColor.blue - shadowDarken);
+    int redDark =
+        max(0, (backgroundColor.r * 255).round().clamp(0, 255) - shadowDarken);
+    int greenDark =
+        max(0, (backgroundColor.g * 255).round().clamp(0, 255) - shadowDarken);
+    int blueDark =
+        max(0, (backgroundColor.b * 255).round().clamp(0, 255) - shadowDarken);
     Color shadowColor = Color.fromRGBO(redDark, greenDark, blueDark, 1);
 
     // Stair Shadow
     const int stairShadowDarken = 100;
-    int redStairShadow = max(0, backgroundColor.red - stairShadowDarken);
-    int greenStairShadow = max(0, backgroundColor.green - stairShadowDarken);
-    int blueStairShadow = max(0, backgroundColor.blue - stairShadowDarken);
+    int redStairShadow = max(
+        0, (backgroundColor.r * 255).round().clamp(0, 255) - stairShadowDarken);
+    int greenStairShadow = max(
+        0, (backgroundColor.g * 255).round().clamp(0, 255) - stairShadowDarken);
+    int blueStairShadow = max(
+        0, (backgroundColor.b * 255).round().clamp(0, 255) - stairShadowDarken);
     Color stairShadowColor =
         Color.fromRGBO(redStairShadow, greenStairShadow, blueStairShadow, 1);
 
