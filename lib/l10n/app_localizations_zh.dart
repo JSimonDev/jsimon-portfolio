@@ -118,4 +118,10 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get footerPhrasePart2 => '来自多米尼加共和国';
+
+  @override
+  String get contactEmail => 'nihao@jsimon.dev';
+
+  @override
+  String get buyMeACoffee => '请我喝咖啡';
 }

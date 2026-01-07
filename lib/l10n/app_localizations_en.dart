@@ -119,4 +119,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get footerPhrasePart2 => 'from Dominican Republic';
+
+  @override
+  String get contactEmail => 'hello@jsimon.dev';
+
+  @override
+  String get buyMeACoffee => 'Buy me a coffee';
 }

@@ -118,4 +118,10 @@ class AppLocalizationsHi extends AppLocalizations {
 
   @override
   String get footerPhrasePart2 => 'डोमिनिकन गणराज्य से';
+
+  @override
+  String get contactEmail => 'namaste@jsimon.dev';
+
+  @override
+  String get buyMeACoffee => 'मुझे कॉफी पिलाएं';
 }

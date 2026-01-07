@@ -2,37 +2,147 @@
   "@@locale": "en",
   "@@author": "Jonathan Simon",
   "name": "Jonathan Simon",
+  "@name": {
+    "description": "The name of the developer"
+  },
   "roleLarge": "Software Developer | Tech Enthusiast",
+  "@roleLarge": {
+    "description": "Large role description in the hero section"
+  },
   "roleSmall": "Software Developer",
+  "@roleSmall": {
+    "description": "Small role description for mobile or smaller components"
+  },
   "phrase": "Welcome to my digital garden 🌱, a space where I cultivate and share my discoveries about developing exceptional products, continually refining myself as a developer, and evolving my career in the vast world of technology.",
+  "@phrase": {
+    "description": "Introductory phrase in the hero section"
+  },
   "contactButtonLabel": "Contact",
+  "@contactButtonLabel": {
+    "description": "Label for the contact button"
+  },
   "expirienceTitle": "Experience",
+  "@expirienceTitle": {
+    "description": "Title for the experience section"
+  },
   "projectsTitle": "Projects",
+  "@projectsTitle": {
+    "description": "Title for the projects section"
+  },
   "technologiesTitle": "Technologies I have worked with",
+  "@technologiesTitle": {
+    "description": "Title for the technologies section"
+  },
   "contactTitle": "Contact Me",
+  "@contactTitle": {
+    "description": "Title for the contact section"
+  },
   "cotizameName": "Cotízame",
+  "@cotizameName": {
+    "description": "Name of the Cotízame project"
+  },
   "cotizameRole": "Mobile Developer (Flutter)",
+  "@cotizameRole": {
+    "description": "Role held during the Cotízame project"
+  },
   "cotizameTimelapse": "2023 - Present",
+  "@cotizameTimelapse": {
+    "description": "Time period of the Cotízame project"
+  },
   "cotizameExperienceDescription": "In the development of \"Cotízame\", an innovative mobile application that facilitates interaction between buyers and sellers through direct quotation requests, I lead the creation of the user interface and design, using Flutter. My role is fundamental in the conceptualization and execution of an intuitive user experience, significantly contributing to the distinctive character and usability of the application. This project has been an excellent opportunity to delve deeper into Flutter and Dart, strengthening my skills in interface design and collaboration to deliver a revolutionary market solution.",
+  "@cotizameExperienceDescription": {
+    "description": "Description of the experience gained during the Cotízame project"
+  },
   "cotizameProjectDescription": "Cotízame is an innovative mobile application designed in Flutter, specifically aimed, though not exclusively, at the population of the Dominican Republic. Cotizame revolutionizes the way buyers and sellers interact, giving the buyer a more active role in the purchasing process. Through this application, users can draft and send detailed quotation requests specifying the desired product or service and the price they are willing to pay. These requests are sent directly to selected sellers, who can respond with personalized offers. Upon accepting an offer, a purchase order is automatically generated, initiating the payment and delivery process. Cotizame stands out for its modern and user-friendly interface, facilitating intuitive navigation and efficient processing of quotation requests, all within a fast and accessible mobile environment.",
+  "@cotizameProjectDescription": {
+    "description": "General description of the Cotízame project"
+  },
   "freelanceName": "Freelance",
+  "@freelanceName": {
+    "description": "Name for freelance work entry"
+  },
   "freelanceRole": "Web Developer / Mobile Developer (Ionic, Flutter)",
+  "@freelanceRole": {
+    "description": "Role held as a freelancer"
+  },
   "freelanceTimelapse": "2022 - 2023",
+  "@freelanceTimelapse": {
+    "description": "Time period of freelance work"
+  },
   "freelanceExperienceDescription": "Personal projects and freelance work have been key in expanding development and design skills, facilitating the exploration of innovative solutions independently. These experiences have reinforced the ability to manage projects and solve technical challenges with creativity, without relying on traditional structures.",
+  "@freelanceExperienceDescription": {
+    "description": "Description of the experience gained as a freelancer"
+  },
   "riveColorModifierProjectName": "Rive Color Modifier",
+  "@riveColorModifierProjectName": {
+    "description": "Name of the Rive Color Modifier project"
+  },
   "riveColorModifierProjectDescription": "Rive Color Modifier is a Flutter package that allows you to dynamically modify the colors of your Rive animations. If you work with animations in your application, this package can be a valuable tool for adjusting colors in real time.\n\nHere are the key details about the package:\n\n- Usage: To use Rive Color Modifier, simply add the dependency to your `pubspec.yaml` file. Then, in your code, you can create instances of `RiveColorModifier` and apply color changes to your Rive animations.\n- Benefits:\n    1. Flexibility: Modify animation colors without altering the original Rive files.\n    2. Interactivity: Adjust colors in real time, useful for customizable themes or dynamic animations.\n    3. Optimization: Avoid duplicating Rive files just to change colors. Making use of RiveRenderObject to apply color changes directly to the Rive animation.",
+  "@riveColorModifierProjectDescription": {
+    "description": "Detailed description of the Rive Color Modifier project"
+  },
   "cinemapediaName": "Cinemapedia",
+  "@cinemapediaName": {
+    "description": "Name of the Cinemapedia project"
+  },
   "cinemapediaProjectDescription": "Cinemapedia is an application developed using Flutter and TheMovieDB API, providing users with a platform to explore detailed information about current movies, upcoming releases, and the most popular ones. The app allows users to mark movies as favorites, view trailers, learn about the cast, and perform searches by name, genre, or keywords. It also offers information on actors, film categories, and movie ratings, enabling users to have a comprehensive and enriching experience in their engagement with cinema.",
+  "@cinemapediaProjectDescription": {
+    "description": "Detailed description of the Cinemapedia project"
+  },
   "frescomaxName": "Frescomax",
+  "@frescomaxName": {
+    "description": "Name of the Frescomax project"
+  },
   "frescomaxRole": "Full Stack & Cloud Engineer",
+  "@frescomaxRole": {
+    "description": "Role held during the Frescomax project"
+  },
   "frescomaxTimelapse": "2025 - Present",
+  "@frescomaxTimelapse": {
+    "description": "Time period of the Frescomax project"
+  },
   "frescomaxExperienceDescription": "As the sole developer, I built the entire ecosystem from scratch. I developed both the application (Flutter) and the Backend (API). Designed and deployed the infrastructure on AWS using Elastic Beanstalk, S3, and CloudFront for video streaming. Implemented Clean Architecture with Riverpod, ensuring a scalable and high-performance product on iOS, Android, and Web.",
+  "@frescomaxExperienceDescription": {
+    "description": "Description of the experience gained during the Frescomax project"
+  },
   "frescomaxProjectDescription": "Frescomax is a cross-platform app (iOS, Android, Web) that serves as an interactive catalog and visualization tool for fans. It features a detailed product catalog, advanced customization with real-time color selection, and an AR-like virtual assembly tool to visualize fans in real spaces. Built with Flutter and Clean Architecture, it ensures a premium user experience with smooth animations and a responsive design.",
+  "@frescomaxProjectDescription": {
+    "description": "General description of the Frescomax project"
+  },
   "contactDescription": "If you want to know more about me, my work, or just want to chat, don't hesitate to contact me. I'm always open to new opportunities and collaborations.",
+  "@contactDescription": {
+    "description": "Introductory text for the contact section"
+  },
   "licenseButtonLabel": "Licenses",
+  "@licenseButtonLabel": {
+    "description": "Label for the licenses button"
+  },
   "goToTopButtonLabel": "Go to top",
+  "@goToTopButtonLabel": {
+    "description": "Label for the scroll to top button"
+  },
   "goToWebsiteButtonLabel": "Go to website",
+  "@goToWebsiteButtonLabel": {
+    "description": "Label for the link to the external website"
+  },
   "lifePolicies": "Life Policies",
+  "@lifePolicies": {
+    "description": "Title for the Life Policies section"
+  },
   "footerPhrasePart1": "Made with",
-  "footerPhrasePart2": "from Dominican Republic"
+  "@footerPhrasePart1": {
+    "description": "First part of the footer credits phrase"
+  },
+  "footerPhrasePart2": "from Dominican Republic",
+  "@footerPhrasePart2": {
+    "description": "Second part of the footer credits phrase"
+  },
+  "contactEmail": "hello@jsimon.dev",
+  "@contactEmail": {
+    "description": "The contact email address"
+  },
+  "buyMeACoffee": "Buy me a coffee",
+  "@buyMeACoffee": {
+    "description": "Label for the Buy Me a Coffee button"
+  }
 }

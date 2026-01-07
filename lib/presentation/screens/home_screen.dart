@@ -97,6 +97,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
               return SafeArea(
                 child: CustomScrollView(
                   controller: _scrollController,
+                  physics: const ClampingScrollPhysics(),
                   slivers: [
                     //* SLIVER APP BAR
                     SliverPadding(
@@ -229,7 +230,7 @@ class HomeScreenState extends ConsumerState<HomeScreen> {
                     //* GRACE SPACE
                     const SliverToBoxAdapter(
                       child: SizedBox(
-                        height: 30,
+                        height: 80,
                       ),
                     ),
                   ],
@@ -422,9 +423,9 @@ class _ContactSectionState extends State<ContactSection> {
                         //* EMAIL
                         ContactAction(
                           icon: Symbols.email,
-                          text: "jsimondev@gmail.com",
-                          onTap: () =>
-                              _launchMail('mailto:jsimondev@gmail.com'),
+                          text: appLocalizations.contactEmail,
+                          onTap: () => _launchMail(
+                              'mailto:${appLocalizations.contactEmail}'),
                         ),
                         //* SOCIAL MEDIA
                         ContactAction(
@@ -438,6 +439,13 @@ class _ContactSectionState extends State<ContactSection> {
                           icon: Symbols.send,
                           text: "Telegram",
                           onTap: () => _launchUrl('https://t.me/MRPDWKDP'),
+                        ),
+                        //* BUY ME A COFFEE
+                        ContactAction(
+                          icon: Symbols.coffee_rounded,
+                          text: appLocalizations.buyMeACoffee,
+                          onTap: () =>
+                              _launchUrl('https://buymeacoffee.com/jsimondev'),
                         ),
                         //* LICENSE
                         ContactAction(
@@ -1358,8 +1366,8 @@ class ContactButton extends StatelessWidget {
       onPressed: () {
         scrollController.animateTo(
           scrollController.position.maxScrollExtent + 200,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
+          duration: const Duration(milliseconds: 1000),
+          curve: Curves.fastOutSlowIn,
         );
       },
       child: Text(
@@ -1977,27 +1985,31 @@ class AppBarName extends StatelessWidget {
     final appLocalizations = AppLocalizations.of(context)!;
 
     return Flexible(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SelectableText(
-            appLocalizations.name,
-            style: textStyles.titleLarge!.copyWith(
-              fontFamily: 'Cookie',
-              letterSpacing: 1.0,
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        alignment: Alignment.centerLeft,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SelectableText(
+              appLocalizations.name,
+              style: textStyles.titleLarge!.copyWith(
+                fontFamily: 'Cookie',
+                letterSpacing: 1.0,
+              ),
+              maxLines: 1,
             ),
-            maxLines: 1,
-          ),
-          SelectableText(
-            isLargeScreen
-                ? appLocalizations.roleLarge
-                : appLocalizations.roleSmall,
-            style: textStyles.labelSmall!.copyWith(
-              color: colors.onSurface.withValues(alpha: 0.6),
+            SelectableText(
+              isLargeScreen
+                  ? appLocalizations.roleLarge
+                  : appLocalizations.roleSmall,
+              style: textStyles.labelSmall!.copyWith(
+                color: colors.onSurface.withValues(alpha: 0.6),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
